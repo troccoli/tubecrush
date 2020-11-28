@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+
+  web:
+    container_name: tubecrush-web
+    image: troccoli/laravel:7.4.12
+    volumes:
+      - ./:/var/www/vhosts/app:z
+    ports:
+      - 80:80
+    depends_on:
+      - mysql
+    environment:
+      XDEBUG_CONFIG: "remote_host=172.17.0.1"
+      PHP_IDE_CONFIG: "serverName=tubecrush"
+
+  mysql:
+    container_name: tubecrush-mysql
+    image: mysql:8.0.22
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+    ports:
+      - 3306:3306
+    volumes:
+      - ./.docker/config/mysql/initdb.d:/docker-entrypoint-initdb.d:z
+      - ./.docker/database:/var/lib/mysql:z
+
+  mailhog:
+    container_name: tubecrush-mailhog
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+      - 1025:1025
+
+  selenium:
+    container_name: tubecrush-selenium
+    image: selenium/standalone-chrome:3.141.59-oxygen
+    environment:
+      START_XVFB: "false"
+    depends_on:
+      - web
+    volumes:
+      - /dev/shm:/dev/shm
+    links:
+      - web:selenium.test
