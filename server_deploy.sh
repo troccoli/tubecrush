@@ -22,6 +22,7 @@ echo "Deploying application ..."
     php artisan cache:clear
     php artisan optimize
     php artisan view:cache
+    php artisan event:cache
 
     # Reload PHP to update opcache
     echo "" | sudo -S service php7.4-fpm reload
