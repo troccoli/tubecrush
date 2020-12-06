@@ -21,8 +21,8 @@ echo "Deploying application ..."
     # Clear cache
     php artisan cache:clear
     php artisan optimize
-    php artisan route:clear # Until we can cache the routes
     php artisan view:cache
+    php artisan event:cache
 
     # Reload PHP to update opcache
     echo "" | sudo -S service php7.4-fpm reload
