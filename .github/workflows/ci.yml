@@ -1,6 +1,9 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches-ignore:
+      - deploy
 
 env:
   node-modules-cache-name: cache-node-modules-2
