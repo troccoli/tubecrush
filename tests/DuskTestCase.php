@@ -2,14 +2,18 @@
 
 namespace Tests;
 
+use App\Models\User;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\TestCase as BaseTestCase;
 
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
+    use DatabaseMigrations;
+    use SeedsTestData;
 
     /**
      * Prepare for Dusk test execution.
@@ -19,9 +23,20 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare()
     {
-        if (! static::runningInSail()) {
+        if (!static::runningInSail()) {
             static::startChromeDriver();
         }
+    }
+
+    public function browse(\Closure $callback)
+    {
+        parent::browse($callback);
+        static::$browsers->first()->driver->manage()->deleteAllCookies();
+    }
+
+    protected function user(): User
+    {
+        return User::whereEmail('super-admin@example.com')->first();
     }
 
     /**
@@ -44,10 +59,4 @@ abstract class DuskTestCase extends BaseTestCase
             )
         );
     }
-
-//    public function browse(Closure $callback)
-//    {
-//        parent::browse($callback);
-//        static::$browsers->first()->driver->manage()->deleteAllCookies();
-//    }
 }
