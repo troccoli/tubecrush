@@ -12,10 +12,10 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'Super Admin',
             'email' => 'super-admin@example.com',
-        ])->attachRole('super-admin');
+        ])->assignRole('Super Admin');
         User::factory()->create([
             'name' => 'Editor',
             'email' => 'editor@example.com',
-        ])->attachRole('editor');
+        ])->assignRole('Editor');
     }
 }
