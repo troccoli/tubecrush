@@ -14,6 +14,4 @@ abstract class TestCase extends BaseTestCase
 
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
     }
-
-
 }

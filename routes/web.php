@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +20,10 @@ Route::get('/', \App\Http\Controllers\HomeController::class)
 Route::middleware(['auth:sanctum', 'verified'])
     ->get('/dashboard', \App\Http\Controllers\DashboardController::class)
     ->name('dashboard');
+
+Route::get('/register', [RegisteredUserController::class, 'create'])
+    ->middleware('can:register users')
+    ->name('register');
+
+Route::post('/register', [RegisteredUserController::class, 'store'])
+    ->middleware('can:register users');
