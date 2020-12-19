@@ -25,10 +25,7 @@
     <!-- Page Heading -->
     <header class="bg-white shadow">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap justify-center">
-                <img src="https://tubecrush.net/wp-content/uploads/2018/08/cropped-Logo-TC-BlkBk.jpg" alt="Site Banner"
-                     class="shadow rounded max-w-full h-auto align-middle border-none"/>
-            </div>
+            {{ $header }}
         </div>
     </header>
 
