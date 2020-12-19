@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Models\User;
+use Database\Seeders\Testing\DatabaseSeeder;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
@@ -13,7 +14,9 @@ abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
     use DatabaseMigrations;
-    use SeedsTestData;
+
+    protected User $superAdmin;
+    protected User $editor;
 
     /**
      * Prepare for Dusk test execution.
@@ -32,6 +35,16 @@ abstract class DuskTestCase extends BaseTestCase
     {
         parent::browse($callback);
         static::$browsers->first()->driver->manage()->deleteAllCookies();
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed(DatabaseSeeder::class);
+
+        $this->superAdmin = User::whereEmail('super-admin@example.com')->first();
+        $this->editor = User::whereEmail('editor@example.com')->first();
     }
 
     protected function user(): User
