@@ -36,4 +36,18 @@ class AuthenticationTest extends TestCase
             ->get(route('register'))
             ->assertForbidden();
     }
+
+    public function testAccessingDashboardPage(): void
+    {
+        $this->get(route('dashboard'))
+            ->assertRedirect(route('login'));
+
+        $this->actingAs(User::factory()->create()->assignRole('Super Admin'))
+            ->get(route('dashboard'))
+            ->assertSuccessful();
+
+        $this->actingAs(User::factory()->create()->assignRole('Editor'))
+            ->get(route('dashboard'))
+            ->assertSuccessful();
+    }
 }
