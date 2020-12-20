@@ -11,7 +11,8 @@
                 <div class="md:grid md:grid-flow-col md:grid-cols-4">
                     <div>
                         @can('register user')
-                            <a class="group relative md:w-3/4 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <a href="{{ route('register') }}"
+                               class="group relative md:w-3/4 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                                     <!-- Heroicon name: users -->
                                     <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"

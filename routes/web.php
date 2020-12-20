@@ -21,9 +21,6 @@ Route::middleware(['auth:sanctum', 'verified'])
     ->get('/dashboard', \App\Http\Controllers\DashboardController::class)
     ->name('dashboard');
 
-Route::get('/register', [RegisteredUserController::class, 'create'])
-    ->middleware('can:register users')
+Route::get('/register', \App\Http\Controllers\RegisterUser::class)
+    ->middleware('can: register users')
     ->name('register');
-
-Route::post('/register', [RegisteredUserController::class, 'store'])
-    ->middleware('can:register users');
