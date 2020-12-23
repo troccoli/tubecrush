@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -29,6 +30,8 @@ class RegisterUserForm extends Component
 
         $this->emit('userRegistered');
         $this->resetInputFields();
+
+        event(new Registered($user));
     }
 
     public function render(): View
