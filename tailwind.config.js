@@ -11,6 +11,8 @@ module.exports = {
         extend: {
             fontFamily: {
                 sans: ['Roboto', ...defaultTheme.fontFamily.sans],
+                'post-title': ['Actor', ...defaultTheme.fontFamily.sans],
+                'post-content': ['Montserrat', ...defaultTheme.fontFamily.sans],
             },
         },
     },
