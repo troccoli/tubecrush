@@ -41,7 +41,7 @@
                         <ul>
                             <li class="mt-3">
                                 <a class="text-gray-500 cursor-pointer hover:text-gray-900"
-                                   href="#">{{__('About us')}}</a>
+                                   href="{{ route('about-us') }}">{{__('About us')}}</a>
                             </li>
                             <li class="mt-3">
                                 <a class="text-gray-500 cursor-pointer hover:text-gray-900"

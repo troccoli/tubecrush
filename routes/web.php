@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', \App\Http\Controllers\HomeController::class)
     ->name('home');
+Route::get('/about-us', [\App\Http\Controllers\StaticPagesController::class, 'aboutUs'])
+    ->name('about-us');
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {
