@@ -10,19 +10,19 @@ echo "Deploying application ..."
     git reset --hard origin/deploy
 
     # Install dependencies based on lock file
-    composer install --no-interaction --prefer-dist --optimize-autoloader --no-progress
+    composer install --no-interaction --no-dev --no-suggest --prefer-dist --optimize-autoloader --no-progress
 
     # Migrate database
-    php artisan migrate --force
+    php artisan migrate --force --no-interaction
 
     # Note: If you're using queue workers, this is the place to restart them.
     # ...
 
     # Clear cache
-    php artisan cache:clear
-    php artisan optimize
-    php artisan view:cache
-    php artisan event:cache
+    php artisan cache:clear --no-interaction
+    php artisan optimize --no-interaction
+    php artisan view:cache --no-interaction
+    php artisan event:cache --no-interaction
 
     # Reload PHP to update opcache
     echo "" | sudo -S service php7.4-fpm reload
