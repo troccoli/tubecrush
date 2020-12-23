@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class RegisterUser extends Controller
 {
     public function __invoke(Request $request)
     {
-        return view('dashboard.index');
+        return view('dashboard.register-user');
     }
 }

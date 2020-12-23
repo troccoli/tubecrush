@@ -17,5 +17,11 @@ Route::get('/', \App\Http\Controllers\HomeController::class)
     ->name('home');
 
 Route::middleware(['auth:sanctum', 'verified'])
-    ->get('/dashboard', \App\Http\Controllers\DashboardController::class)
-    ->name('dashboard');
+    ->group(function () {
+        Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)
+            ->name('dashboard');
+
+        Route::get('/register', \App\Http\Controllers\RegisterUser::class)
+            ->middleware('can: register users')
+            ->name('register');
+    });
