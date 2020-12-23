@@ -11,6 +11,8 @@ echo "Deploying application ..."
 
     # Install dependencies based on lock file
     composer install --no-interaction --no-dev --no-suggest --prefer-dist --optimize-autoloader --no-progress
+    npm install
+    npm run prod
 
     # Migrate database
     php artisan migrate --force --no-interaction
