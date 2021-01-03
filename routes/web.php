@@ -19,6 +19,8 @@ Route::get('/about-us', [\App\Http\Controllers\StaticPagesController::class, 'ab
     ->name('about-us');
 Route::get('/guidelines', [\App\Http\Controllers\StaticPagesController::class, 'guidelines'])
     ->name('guidelines');
+Route::get('/legal-information', [\App\Http\Controllers\StaticPagesController::class, 'legalInformation'])
+    ->name('legal');
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {

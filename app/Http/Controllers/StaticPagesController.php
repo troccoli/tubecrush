@@ -15,4 +15,9 @@ class StaticPagesController extends Controller
     {
         return view('static.guidelines');
     }
+
+    public function legalInformation(): View
+    {
+        return view('static.legal-information');
+    }
 }

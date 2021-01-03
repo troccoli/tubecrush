@@ -12,7 +12,8 @@ class FooterTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visitRoute('home')
                 ->clickLink('About us')->assertRouteIs('about-us')
-                ->clickLink('Photo guidelines')->assertRouteIs('guidelines');
+                ->clickLink('Photo guidelines')->assertRouteIs('guidelines')
+                ->clickLink('Legal')->assertRouteIs('legal');
         });
     }
 }
