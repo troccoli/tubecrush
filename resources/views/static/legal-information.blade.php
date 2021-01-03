@@ -100,7 +100,7 @@
         <p class="mb-2">
             We have registered our brand with the intellectual property office. Our brand should not be used without our
             permission – to contact a member of our team to discuss this in more detail please email
-            <a href="mailto:tubecrush@gmail.com" class="text-blue-600 hover:underline">tubecrush@gmail.com</a>.
+            <a href="mailto:{{ config('mail.from.address') }}" class="text-blue-600 hover:underline">{{ config('mail.from.address') }}</a>.
         </p>
     </div>
 </x-app-layout>
