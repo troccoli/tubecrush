@@ -21,6 +21,8 @@ Route::get('/guidelines', [\App\Http\Controllers\StaticPagesController::class, '
     ->name('guidelines');
 Route::get('/legal-information', [\App\Http\Controllers\StaticPagesController::class, 'legalInformation'])
     ->name('legal');
+Route::get('/photo-removal', [\App\Http\Controllers\StaticPagesController::class, 'photoRemoval'])
+    ->name('photo-removal');
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {

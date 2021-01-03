@@ -67,7 +67,7 @@
                             </li>
                             <li class="mt-3">
                                 <a class="text-gray-500 cursor-pointer hover:text-gray-900"
-                                   href="#">{{__('Photo removal')}}</a>
+                                   href="{{ route('photo-removal') }}">{{__('Photo removal')}}</a>
                             </li>
                             <li class="mt-3">
                                 <a class="text-gray-500 cursor-pointer hover:text-gray-900"

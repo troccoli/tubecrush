@@ -20,4 +20,9 @@ class StaticPagesController extends Controller
     {
         return view('static.legal-information');
     }
+
+    public function photoRemoval(): View
+    {
+        return view('static.photo-removal');
+    }
 }
