@@ -17,6 +17,8 @@ Route::get('/', \App\Http\Controllers\HomeController::class)
     ->name('home');
 Route::get('/about-us', [\App\Http\Controllers\StaticPagesController::class, 'aboutUs'])
     ->name('about-us');
+Route::get('/guidelines', [\App\Http\Controllers\StaticPagesController::class, 'guidelines'])
+    ->name('guidelines');
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {

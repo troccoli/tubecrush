@@ -10,8 +10,9 @@ class StaticPagesTest extends DuskTestCase
     public function testAboutUsPage(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->visitRoute('about-us')
-                ->assertSeeIn('h2', 'About Tube Crush');
+            $browser
+                ->visitRoute('about-us')->assertSeeIn('h2', 'About Tube Crush')
+                ->visitRoute('guidelines')->assertSeeIn('h2', 'Photo and Comment Guidelines');
         });
     }
 }

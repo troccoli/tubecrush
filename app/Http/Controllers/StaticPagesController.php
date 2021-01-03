@@ -10,4 +10,9 @@ class StaticPagesController extends Controller
     {
         return view('static.about-us');
     }
+
+    public function guidelines(): View
+    {
+        return view('static.guidelines');
+    }
 }
