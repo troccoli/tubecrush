@@ -15,6 +15,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', \App\Http\Controllers\HomeController::class)
     ->name('home');
+Route::get('/about-us', [\App\Http\Controllers\StaticPagesController::class, 'aboutUs'])
+    ->name('about-us');
+Route::get('/guidelines', [\App\Http\Controllers\StaticPagesController::class, 'guidelines'])
+    ->name('guidelines');
+Route::get('/legal-information', [\App\Http\Controllers\StaticPagesController::class, 'legalInformation'])
+    ->name('legal');
+Route::get('/photo-removal', [\App\Http\Controllers\StaticPagesController::class, 'photoRemoval'])
+    ->name('photo-removal');
+Route::get('/press-enquiries', [\App\Http\Controllers\StaticPagesController::class, 'pressEnquiries'])
+    ->name('press-enquiries');
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {

@@ -26,14 +26,14 @@
     @livewire('navigation-dropdown')
 
     <!-- Page Heading -->
-    <header class="bg-white shadow">
+    <header class="bg-white">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             {{ $header }}
         </div>
     </header>
 
     <!-- Page Content -->
-    <main class="bg-white">
+    <main class="bg-white pb-6">
         {{ $slot }}
     </main>
 
