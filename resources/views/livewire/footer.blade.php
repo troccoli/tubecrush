@@ -76,7 +76,7 @@
         </div>
         <div class="bg-gray-300">
             <div class="container px-5 py-4 mx-auto">
-                <p class="text-sm text-gray-700 capitalize text-center">© 2020 All rights reserved - Made with <span
+                <p class="text-sm text-gray-700 capitalize text-center">© {{ date('Y') }} All rights reserved - Made with <span
                         id="heart">&#x2764;</span></p>
             </div>
         </div>
