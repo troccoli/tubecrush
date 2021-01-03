@@ -25,4 +25,9 @@ class StaticPagesController extends Controller
     {
         return view('static.photo-removal');
     }
+
+    public function pressEnquiries(): View
+    {
+        return view('static.press-enquiries');
+    }
 }

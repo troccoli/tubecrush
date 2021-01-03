@@ -71,7 +71,7 @@
                             </li>
                             <li class="mt-3">
                                 <a class="text-gray-500 cursor-pointer hover:text-gray-900"
-                                   href="#">{{__('Press enquiries')}}</a>
+                                   href="{{ route('press-enquiries') }}">{{__('Press enquiries')}}</a>
                             </li>
                         </ul>
                     </nav>
