@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\SomeoneHasContactedUs;
 use App\Listeners\SendChangePasswordEmail;
+use App\Listeners\SendContactUsMessage;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -17,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendChangePasswordEmail::class,
         ],
+        SomeoneHasContactedUs::class => [
+            SendContactUsMessage::class,
+        ]
     ];
 
     /**

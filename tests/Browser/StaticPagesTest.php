@@ -15,7 +15,8 @@ class StaticPagesTest extends DuskTestCase
                 ->visitRoute('guidelines')->assertSeeIn('h2', 'Photo and Comment Guidelines')
                 ->visitRoute('legal')->assertSeeIn('h2', 'Legal Information')
                 ->visitRoute('photo-removal')->assertSeeIn('h2', 'Photo Removal Request')
-                ->visitRoute('press-enquiries')->assertSeeIn('h2', 'Press Enquiries');
+                ->visitRoute('press-enquiries')->assertSeeIn('h2', 'Press Enquiries')
+                ->visitRoute('contact-us')->assertSeeIn('h2', 'Contact us');
         });
     }
 }

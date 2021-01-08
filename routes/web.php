@@ -25,6 +25,8 @@ Route::get('/photo-removal', [\App\Http\Controllers\StaticPagesController::class
     ->name('photo-removal');
 Route::get('/press-enquiries', [\App\Http\Controllers\StaticPagesController::class, 'pressEnquiries'])
     ->name('press-enquiries');
+Route::get('/contact-us', \App\Http\Controllers\ContactUsController::class)
+    ->name('contact-us');
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {

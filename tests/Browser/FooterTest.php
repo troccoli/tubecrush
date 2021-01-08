@@ -15,7 +15,8 @@ class FooterTest extends DuskTestCase
                 ->clickLink('Photo guidelines')->assertRouteIs('guidelines')
                 ->clickLink('Legal')->assertRouteIs('legal')
                 ->clickLink('Photo removal')->assertRouteIs('photo-removal')
-                ->clickLink('Press enquiries')->assertRouteIs('press-enquiries');
+                ->clickLink('Press enquiries')->assertRouteIs('press-enquiries')
+                ->clickLink('Contact us')->assertRouteIs('contact-us');
         });
     }
 }
