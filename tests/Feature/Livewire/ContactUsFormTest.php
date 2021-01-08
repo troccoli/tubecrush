@@ -61,7 +61,7 @@ class ContactUsFormTest extends TestCase
             ->set('message', '123456789')
             ->call('contactUs')
             ->assertHasErrors(['message' => 'min'])
-            ->set('message', Str::random(2001))
+            ->set('message', Str::random(501))
             ->call('contactUs')
             ->assertHasErrors(['message' => 'max'])
             ->set('message', '1234567890')
