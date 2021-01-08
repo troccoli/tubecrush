@@ -29,7 +29,7 @@ class RegisterUserForm extends Component
         $user->assignRole('Editor');
 
         $this->emit('userRegistered');
-        $this->resetInputFields();
+        $this->reset();
 
         event(new Registered($user));
     }
@@ -37,11 +37,5 @@ class RegisterUserForm extends Component
     public function render(): View
     {
         return view('livewire.register-user-form');
-    }
-
-    private function resetInputFields(): void
-    {
-        $this->name = '';
-        $this->email = '';
     }
 }

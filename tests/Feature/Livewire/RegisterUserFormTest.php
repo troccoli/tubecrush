@@ -35,14 +35,12 @@ class RegisterUserFormTest extends TestCase
         Livewire::test('register-user-form')
             ->set('email', 'paul@example.com')
             ->call('registerUser')
-            ->assertHasErrors(['name' => 'required']);
-        $this->assertNull(User::whereEmail('paul@example.com')->first());
-
-        Livewire::test('register-user-form')
+            ->assertHasErrors(['name' => 'required'])
             ->set('name', Str::random(256))
             ->set('email', 'paul@example.com')
             ->call('registerUser')
             ->assertHasErrors(['name' => 'max']);
+
         $this->assertNull(User::whereEmail('paul@example.com')->first());
     }
 
@@ -51,21 +49,16 @@ class RegisterUserFormTest extends TestCase
         Livewire::test('register-user-form')
             ->set('name', 'Paul')
             ->call('registerUser')
-            ->assertHasErrors(['email' => 'required']);
-        $this->assertNull(User::whereName('Paul')->first());
-
-        Livewire::test('register-user-form')
+            ->assertHasErrors(['email' => 'required'])
             ->set('name', 'Paul')
             ->set('email', 'email')
             ->call('registerUser')
-            ->assertHasErrors(['email' => 'email']);
-        $this->assertNull(User::whereName('Paul')->first());
-
-        Livewire::test('register-user-form')
+            ->assertHasErrors(['email' => 'email'])
             ->set('name', 'Paul')
             ->set('email', 'editor@example.com')
             ->call('registerUser')
             ->assertHasErrors(['email' => 'unique']);
+
         $this->assertNull(User::whereName('Paul')->first());
     }
 }
