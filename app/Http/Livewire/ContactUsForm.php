@@ -21,7 +21,7 @@ class ContactUsForm extends Component
     protected array $rules = [
         'name' => 'required|max:255',
         'email' => 'required|email',
-        'message' => 'required|min:10|max:2000',
+        'message' => 'required|min:10|max:500',
     ];
 
     public function updated($propertyName)
