@@ -7,6 +7,17 @@ use Livewire\Component;
 
 class Footer extends Component
 {
+    public string $phpVersion;
+    public string $laravelVersion;
+    public string $tailwindcssVersion;
+
+    public function __construct()
+    {
+        $this->phpVersion = phpversion();
+        $this->laravelVersion = app()->version();
+        $this->tailwindcssVersion = '1.9.6';
+    }
+
     public function render(): View
     {
         return view('livewire.footer');
