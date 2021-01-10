@@ -82,7 +82,15 @@
             <div class="container px-5 py-4 mx-auto">
                 <p class="text-sm text-gray-700 capitalize text-center">© {{ date('Y') }} All rights reserved - Made
                     with <span
-                        id="heart">&#x2764;</span></p>
+                        id="heart" class="tooltip static">&#x2764;<span
+                            class="tooltip-text p-2 absolute ml-2 -mt-16 inline-block text-sm text-left normal-case rounded-lg bg-gray-600 text-white transition duration-500">
+                            PHP {{ $phpVersion }}<br/>
+                            Laravel {{ $laravelVersion }}<br/>
+                            TailwindCSS {{ $tailwindcssVersion }}
+                        </span>
+                    </span>
+                    by <a href="http://www.troccoli.it" class="hover:underline">Giulio Troccoli-Allard</a>
+                </p>
             </div>
         </div>
     </footer>

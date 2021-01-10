@@ -9,7 +9,7 @@ class LoginTest extends DuskTestCase
 {
     public function testRedirectsToHomepageAfterLoggingIn(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (Browser $browser): void {
             $browser->visit('/login')
                 ->type('email', 'super-admin@example.com')
                 ->type('password', 'password')

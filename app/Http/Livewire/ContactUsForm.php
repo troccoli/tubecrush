@@ -3,13 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Events\SomeoneHasContactedUs;
-use App\Mail\ContactUsMessage;
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class ContactUsForm extends Component
@@ -24,12 +18,15 @@ class ContactUsForm extends Component
         'message' => 'required|min:10|max:500',
     ];
 
-    public function updated($propertyName)
+    /**
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function updated($propertyName): void
     {
         $this->validateOnly($propertyName);
     }
 
-    public function contactUs()
+    public function contactUs(): void
     {
         $data = $this->validate();
 
@@ -39,7 +36,7 @@ class ContactUsForm extends Component
         event(new SomeoneHasContactedUs($data['name'], $data['email'], $data['message']));
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.contact-us-form');
     }
