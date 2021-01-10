@@ -19,19 +19,16 @@ abstract class DuskTestCase extends BaseTestCase
     protected User $editor;
 
     /**
-     * Prepare for Dusk test execution.
-     *
      * @beforeClass
-     * @return void
      */
-    public static function prepare()
+    public static function prepare(): void
     {
         if (!static::runningInSail()) {
             static::startChromeDriver();
         }
     }
 
-    public function browse(\Closure $callback)
+    public function browse(\Closure $callback): void
     {
         parent::browse($callback);
         static::$browsers->first()->driver->manage()->deleteAllCookies();
@@ -52,12 +49,7 @@ abstract class DuskTestCase extends BaseTestCase
         return User::whereEmail('super-admin@example.com')->first();
     }
 
-    /**
-     * Create the RemoteWebDriver instance.
-     *
-     * @return \Facebook\WebDriver\Remote\RemoteWebDriver
-     */
-    protected function driver()
+    protected function driver(): RemoteWebDriver
     {
         $options = (new ChromeOptions)->addArguments([
             '--disable-gpu',

@@ -14,23 +14,12 @@ class SendChangePasswordEmail implements ShouldQueue
 
     protected $broker;
 
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
     public function __construct(PasswordBroker $broker)
     {
         $this->broker = $broker;
     }
 
-    /**
-     * Handle the event.
-     *
-     * @param  Registered  $event
-     * @return void
-     */
-    public function handle(Registered $event)
+    public function handle(Registered $event): void
     {
         abort_unless($event->user instanceof CanResetPassword, 500);
 

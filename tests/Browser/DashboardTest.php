@@ -8,9 +8,9 @@ use Tests\DuskTestCase;
 
 class DashboardTest extends DuskTestCase
 {
-    public function testDashboard()
+    public function testDashboard(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (Browser $browser): void {
             $browser->loginAs($this->superAdmin)
                 ->visitRoute('dashboard')
                 ->assertSee("Super Admin's Dashboard")
@@ -30,7 +30,7 @@ class DashboardTest extends DuskTestCase
 
     public function testRegisteringAUser(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (Browser $browser): void {
             $browser->loginAs($this->superAdmin)
                 ->visitRoute('dashboard')
                 ->clickLink('Users')
@@ -63,7 +63,6 @@ class DashboardTest extends DuskTestCase
                 ->type('#email', 'john@example.com')
                 ->pressAndWaitFor('REGISTER')
                 ->assertSee('The user has been registered.')
-
                 ->logout();
         });
     }

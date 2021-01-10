@@ -30,7 +30,7 @@ class HomepageTest extends DuskTestCase
 
             $browser->login()
                 ->visit('/')
-                ->within('@main-nav', function (Browser $nav) {
+                ->within('@main-nav', function (Browser $nav): void {
                     $nav->assertSeeLink('Home')
                         ->assertSeeLink('News')
                         ->assertSee('Super Admin')

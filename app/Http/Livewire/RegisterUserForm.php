@@ -19,7 +19,7 @@ class RegisterUserForm extends Component
         'email' => 'required|email|unique:users,email',
     ];
 
-    public function registerUser()
+    public function registerUser(): void
     {
         $data = $this->validate();
 
