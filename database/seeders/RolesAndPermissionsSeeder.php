@@ -14,8 +14,13 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         Permission::create(['name' => 'register users']);
+        Permission::create(['name' => 'create posts']);
+        Permission::create(['name' => 'view posts']);
+        Permission::create(['name' => 'update posts']);
+        Permission::create(['name' => 'delete posts']);
 
         Role::create(['name' => 'Super Admin']);
-        Role::create(['name' => 'Editor']);
+        Role::create(['name' => 'Editor'])
+            ->givePermissionTo(['create posts', 'view posts', 'update posts']);
     }
 }
