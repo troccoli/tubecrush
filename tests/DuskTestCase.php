@@ -46,7 +46,7 @@ abstract class DuskTestCase extends BaseTestCase
 
     protected function user(): User
     {
-        return User::whereEmail('super-admin@example.com')->first();
+        return $this->superAdmin;
     }
 
     protected function driver(): RemoteWebDriver

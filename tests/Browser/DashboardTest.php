@@ -13,7 +13,7 @@ class DashboardTest extends DuskTestCase
         $this->browse(function (Browser $browser): void {
             $browser->loginAs($this->superAdmin)
                 ->visitRoute('dashboard')
-                ->assertSee("Super Admin's Dashboard")
+                ->assertSee("{$this->superAdmin->getName()}'s Dashboard")
                 ->assertSee('Welcome to your dashboard.')
                 ->assertSeeLink('Users')
                 ->clickLink('Users')
@@ -21,7 +21,7 @@ class DashboardTest extends DuskTestCase
                 ->logout();
             $browser->loginAs($this->editor)
                 ->visitRoute('dashboard')
-                ->assertSee("Editor's Dashboard")
+                ->assertSee("{$this->editor->getName()}'s Dashboard")
                 ->assertSee('Welcome to your dashboard.')
                 ->assertDontSee('Users')
                 ->logout();

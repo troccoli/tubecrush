@@ -33,11 +33,11 @@ class HomepageTest extends DuskTestCase
                 ->within('@main-nav', function (Browser $nav): void {
                     $nav->assertSeeLink('Home')
                         ->assertSeeLink('News')
-                        ->assertSee('Super Admin')
+                        ->assertSee($this->user()->getName())
                         ->assertDontSeeLink('Dashboard')
                         ->assertDontSeeLink('Profile')
                         ->assertDontSeeLink('Logout')
-                        ->clickLink('Super Admin', 'button')
+                        ->clickLink($this->user()->getName(), 'button')
                         ->assertSeeLink('Dashboard')
                         ->assertSeeLink('Profile')
                         ->assertSeeLink('Logout');
