@@ -44,4 +44,17 @@ class HomepageTest extends DuskTestCase
                 })->logout();
         });
     }
+
+    public function testListOfPosts(): void
+    {
+        $this->browse(function (Browser $browser): void {
+            $browser->visitRoute('home')
+                ->within('main', function (Browser $main): void {
+                    $main->assertCountInElement(3, '@post')
+                        ->press('More posts')
+                        ->pause(1000)
+                        ->assertCountInElement(6, '@post');
+                });
+        });
+    }
 }
