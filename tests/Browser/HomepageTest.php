@@ -33,15 +33,28 @@ class HomepageTest extends DuskTestCase
                 ->within('@main-nav', function (Browser $nav): void {
                     $nav->assertSeeLink('Home')
                         ->assertSeeLink('News')
-                        ->assertSee('Super Admin')
+                        ->assertSee($this->user()->getName())
                         ->assertDontSeeLink('Dashboard')
                         ->assertDontSeeLink('Profile')
                         ->assertDontSeeLink('Logout')
-                        ->clickLink('Super Admin', 'button')
+                        ->clickLink($this->user()->getName(), 'button')
                         ->assertSeeLink('Dashboard')
                         ->assertSeeLink('Profile')
                         ->assertSeeLink('Logout');
                 })->logout();
+        });
+    }
+
+    public function testListOfPosts(): void
+    {
+        $this->browse(function (Browser $browser): void {
+            $browser->visitRoute('home')
+                ->within('main', function (Browser $main): void {
+                    $main->assertCountInElement(3, '@post')
+                        ->press('More posts')
+                        ->pause(1000)
+                        ->assertCountInElement(6, '@post');
+                });
         });
     }
 }

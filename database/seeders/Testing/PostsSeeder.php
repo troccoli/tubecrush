@@ -10,7 +10,7 @@ class PostsSeeder extends Seeder
 {
     public function run(): void
     {
-        $editor = User::query()->firstWhere('name', 'Editor');
+        $editor = User::query()->firstWhere('email', 'editor@example.com');
 
         Post::factory()
             ->for($editor, 'author')
