@@ -33,7 +33,7 @@ Route::middleware(['auth:sanctum', 'verified'])
         Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)
             ->name('dashboard');
 
-        Route::get('/register', \App\Http\Controllers\RegisterUser::class)
+        Route::get('/register', \App\Http\Controllers\RegisterUserController::class)
             ->middleware('can: register users')
             ->name('register');
     });
