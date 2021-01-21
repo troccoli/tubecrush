@@ -86,6 +86,7 @@
                             class="tooltip-text p-2 absolute ml-2 -mt-16 inline-block text-sm text-left normal-case rounded-lg bg-gray-600 text-white transition duration-500">
                             PHP {{ $phpVersion }}<br/>
                             Laravel {{ $laravelVersion }}<br/>
+                            Livewire {{ $livewireVersion }}<br/>
                             TailwindCSS {{ $tailwindcssVersion }}
                         </span>
                     </span>

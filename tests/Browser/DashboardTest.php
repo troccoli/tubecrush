@@ -16,14 +16,28 @@ class DashboardTest extends DuskTestCase
                 ->assertSee("{$this->superAdmin->getName()}'s Dashboard")
                 ->assertSee('Welcome to your dashboard.')
                 ->assertSeeLink('Users')
+                ->assertSeeLink('Posts')
                 ->clickLink('Users')
                 ->assertRouteIs('register')
+                ->clickLink('Posts')
+                ->assertRouteIs('posts')
+                ->withEach('@post', function (Browser $post): void {
+                    $post->assertPresent('@edit-post')
+                        ->assertPresent('@delete-post');
+                })
                 ->logout();
             $browser->loginAs($this->editor)
                 ->visitRoute('dashboard')
                 ->assertSee("{$this->editor->getName()}'s Dashboard")
                 ->assertSee('Welcome to your dashboard.')
                 ->assertDontSee('Users')
+                ->assertSeeLink('Posts')
+                ->clickLink('Posts')
+                ->assertRouteIs('posts')
+                ->withEach('@post', function (Browser $post): void {
+                    $post->assertPresent('@edit-post')
+                        ->assertMissing('@delete-post');
+                })
                 ->logout();
         });
     }
@@ -64,6 +78,17 @@ class DashboardTest extends DuskTestCase
                 ->pressAndWaitFor('REGISTER')
                 ->assertSee('The user has been registered.')
                 ->logout();
+        });
+    }
+
+    public function testListOfPosts(): void
+    {
+        $this->browse(function (Browser $browser): void {
+            $browser->loginAs($this->superAdmin)
+                ->visitRoute('posts')
+                ->within('@posts-list', function (Browser $list): void {
+                    $list->assertCountInElement(5, '@post');
+                });
         });
     }
 }
