@@ -25,7 +25,7 @@
             </div>
 
             <div class="relative divide-y divide-gray-200 border-t border-t-gray-200">
-                <div wire:loading class="w-full h-full absolute block top-0 left-0 bg-white opacity-75 z-50"
+                <div wire:loading.delay class="w-full h-full absolute block top-0 left-0 bg-white opacity-75 z-50"
                      dusk="loading-icon">
                     <div class="flex h-full items-center justify-center">
                         <x-loading-icon class=" h-20 w-20 text-gray-900"/>
