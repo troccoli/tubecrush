@@ -3,11 +3,11 @@
 namespace App\Http\Livewire\Posts;
 
 use App\Models\Post;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
 class Form extends Component
 {
+    public $currentPost;
     public $title;
     public $content;
     protected array $rules = [
@@ -15,22 +15,39 @@ class Form extends Component
         'content' => 'required|min:10|max:2000',
     ];
 
+    public function mount(?int $postId = null)
+    {
+        if (null != $postId) {
+            $currentPost = Post::findOrFail($postId);
+            $this->currentPost = $currentPost;
+            $this->title = $currentPost->getTitle();
+            $this->content = $currentPost->getContent();
+        }
+    }
+
     public function render()
     {
         return view('livewire.posts.form');
     }
 
-    public function createPost()
+    public function submit()
     {
         $this->validate();
 
-        $post = Post::create([
-            'title' => $this->title,
-            'content' => $this->content,
-            'author_id' => auth()->user()->getAuthIdentifier(),
-        ]);
+        if ($this->currentPost) {
+            $this->currentPost->update([
+                'title' => $this->title,
+                'content' => $this->content,
+            ]);
+        } else {
+            $post = Post::create([
+                'title' => $this->title,
+                'content' => $this->content,
+                'author_id' => auth()->user()->getAuthIdentifier(),
+            ]);
 
-        session()->flash('new-post-id', $post->getId());
+            session()->flash('new-post-id', $post->getId());
+        }
 
         return $this->redirectBack();
     }

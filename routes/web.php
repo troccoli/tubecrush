@@ -44,4 +44,8 @@ Route::middleware(['auth:sanctum', 'verified'])
         Route::get('/posts/create', [\App\Http\Controllers\PostsController::class, 'create'])
             ->middleware('can:create posts')
             ->name('posts.create');
+
+        Route::get('/posts/update/{postId}', [\App\Http\Controllers\PostsController::class, 'update'])
+            ->middleware('can:update posts')
+            ->name('posts.update');
     });

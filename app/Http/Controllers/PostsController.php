@@ -15,4 +15,9 @@ class PostsController extends Controller
     {
         return view('dashboard.posts.create');
     }
+
+    public function update(int $postId): View
+    {
+        return view('dashboard.posts.update', compact('postId'));
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Post;
 use App\Models\User;
 
 class AuthenticationTest extends TestCase
@@ -69,6 +70,23 @@ class AuthenticationTest extends TestCase
 
         $this->actingAs($this->editor())
             ->get(route('posts.create'))
+            ->assertSuccessful();
+    }
+
+    public function testAccessingPostsEditPage(): void
+    {
+        /** @var Post $post */
+        $post = Post::factory()->for($this->superAdmin(), 'author')->create();
+
+        $this->get(route('posts.update', ['postId' => $post->getId()]))
+            ->assertRedirect(route('login'));
+
+        $this->actingAs($this->superAdmin())
+            ->get(route('posts.update', ['postId' => $post->getId()]))
+            ->assertSuccessful();
+
+        $this->actingAs($this->editor())
+            ->get(route('posts.update', ['postId' => $post->getId()]))
             ->assertSuccessful();
     }
 }

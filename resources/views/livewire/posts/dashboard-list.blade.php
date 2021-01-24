@@ -47,7 +47,7 @@
                                 class="hidden md:flex w-1/3 pl-2 text-sm">{{ $post->getPublishedDate()->toFormattedDateString() }}</div>
                             <div class="flex flex-row items-center mt-4 md:mt-0">
                                 @can('update posts')
-                                    <a href="#" title="Edit post"
+                                    <a href="{{ route('posts.update', ['postId' => $post->getId()]) }}" title="Edit post"
                                        class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 mr-1 border border-transparent rounded-md bg-gray-400 hover:bg-gray-500 transition duration-300"
                                        dusk="edit-post-button">
                                         <!-- Heroicon name: pencil -->

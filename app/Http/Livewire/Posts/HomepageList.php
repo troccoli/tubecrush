@@ -7,10 +7,9 @@ use Livewire\Component;
 
 class HomepageList extends Component
 {
+    private const POST_PER_PAGE = 3;
     public $posts;
     public $count;
-
-    private const POST_PER_PAGE = 3;
 
     public function mount()
     {
