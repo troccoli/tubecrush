@@ -21,9 +21,10 @@ class DashboardTest extends DuskTestCase
                 ->assertRouteIs('register')
                 ->clickLink('Posts')
                 ->assertRouteIs('posts.list')
+                ->assertPresent('@create-post-button')
                 ->withEach('@post', function (Browser $post): void {
-                    $post->assertPresent('@edit-post')
-                        ->assertPresent('@delete-post');
+                    $post->assertPresent('@edit-post-button')
+                        ->assertPresent('@delete-post-button');
                 })
                 ->logout();
             $browser->loginAs($this->editor)
@@ -34,9 +35,10 @@ class DashboardTest extends DuskTestCase
                 ->assertSeeLink('Posts')
                 ->clickLink('Posts')
                 ->assertRouteIs('posts.list')
+                ->assertPresent('@create-post-button')
                 ->withEach('@post', function (Browser $post): void {
-                    $post->assertPresent('@edit-post')
-                        ->assertMissing('@delete-post');
+                    $post->assertPresent('@edit-post-button')
+                        ->assertMissing('@delete-post-button');
                 })
                 ->logout();
         });
@@ -89,6 +91,16 @@ class DashboardTest extends DuskTestCase
                 ->within('@posts-list', function (Browser $list): void {
                     $list->assertCountInElement(5, '@post');
                 });
+        });
+    }
+
+    public function testCreatePost(): void
+    {
+        $this->browse(function (Browser $browser): void {
+            $browser->loginAs($this->superAdmin)
+                ->visitroute('posts.list')
+                ->click('@create-post-button')
+                ->assertRouteIs('posts.create');
         });
     }
 }

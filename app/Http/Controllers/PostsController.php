@@ -10,4 +10,9 @@ class PostsController extends Controller
     {
         return view('dashboard.posts.list');
     }
+
+    public function create(): View
+    {
+        return view('dashboard.posts.create');
+    }
 }

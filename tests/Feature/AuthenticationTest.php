@@ -57,4 +57,18 @@ class AuthenticationTest extends TestCase
             ->get(route('posts.list'))
             ->assertSuccessful();
     }
+
+    public function testAccessingPostsCreatePage(): void
+    {
+        $this->get(route('posts.create'))
+            ->assertRedirect(route('login'));
+
+        $this->actingAs($this->superAdmin())
+            ->get(route('posts.create'))
+            ->assertSuccessful();
+
+        $this->actingAs($this->editor())
+            ->get(route('posts.create'))
+            ->assertSuccessful();
+    }
 }

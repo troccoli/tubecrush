@@ -40,4 +40,8 @@ Route::middleware(['auth:sanctum', 'verified'])
         Route::get('/posts', [\App\Http\Controllers\PostsController::class, 'list'])
             ->middleware('can:view posts')
             ->name('posts.list');
+
+        Route::get('/posts/create', [\App\Http\Controllers\PostsController::class, 'create'])
+            ->middleware('can:create posts')
+            ->name('posts.create');
     });
