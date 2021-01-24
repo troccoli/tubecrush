@@ -12,7 +12,7 @@ class Footer extends Component
     public string $livewireVersion;
     public string $tailwindcssVersion;
 
-    public function __construct()
+    public function mount()
     {
         $this->phpVersion = phpversion();
         $this->laravelVersion = app()->version();
