@@ -9,7 +9,7 @@ class DashboardListTest extends TestCase
     public function testTheComponentIsRendered(): void
     {
         $this->actingAs($this->superAdmin())
-            ->get(route('posts'))
+            ->get(route('posts.list'))
             ->assertSeeLivewire('posts.dashboard-list');
     }
 }

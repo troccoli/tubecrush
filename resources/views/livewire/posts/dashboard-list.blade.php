@@ -4,7 +4,7 @@
         <div class="flex flex-auto justify-between items-center">
             <h2 class="text-2xl sm:text-3xl">List of all posts</h2>
             @can('create posts')
-                <a href="#" title="Create post"
+                <a href="{{ route('posts.create') }}" title="Create post" dusk="create-post-button"
                    class="w-1/5 md:w-auto p-1 flex justify-around rounded-md text-indigo-100 bg-indigo-600 hover:text-indigo-300 hover:bg-indigo-700">
                     <!-- Heroicon name: document-add -->
                     <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -24,17 +24,17 @@
                     date</p>
             </div>
 
-            <div class="relative divide-y divide-gray-200 border-t border-t-gray-200">
-                <div wire:loading class="w-full h-full absolute block top-0 left-0 bg-white opacity-75 z-50"
+            <div class="relative border-t border-t-gray-200">
+                <div wire:loading.delay class="w-full h-full absolute block top-0 left-0 bg-white opacity-75 z-50"
                      dusk="loading-icon">
                     <div class="flex h-full items-center justify-center">
                         <x-loading-icon class=" h-20 w-20 text-gray-900"/>
                     </div>
                 </div>
-                <div dusk="posts-list">
+                <div dusk="posts-list" class="divide-y divide-gray-200">
                 @foreach($posts as $post)
                     <!-- single post row -->
-                        <div class="hover:bg-gray-100 py-4 flex flex-col md:flex-row" dusk="post">
+                        <div class="@if($post->getId() === session('new-post-id')) animate-pulse-bg-once bg-green-50 @endif hover:bg-gray-100 py-4 flex flex-col md:flex-row" dusk="post">
                             <div class="w-full md:w-1/2 md:pl-4 text-lg text-gray-900">
                                 {{ $post->getTitle() }}
                                 <div class="mt-1 text-sm text-gray-500">by <span
@@ -49,7 +49,7 @@
                                 @can('update posts')
                                     <a href="#" title="Edit post"
                                        class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 mr-1 border border-transparent rounded-md bg-gray-400 hover:bg-gray-500 transition duration-300"
-                                       dusk="edit-post">
+                                       dusk="edit-post-button">
                                         <!-- Heroicon name: pencil -->
                                         <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none"
                                              viewBox="0 0 24 24" stroke="currentColor">
@@ -61,7 +61,7 @@
                                 @can('delete posts')
                                     <a href="#" title="Delete post"
                                        class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 ml-1 border border-transparent rounded-md bg-red-400 hover:bg-red-500 transition duration-300"
-                                       dusk="delete-post">
+                                       dusk="delete-post-button">
                                         <!-- Heroicon name: trash -->
                                         <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none"
                                              viewBox="0 0 24 24" stroke="currentColor">

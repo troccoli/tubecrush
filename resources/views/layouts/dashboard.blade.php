@@ -25,7 +25,7 @@
                             </a>
                         @endcan
                         @can('view posts')
-                            <a href="{{ route('posts') }}"
+                            <a href="{{ route('posts.list') }}"
                                class="relative md:w-3/4 flex justify-center py-2 px-4 border border-transparent rounded-md text-indigo-100 bg-indigo-600 hover:bg-indigo-700 transition duration-300">
                                 <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                                     <!-- Heroicon name: newspaper -->

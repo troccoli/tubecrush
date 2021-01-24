@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 
 class PostsController extends Controller
 {
-    public function __invoke(Request $request): View
+    public function list(): View
     {
-        return view('dashboard.posts');
+        return view('dashboard.posts.list');
+    }
+
+    public function create(): View
+    {
+        return view('dashboard.posts.create');
     }
 }

@@ -37,7 +37,11 @@ Route::middleware(['auth:sanctum', 'verified'])
             ->middleware('can:register users')
             ->name('register');
 
-        Route::get('/posts', \App\Http\Controllers\PostsController::class)
+        Route::get('/posts', [\App\Http\Controllers\PostsController::class, 'list'])
             ->middleware('can:view posts')
-            ->name('posts');
+            ->name('posts.list');
+
+        Route::get('/posts/create', [\App\Http\Controllers\PostsController::class, 'create'])
+            ->middleware('can:create posts')
+            ->name('posts.create');
     });
