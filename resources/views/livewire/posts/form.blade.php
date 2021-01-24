@@ -1,12 +1,12 @@
 <div>
     <form wire:submit.prevent="submit">
-            <!-- Title -->
-            <div class="mb-6 md:w-full md:mr-6">
-                <x-jet-label for="title" value="{{ __('Title') }}"/>
-                <x-jet-input id="title" type="text" class="mt-2 block w-full" wire:model="title"
-                             autocomplete="title"/>
-                <x-jet-input-error for="title" class="mt-2"/>
-            </div>
+        <!-- Title -->
+        <div class="mb-6 md:w-full md:mr-6">
+            <x-jet-label for="title" value="{{ __('Title') }}"/>
+            <x-jet-input id="title" type="text" class="mt-2 block w-full" wire:model="title"
+                         autocomplete="title"/>
+            <x-jet-input-error for="title" class="mt-2"/>
+        </div>
 
         <!-- Content -->
         <div class="mb-6">
