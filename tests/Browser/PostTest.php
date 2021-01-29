@@ -83,4 +83,50 @@ class PostTest extends DuskTestCase
                 });
         });
     }
+
+    public function testDeletingAPost(): void
+    {
+        /** @var Post $post */
+        $post = Post::query()->latest()->first();
+
+        $this->browse(function (Browser $browser) use ($post): void {
+            $browser->login()
+                ->visitRoute('posts.list')
+                ->with('[dusk="post"]:first-child', function (Browser $postRow): void {
+                    $postRow->click('@delete-post-button');
+                })
+                ->waitFor('#confirm-delete-post-dialog')
+                ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
+                    $dialog->assertSeeIn('@cancel-delete-post-button', 'NEVERMIND')
+                        ->assertSeeIn('@confirm-delete-post-button', 'YES PLEASE')
+                        ->click('@cancel-delete-post-button');
+                })
+                ->waitUntilMissing('#confirm-delete-post-dialog')
+                ->within('@posts-list', function (Browser $list) use ($post): void {
+                    $list->assertSee($post->getTitle());
+                })
+                ->with('[dusk="post"]:first-child', function (Browser $postRow): void {
+                    $postRow->click('@delete-post-button');
+                })
+                ->waitFor('#confirm-delete-post-dialog')
+                ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
+                    $dialog->click('@cancel-delete-post-button');
+                })
+                ->waitUntilMissing('#confirm-delete-post-dialog')
+                ->within('@posts-list', function (Browser $list) use ($post): void {
+                    $list->assertSee($post->getTitle());
+                })
+                ->with('[dusk="post"]:first-child', function (Browser $postRow): void {
+                    $postRow->click('@delete-post-button');
+                })
+                ->waitFor('#confirm-delete-post-dialog')
+                ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
+                    $dialog->click('@confirm-delete-post-button');
+                })
+                ->waitUntilMissing('#confirm-delete-post-dialog')
+                ->within('@posts-list', function (Browser $list) use ($post): void {
+                    $list->assertDontSee($post->getTitle());
+                });
+        });
+    }
 }
