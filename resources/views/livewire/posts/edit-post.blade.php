@@ -16,8 +16,8 @@
         </div>
 
         <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 justify-end">
-            <x-jet-secondary-button wire:click="redirectBack" class="w-full justify-center md:w-auto">{{ __('Cancel') }}</x-jet-secondary-button>
-            <x-jet-button class="w-full justify-center md:w-auto">@if($this->currentPost) {{ __('Update') }} @else {{ __('Create') }} @endif</x-jet-button>
+            <x-jet-secondary-button wire:click="cancelEdit" class="w-full justify-center md:w-auto">{{ __('Cancel') }}</x-jet-secondary-button>
+            <x-jet-button class="w-full justify-center md:w-auto">{{ __('Update') }}</x-jet-button>
         </div>
     </form>
 </div>
