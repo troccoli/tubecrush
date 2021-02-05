@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Livewire\Posts;
 
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Tests\Feature\TestCase;
@@ -15,7 +17,7 @@ class CreatePostTest extends TestCase
             ->assertSeeLivewire('posts.create-post');
     }
 
-    public function testTheTileIsRequiredAndCannotBeLongerThan50Characters(): void
+    public function testTheTitleIsRequiredAndCannotBeLongerThan50Characters(): void
     {
         Livewire::test('posts.create-post')
             ->call('submit')
@@ -41,17 +43,49 @@ class CreatePostTest extends TestCase
             ->assertHasNoErrors(['content' => 'min']);
     }
 
+    public function testThePhotoIsRequiredAndMustBeAnImageAndMustNotBeBiggerThan5MB(): void
+    {
+        Storage::fake('public');
+
+        $textFile = UploadedFile::fake()->create('file.txt', 1000, 'text/plain');
+        $jpgFile = UploadedFile::fake()->image('photo.jpg');
+        $jpegFile = UploadedFile::fake()->image('photo2.jpeg');
+        $pngFile = UploadedFile::fake()->image('photo3.png');
+
+        Livewire::test('posts.create-post')
+            ->call('submit')
+            ->assertHasErrors(['photo' => 'required'])
+            ->set('photo', $textFile)
+            ->call('submit')
+            ->assertHasErrors(['photo' => 'mimes'])
+            ->set('photo', $jpgFile)
+            ->call('submit')
+            ->assertHasNoErrors(['photo' => 'mimes'])
+            ->set('photo', $jpegFile)
+            ->call('submit')
+            ->assertHasNoErrors(['photo' => 'mimes'])
+            ->set('photo', $pngFile)
+            ->call('submit')
+            ->assertHasNoErrors(['photo' => 'mimes']);
+    }
+
     public function testItCreatesANewPost(): void
     {
+        Storage::fake('public');
+
         $this->actingAs($this->superAdmin());
+        $photo = UploadedFile::fake()->image('photo.jpg');
 
         Livewire::test('posts.create-post')
             ->set('title', "New Post")
             ->set('content', 'Amazing content for this new post')
-            ->call('submit');
+            ->set('photo', $photo)
+            ->call('submit')
+            ->assertHasNoErrors();
 
         $this->assertDatabaseHas('posts', ['title' => 'New Post']);
         $this->assertCount(1, $this->superAdmin()->posts);
+        Storage::disk('public')->assertExists($this->superAdmin()->posts->first()->getPhoto());
     }
 
     public function testItCanCancel(): void

@@ -13,7 +13,7 @@ class Post extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['title', 'content', 'author_id'];
+    protected $fillable = ['title', 'content', 'photo', 'author_id'];
 
     public function author(): BelongsTo
     {
@@ -38,5 +38,10 @@ class Post extends Model
     public function getPublishedDate(): Carbon
     {
         return $this->created_at;
+    }
+
+    public function getPhoto(): string
+    {
+        return $this->photo;
     }
 }
