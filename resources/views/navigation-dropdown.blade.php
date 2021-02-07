@@ -42,6 +42,12 @@
                         </x-slot>
 
                         <x-slot name="content">
+                            @can('create posts')
+                            <x-jet-dropdown-link href="{{ route('posts.create') }}">
+                                {{ __('Create post') }}
+                            </x-jet-dropdown-link>
+                            <div class="border-t border-gray-100"></div>
+                            @endcan
                             <x-jet-dropdown-link href="{{ route('dashboard') }}">
                                 {{ __('Dashboard') }}
                             </x-jet-dropdown-link>
@@ -96,6 +102,11 @@
             @endif
 
             <div class="mt-3 space-y-1">
+                @can('create posts')
+                    <x-jet-responsive-nav-link href="{{ route('posts.create') }}" :active="request()->routeIs('posts.create')">
+                        {{ __('Create post') }}
+                    </x-jet-responsive-nav-link>
+                @endcan
                 <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                     {{ __('Dashboard') }}
                 </x-jet-responsive-nav-link>
