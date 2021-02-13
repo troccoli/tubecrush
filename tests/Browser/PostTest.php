@@ -12,121 +12,95 @@ class PostTest extends DuskTestCase
     public function testCreatingAPost(): void
     {
         $this->browse(function (Browser $browser): void {
-            $browser->login()
-                ->visitRoute('posts.list')
+            $browser->loginAs($this->superAdmin)
+                ->visitRoute('home')
+                ->within('@main-nav', function (Browser $nav): void {
+                    $nav->clickLink($this->superAdmin->getName(), 'button')
+                        ->waitForLink('Dashboard')
+                        ->clickLink('Dashboard');
+                })
+                ->clickLink('Posts')
                 ->click('@create-post-button')
                 ->assertRouteIs('posts.create')
-                ->type('#title', 'My new post')
-                ->type('#content', 'Awesome content for my new posts')
-                ->press('CREATE')
-                ->waitForReload()
-                ->assertRouteIs('posts.list')
-                ->within('[dusk="post"]:first-child', function (Browser $list): void {
-                    $list->assertSee('My new post')
-                        ->assertSee($this->user()->getName());
+                ->logout();
+            $browser->loginAs($this->editor)
+                ->visitRoute('home')
+                ->within('@main-nav', function (Browser $nav): void {
+                    $nav->clickLink($this->editor->getName(), 'button')
+                        ->waitForLink('Dashboard')
+                        ->clickLink('Dashboard');
                 })
+                ->clickLink('Posts')
                 ->click('@create-post-button')
-                ->type('#title', 'My second post')
-                ->type('#content', 'More content for my second post')
-                ->press('CANCEL')
-                ->waitForReload()
-                ->assertRouteIs('posts.list')
-                ->within('@posts-list', function (Browser $list): void {
-                    $list->assertDontSee('My second post');
-                })
-                ->within('[dusk="post"]:first-child', function (Browser $list): void {
-                    $list->assertSee('My new post')
-                        ->assertSee($this->user()->getName());
-                });
+                ->assertRouteIs('posts.create')
+                ->logout();
         });
     }
 
     public function testUpdatingAPost(): void
     {
-        /** @var Post $post */
-        $post = Post::factory()->for($this->user(), 'author')->create(['created_at' => Carbon::now()]);
+        /** @var Post $latestPost */
+        $latestPost = Post::query()->latest()->first();
 
-        $this->browse(function (Browser $browser) use ($post): void {
-            $browser->login()
-                ->visitRoute('posts.list')
+        $this->browse(function (Browser $browser) use ($latestPost): void {
+            $browser->loginAs($this->superAdmin)
+                ->visitRoute('home')
+                ->within('@main-nav', function (Browser $nav): void {
+                    $nav->clickLink($this->superAdmin->getName(), 'button')
+                        ->waitForLink('Dashboard')
+                        ->clickLink('Dashboard');
+                })
+                ->clickLink('Posts')
                 ->with('[dusk="post"]:first-child', function (Browser $list): void {
                     $list->click('@edit-post-button');
                 })
-                ->assertRouteIs('posts.update', ['postId' => $post->getId()])
-                ->assertValue('#title', $post->getTitle())
-                ->assertValue('#content', $post->getContent())
-                ->type('#title', 'My new post')
-                ->type('#content', 'Awesome content for my new post')
-                ->press('UPDATE')
-                ->waitForReload()
-                ->assertRouteIs('posts.list')
-                ->within('[dusk="post"]:first-child', function (Browser $list): void {
-                    $list->assertSee('My new post')
-                        ->assertSee($this->user()->getName());
+                ->assertRouteIs('posts.update', ['postId' => $latestPost->getId()])
+                ->logout();
+            $browser->loginAs($this->editor)
+                ->visitRoute('home')
+                ->within('@main-nav', function (Browser $nav): void {
+                    $nav->clickLink($this->editor->getName(), 'button')
+                        ->waitForLink('Dashboard')
+                        ->clickLink('Dashboard');
                 })
+                ->clickLink('Posts')
                 ->with('[dusk="post"]:first-child', function (Browser $list): void {
                     $list->click('@edit-post-button');
                 })
-                ->assertValue('#title', 'My new post')
-                ->assertValue('#content', 'Awesome content for my new post')
-                ->type('#title', 'My second post')
-                ->type('#content', 'More content for my second post')
-                ->press('CANCEL')
-                ->waitForReload()
-                ->assertRouteIs('posts.list')
-                ->within('@posts-list', function (Browser $list): void {
-                    $list->assertDontSee('My second post');
-                })
-                ->within('[dusk="post"]:first-child', function (Browser $list): void {
-                    $list->assertSee('My new post')
-                        ->assertSee($this->user()->getName());
-                });
+                ->assertRouteIs('posts.update', ['postId' => $latestPost->getId()])
+                ->logout();
         });
     }
 
     public function testDeletingAPost(): void
     {
-        /** @var Post $post */
-        $post = Post::query()->latest()->first();
-
-        $this->browse(function (Browser $browser) use ($post): void {
-            $browser->login()
-                ->visitRoute('posts.list')
+        $this->browse(function (Browser $browser): void {
+            $browser->loginAs($this->superAdmin)
+                ->visitRoute('home')
+                ->within('@main-nav', function (Browser $nav): void {
+                    $nav->clickLink($this->superAdmin->getName(), 'button')
+                        ->waitForLink('Dashboard')
+                        ->clickLink('Dashboard');
+                })
+                ->clickLink('Posts')
                 ->with('[dusk="post"]:first-child', function (Browser $postRow): void {
                     $postRow->click('@delete-post-button');
                 })
                 ->waitFor('#confirm-delete-post-dialog')
-                ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
-                    $dialog->assertSeeIn('@cancel-delete-post-button', 'NEVERMIND')
-                        ->assertSeeIn('@confirm-delete-post-button', 'YES PLEASE')
-                        ->click('@cancel-delete-post-button');
+                ->assertSee('Are you sure you want to delete the following post?')
+                ->logout();
+            $browser->loginAs($this->editor)
+                ->visitRoute('home')
+                ->within('@main-nav', function (Browser $nav): void {
+                    $nav->clickLink($this->editor->getName(), 'button')
+                        ->waitForLink('Dashboard')
+                        ->clickLink('Dashboard');
                 })
-                ->waitUntilMissing('#confirm-delete-post-dialog')
-                ->within('@posts-list', function (Browser $list) use ($post): void {
-                    $list->assertSee($post->getTitle());
-                })
+                ->clickLink('Posts')
                 ->with('[dusk="post"]:first-child', function (Browser $postRow): void {
-                    $postRow->click('@delete-post-button');
+                    $postRow->assertDontSeeLink('@delete-post-button');
                 })
-                ->waitFor('#confirm-delete-post-dialog')
-                ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
-                    $dialog->click('@cancel-delete-post-button');
-                })
-                ->waitUntilMissing('#confirm-delete-post-dialog')
-                ->within('@posts-list', function (Browser $list) use ($post): void {
-                    $list->assertSee($post->getTitle());
-                })
-                ->with('[dusk="post"]:first-child', function (Browser $postRow): void {
-                    $postRow->click('@delete-post-button');
-                })
-                ->waitFor('#confirm-delete-post-dialog')
-                ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
-                    $dialog->click('@confirm-delete-post-button');
-                })
-                ->waitUntilMissing('#confirm-delete-post-dialog')
-                ->within('@posts-list', function (Browser $list) use ($post): void {
-                    $list->assertDontSee($post->getTitle());
-                });
+                ->logout();
         });
     }
 }
