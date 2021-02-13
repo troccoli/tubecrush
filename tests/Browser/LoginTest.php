@@ -10,11 +10,12 @@ class LoginTest extends DuskTestCase
     public function testRedirectsToHomepageAfterLoggingIn(): void
     {
         $this->browse(function (Browser $browser): void {
-            $browser->visit('/login')
+            $browser->visitRoute('login')
                 ->type('email', 'super-admin@example.com')
                 ->type('password', 'password')
                 ->press('LOGIN')
-                ->assertRouteIs('home');
+                ->assertRouteIs('home')
+                ->assertAuthenticatedAs($this->superAdmin);
         });
     }
 }

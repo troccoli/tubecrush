@@ -8,13 +8,47 @@ use Tests\DuskTestCase;
 
 class DashboardTest extends DuskTestCase
 {
-    public function testDashboard(): void
+    public function testNavigation(): void
     {
         $this->browse(function (Browser $browser): void {
+            $browser->visitRoute('dashboard')
+                ->assertRouteIs('login');
+
             $browser->loginAs($this->superAdmin)
                 ->visitRoute('dashboard')
                 ->assertSee("{$this->superAdmin->getName()}'s Dashboard")
                 ->assertSee('Welcome to your dashboard.')
+                ->assertSeeLink('Users')
+                ->assertSeeLink('Posts')
+                ->clickLink('Users')
+                ->assertRouteIs('register')
+                ->assertSeeLink('Users')
+                ->assertSeeLink('Posts')
+                ->clickLink('Posts')
+                ->assertRouteIs('posts.list')
+                ->assertSeeLink('Users')
+                ->assertSeeLink('Posts')
+                ->logout();
+
+            $browser->loginAs($this->editor)
+                ->visitRoute('dashboard')
+                ->assertSee("{$this->editor->getName()}'s Dashboard")
+                ->assertSee('Welcome to your dashboard.')
+                ->assertDontSeeLink('Users')
+                ->assertSeeLink('Posts')
+                ->clickLink('Posts')
+                ->assertRouteIs('posts.list')
+                ->assertDontSeeLink('Users')
+                ->assertSeeLink('Posts')
+                ->logout();
+        });
+    }
+
+    public function testUsersLink(): void
+    {
+        $this->browse(function (Browser $browser): void {
+            $browser->loginAs($this->superAdmin)
+                ->visitRoute('dashboard')
                 ->assertSeeLink('Users')
                 ->assertSeeLink('Posts')
                 ->clickLink('Users')
@@ -87,10 +121,25 @@ class DashboardTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser): void {
             $browser->loginAs($this->superAdmin)
-                ->visitroute('posts.list')
+                ->visitRoute('posts.list')
                 ->within('@posts-list', function (Browser $list): void {
                     $list->assertCountInElement(5, '@post');
-                });
+                })
+                ->with('[dusk="post"]:first-child', function (Browser $row): void {
+                    $row->assertVisible('@edit-post-button')
+                        ->assertVisible('@delete-post-button');
+                })
+                ->logout();
+
+            $browser->loginAs($this->editor)
+                ->visitRoute('posts.list')
+                ->within('@posts-list', function (Browser $list): void {
+                    $list->assertCountInElement(5, '@post');
+                })
+                ->with('[dusk="post"]:first-child', function (Browser $row): void {
+                    $row->assertVisible('@edit-post-button')
+                        ->assertMissing('@delete-post-button');
+                })->logout();
         });
     }
 
@@ -98,9 +147,71 @@ class DashboardTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser): void {
             $browser->loginAs($this->superAdmin)
-                ->visitroute('posts.list')
+                ->visitRoute('posts.list')
                 ->click('@create-post-button')
-                ->assertRouteIs('posts.create');
+                ->assertRouteIs('posts.create')
+                ->logout();
+
+            $browser->loginAs($this->editor)
+                ->visitRoute('posts.list')
+                ->click('@create-post-button')
+                ->assertRouteIs('posts.create')
+                ->logout();
+        });
+    }
+
+    public function testEditPost(): void
+    {
+        $this->browse(function (Browser $browser): void {
+            $browser->loginAs($this->superAdmin)
+                ->visitRoute('posts.list')
+                ->with('[dusk="post"]:first-child', function (Browser $row): void {
+                    $row->click('@edit-post-button');
+                })
+                ->assertPathBeginsWith('/posts/update/')
+                ->logout();
+
+            $browser->loginAs($this->editor)
+                ->visitRoute('posts.list')
+                ->with('[dusk="post"]:first-child', function (Browser $row): void {
+                    $row->click('@edit-post-button');
+                })
+                ->assertPathBeginsWith('/posts/update/')
+                ->logout();
+        });
+    }
+
+    public function testDeletePost(): void
+    {
+        $this->browse(function (Browser $browser): void {
+            $browser->loginAs($this->superAdmin)
+                ->visitRoute('posts.list')
+                ->with('[dusk="post"]:first-child', function (Browser $row): void {
+                    $row->click('@delete-post-button');
+                })
+                ->waitFor('#confirm-delete-post-dialog')
+                ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
+                    $dialog->assertVisible('@cancel-delete-post-button')
+                        ->assertSeeIn('@cancel-delete-post-button', 'NEVERMIND')
+                        ->assertVisible('@confirm-delete-post-button')
+                        ->assertSeeIn('@confirm-delete-post-button', 'YES PLEASE');
+                })
+                ->press('NEVERMIND')
+                ->waitUntilMissing('#confirm-delete-post-dialog')
+                ->assertRouteIs('posts.list')
+                ->with('[dusk="post"]:first-child', function (Browser $row): void {
+                    $row->click('@delete-post-button');
+                })
+                ->waitFor('#confirm-delete-post-dialog')
+                ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
+                    $dialog->assertVisible('@cancel-delete-post-button')
+                        ->assertSeeIn('@cancel-delete-post-button', 'NEVERMIND')
+                        ->assertVisible('@confirm-delete-post-button')
+                        ->assertSeeIn('@confirm-delete-post-button', 'YES PLEASE');
+                })
+                ->press('YES PLEASE')
+                ->waitUntilMissing('#confirm-delete-post-dialog')
+                ->assertRouteIs('posts.list')->logout();
         });
     }
 }
