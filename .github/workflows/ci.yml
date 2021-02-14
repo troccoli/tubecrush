@@ -28,19 +28,22 @@ jobs:
           composer --version
           node --version
           npm --version
+
       - name: Setup Environment
         run: |
           cp .env.ci .env
           touch ./storage/logs/laravel.log
           touch ./database/database.sqlite
+
       - name: Cache node modules
         id: cache-node-modules
         uses: actions/cache@v1
         with:
           path: ./node_modules
           key: ${{ runner.os }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
-      - name: Install node dependencise
+      - name: Install node dependencies
         run: npm install
+
       - name: Cache composer packages
         id: cache-composer-packages
         uses: actions/cache@v1
@@ -49,43 +52,55 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
       - name: Install composer dependencies
         run: composer install -n --ignore-platform-reqs --no-progress
+
       - name: Build artifacts
         run: npm run prod
+
       - name: Migrate Database
         run: php artisan migrate --force
+
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
+
       - name: Dump Autoloader
         run: composer dump-autoload
+
       - name: Update Chrome Driver
         run: |
           CHROME_VERSION="$(google-chrome --version)"
           CHROMEDRIVER_RELEASE="$(echo $CHROME_VERSION | sed 's/^Google Chrome //')"
           CHROMEDRIVER_RELEASE=${CHROMEDRIVER_RELEASE%%.*}
           php artisan dusk:chrome-driver $CHROMEDRIVER_RELEASE
+
       - name: Start Chrome Driver
         run: ./vendor/laravel/dusk/bin/chromedriver-linux &
+
       - name: Run Laravel Server
         run: php artisan serve &
+
       - name: Execute all tests via PHPUnit
         id: phpunit
         run: vendor/bin/phpunit
+
       - name: Run Laravel Dusk Tests
         id: laravel-dusk
         continue-on-error: true
         run: php artisan dusk
+
       - name: Upload logs
         uses: actions/upload-artifact@v2
         if: ${{ steps.laravel-dusk.outcome == 'failure'}}
         with:
           name: ${{ env.job-name }}-log
           path: ./storage/logs/*.log
+
       - name: Upload screenshots
         uses: actions/upload-artifact@v2
         if: ${{ steps.laravel-dusk.outcome == 'failure' }}
         with:
           name: ${{ env.job-name }}-screenshots
           path: ./tests/Browser/screenshots
+
       - name: Sanity check
         if: ${{ steps.laravel-dusk.outcome == 'failure'}}
         run: exit 2
