@@ -104,7 +104,7 @@
         </x-slot>
         <x-slot name="footer">
             <x-jet-secondary-button wire:click="keepPost" wire:loading.attr="disabled" dusk="cancel-delete-post-button">
-                {{ __("Nevermind") }}
+                {{ __("Never mind") }}
             </x-jet-secondary-button>
 
             <x-jet-danger-button class="ml-2" wire:click="deletePost" wire:loading.attr="disabled" dusk="confirm-delete-post-button">

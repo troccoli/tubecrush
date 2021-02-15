@@ -192,11 +192,11 @@ class DashboardTest extends DuskTestCase
                 ->waitFor('#confirm-delete-post-dialog')
                 ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
                     $dialog->assertVisible('@cancel-delete-post-button')
-                        ->assertSeeIn('@cancel-delete-post-button', 'NEVERMIND')
+                        ->assertSeeIn('@cancel-delete-post-button', 'NEVER MIND')
                         ->assertVisible('@confirm-delete-post-button')
                         ->assertSeeIn('@confirm-delete-post-button', 'YES PLEASE');
                 })
-                ->press('NEVERMIND')
+                ->press('NEVER MIND')
                 ->waitUntilMissing('#confirm-delete-post-dialog')
                 ->assertRouteIs('posts.list')
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
@@ -205,7 +205,7 @@ class DashboardTest extends DuskTestCase
                 ->waitFor('#confirm-delete-post-dialog')
                 ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
                     $dialog->assertVisible('@cancel-delete-post-button')
-                        ->assertSeeIn('@cancel-delete-post-button', 'NEVERMIND')
+                        ->assertSeeIn('@cancel-delete-post-button', 'NEVER MIND')
                         ->assertVisible('@confirm-delete-post-button')
                         ->assertSeeIn('@confirm-delete-post-button', 'YES PLEASE');
                 })
