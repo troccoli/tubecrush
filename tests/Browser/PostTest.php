@@ -188,38 +188,6 @@ class PostTest extends DuskTestCase
         });
     }
 
-    public function testDeletingAPost(): void
-    {
-        $this->browse(function (Browser $browser): void {
-            $browser->loginAs($this->superAdmin)
-                ->visitRoute('home')
-                ->within('@main-nav', function (Browser $nav): void {
-                    $nav->clickLink($this->superAdmin->getName(), 'button')
-                        ->waitForLink('Dashboard')
-                        ->clickLink('Dashboard');
-                })
-                ->clickLink('Posts')
-                ->with('[dusk="post"]:first-child', function (Browser $postRow): void {
-                    $postRow->click('@delete-post-button');
-                })
-                ->waitFor('#confirm-delete-post-dialog')
-                ->assertSee('Are you sure you want to delete the following post?')
-                ->logout();
-            $browser->loginAs($this->editor)
-                ->visitRoute('home')
-                ->within('@main-nav', function (Browser $nav): void {
-                    $nav->clickLink($this->editor->getName(), 'button')
-                        ->waitForLink('Dashboard')
-                        ->clickLink('Dashboard');
-                })
-                ->clickLink('Posts')
-                ->with('[dusk="post"]:first-child', function (Browser $postRow): void {
-                    $postRow->assertDontSeeLink('@delete-post-button');
-                })
-                ->logout();
-        });
-    }
-
     /*
      * This test should be part of either testCreatingAPost or testUpdatingAPost. However, what we test here fails
      * for some reason (it works in the app), and we don't want that to stop the test suites.
