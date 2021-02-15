@@ -21,6 +21,7 @@
         "spatie/laravel-permission": "^3.18"
     },
     "require-dev": {
+        "brianium/paratest": "^6.2",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/dusk": "^6.9",

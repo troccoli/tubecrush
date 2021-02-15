@@ -42,7 +42,8 @@ class NavigationTest extends DuskTestCase
         $this->browse(function (Browser $browser): void {
             $browser->visitRoute('home')
                 ->within('@main-nav', function (Browser $nav): void {
-                    $nav->assertDontSeeLink('Dashboard')
+                    $nav->assertDontSeeLink('Create Post')
+                        ->assertDontSeeLink('Dashboard')
                         ->assertDontSeeLink('Profile')
                         ->assertDontSeeLink('Logout');
                 });
@@ -51,15 +52,22 @@ class NavigationTest extends DuskTestCase
                 ->visitRoute('home')
                 ->within('@main-nav', function (Browser $nav): void {
                     $nav->assertSee($this->superAdmin->getName())
+                        ->assertDontSeeLink('Create post')
                         ->assertDontSeeLink('Dashboard')
                         ->assertDontSeeLink('Profile')
                         ->assertDontSeeLink('Logout')
                         ->clickLink($this->superAdmin->getName(), 'button')
                         ->waitFor('@dropdown-menu')
+                        ->assertSeeLink('Create post')
                         ->assertSeeLink('Dashboard')
                         ->assertSeeLink('Profile')
                         ->assertSeeLink('Logout');
-                })->clickLink('Dashboard')
+                })
+                ->clickLink('Create post')
+                ->assertRouteIs('posts.create')
+                ->clickLink($this->superAdmin->getName(), 'button')
+                ->waitFor('@dropdown-menu')
+                ->clickLink('Dashboard')
                 ->assertRouteIs('dashboard')
                 ->clickLink($this->superAdmin->getName(), 'button')
                 ->waitFor('@dropdown-menu')
@@ -74,15 +82,22 @@ class NavigationTest extends DuskTestCase
                 ->visitRoute('home')
                 ->within('@main-nav', function (Browser $nav): void {
                     $nav->assertSee($this->editor->getName())
+                        ->assertDontSeeLink('Create post')
                         ->assertDontSeeLink('Dashboard')
                         ->assertDontSeeLink('Profile')
                         ->assertDontSeeLink('Logout')
                         ->clickLink($this->editor->getName(), 'button')
                         ->waitFor('@dropdown-menu')
+                        ->assertSeeLink('Create post')
                         ->assertSeeLink('Dashboard')
                         ->assertSeeLink('Profile')
                         ->assertSeeLink('Logout');
-                })->clickLink('Dashboard')
+                })
+                ->clickLink('Create post')
+                ->assertRouteIs('posts.create')
+                ->clickLink($this->editor->getName(), 'button')
+                ->waitFor('@dropdown-menu')
+                ->clickLink('Dashboard')
                 ->assertRouteIs('dashboard')
                 ->clickLink($this->editor->getName(), 'button')
                 ->waitFor('@dropdown-menu')

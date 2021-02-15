@@ -15,8 +15,18 @@ class PostFactory extends Factory
         return [
             'title' => $this->faker->sentence(4),
             'content' => $this->faker->realText(),
+            'photo' => 'photos/placeholder-'.mt_rand(1, 10).'.jpg',
             'created_at' => $date,
             'updated_at' => $date,
         ];
+    }
+
+    public function bySuperAdmin()
+    {
+        return $this->state(function (array $attributes): array {
+            return [
+                'author_id' => 1,
+            ];
+        });
     }
 }

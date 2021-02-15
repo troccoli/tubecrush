@@ -16,6 +16,9 @@ composer install --no-interaction --no-dev --no-suggest --prefer-dist --optimize
 # Migrate database
 php artisan migrate --force --no-interaction
 
+# Make sure the public disk is available
+php artisan storage:link
+
 # Note: If you're using queue workers, this is the place to restart them.
 # ...
 

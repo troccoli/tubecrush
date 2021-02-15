@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use App\Models\Post;
 use Illuminate\Support\Str;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -184,34 +185,37 @@ class DashboardTest extends DuskTestCase
     public function testDeletePost(): void
     {
         $this->browse(function (Browser $browser): void {
+            /** @var Post $latestPost */
+            $latestPost = Post::query()->latest()->first();
+            $postCount = Post::query()->count();
+
             $browser->loginAs($this->superAdmin)
                 ->visitRoute('posts.list')
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
                     $row->click('@delete-post-button');
                 })
                 ->waitFor('#confirm-delete-post-dialog')
-                ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
-                    $dialog->assertVisible('@cancel-delete-post-button')
-                        ->assertSeeIn('@cancel-delete-post-button', 'NEVERMIND')
+                ->within('#confirm-delete-post-dialog', function (Browser $dialog) use ($latestPost): void {
+                    $dialog->assertSee('Are you sure you want to delete the following post?')
+                        ->assertSee($latestPost->getTitle())
+                        ->assertVisible('@cancel-delete-post-button')
+                        ->assertSeeIn('@cancel-delete-post-button', 'NEVER MIND')
                         ->assertVisible('@confirm-delete-post-button')
                         ->assertSeeIn('@confirm-delete-post-button', 'YES PLEASE');
                 })
-                ->press('NEVERMIND')
+                ->press('NEVER MIND')
                 ->waitUntilMissing('#confirm-delete-post-dialog')
                 ->assertRouteIs('posts.list')
+                ->assertSee($latestPost->getTitle())
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
                     $row->click('@delete-post-button');
                 })
                 ->waitFor('#confirm-delete-post-dialog')
-                ->within('#confirm-delete-post-dialog', function (Browser $dialog): void {
-                    $dialog->assertVisible('@cancel-delete-post-button')
-                        ->assertSeeIn('@cancel-delete-post-button', 'NEVERMIND')
-                        ->assertVisible('@confirm-delete-post-button')
-                        ->assertSeeIn('@confirm-delete-post-button', 'YES PLEASE');
-                })
                 ->press('YES PLEASE')
                 ->waitUntilMissing('#confirm-delete-post-dialog')
-                ->assertRouteIs('posts.list')->logout();
+                ->assertRouteIs('posts.list')
+                ->assertDontSee($latestPost->getTitle())
+                ->logout();
         });
     }
 }
