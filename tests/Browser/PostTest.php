@@ -20,6 +20,8 @@ class PostTest extends DuskTestCase
             $browser->visitRoute('posts.create')
                 ->assertSee('Title')
                 ->assertInputValue('#title', '')
+                ->assertSee('Line')
+                ->assertSeeIn('@line-select', 'Choose one line')
                 ->assertSee('Content')
                 ->assertInputValue('#content', '')
                 ->assertSeeIn('@upload-photo-button', 'Upload a photo')
@@ -44,6 +46,17 @@ class PostTest extends DuskTestCase
                 ->type('#title', '12345678901234567890')
                 ->press('CREATE')
                 ->waitUntilMissing('@title-error');
+
+            // The line is mandatory
+            $browser->visitRoute('posts.create')
+                ->press('CREATE')
+                ->waitForTextIn('@line-error', 'The selected line is invalid.')
+                ->click('@line-select')
+                ->waitFor('@circle-line-option')
+                ->click('@circle-line-option')
+                ->waitForTextIn('@line-select', 'Circle line')
+                ->press('CREATE')
+                ->waitUntilMissing('@line-error');
 
             // The content is mandatory, must be at least 10 characters and cannot be more than 2000 characters
             $browser->visitRoute('posts.create')
@@ -87,6 +100,10 @@ class PostTest extends DuskTestCase
             // Create a new post
             $browser->visitRoute('posts.create')
                 ->type('#title', 'New post title')
+                ->click('@line-select')
+                ->waitFor('@circle-line-option')
+                ->click('@circle-line-option')
+                ->waitForTextIn('@line-select', 'Circle line')
                 ->type('#content', 'New post amazing content')
                 ->attach('#photo', $pngFile)
                 ->waitUntilMissing('@photo-loading-icon')
@@ -107,6 +124,7 @@ class PostTest extends DuskTestCase
         $this->browse(function (Browser $browser): void {
             /** @var Post $latestPost */
             $latestPost = Post::query()->latest()->first();
+            $latestPostLine = $latestPost->getLine();
             $postCount = Post::query()->count();
             $browser->loginAs($this->superAdmin);
 
@@ -114,6 +132,8 @@ class PostTest extends DuskTestCase
             $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
                 ->assertSee('Title')
                 ->assertInputValue('#title', $latestPost->getTitle())
+                ->assertSee('Line')
+                ->assertSeeIn('@line-select', $latestPostLine->getName())
                 ->assertSee('Content')
                 ->assertInputValue('#content', $latestPost->getContent())
                 ->assertSeeIn('@upload-photo-button', 'Upload a photo')
@@ -174,6 +194,9 @@ class PostTest extends DuskTestCase
             // Update a post
             $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
                 ->type('#title', 'New title for post')
+                ->click('@line-select')
+                ->waitFor('@circle-line-option')
+                ->click('@circle-line-option')
                 ->type('#content', 'New content for post')
                 ->attach('#photo', $jpgFile)
                 ->waitUntilMissing('@photo-loading-icon')

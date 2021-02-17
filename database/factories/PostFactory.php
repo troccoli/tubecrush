@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Line;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -16,6 +17,7 @@ class PostFactory extends Factory
             'title' => $this->faker->sentence(4),
             'content' => $this->faker->realText(),
             'photo' => 'photos/placeholder-'.mt_rand(1, 10).'.jpg',
+            'line_id' => mt_rand(1, Line::query()->count()),
             'created_at' => $date,
             'updated_at' => $date,
         ];

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Livewire\Posts;
 
+use App\Models\Line;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -25,6 +26,19 @@ class CreatePostTest extends TestCase
             ->set('title', Str::random(51))
             ->call('submit')
             ->assertHasErrors(['title' => 'max']);
+    }
+
+    public function testTheLineIsRequiredAndMustBeAnExistingLine(): void
+    {
+        Livewire::test('posts.create-post')
+            ->call('submit')
+            ->assertHasErrors(['line' => 'exists'])
+            ->set('line', Line::query()->max('id') + 1)
+            ->call('submit')
+            ->assertHasErrors(['line' => 'exists'])
+            ->set('line', Line::query()->max('id'))
+            ->call('submit')
+            ->assertHasNoErrors(['line' => 'exists']);
     }
 
     public function testTheContentIsRequiredAndMustBeAtLeast10CharactersLongAndNoMoreThan2000(): void
@@ -78,6 +92,7 @@ class CreatePostTest extends TestCase
 
         Livewire::test('posts.create-post')
             ->set('title', "New Post")
+            ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
             ->set('photo', $photo)
             ->call('submit')

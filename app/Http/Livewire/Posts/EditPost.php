@@ -12,10 +12,12 @@ class EditPost extends Component
 
     public Post $post;
     public string $title;
+    public int $line = 0;
     public string $content;
     public $photo;
     protected array $rules = [
         'title' => 'required|max:20',
+        'line' => 'exists:\App\Models\Line,id',
         'content' => 'required|min:10|max:2000',
         'photo' => 'nullable|sometimes|mimes:jpg,jpeg,png|max:5120', // 5MB
     ];
@@ -24,6 +26,7 @@ class EditPost extends Component
     {
         $this->post = Post::findOrFail($postId);
         $this->title = $this->post->getTitle();
+        $this->line = $this->post->getLine()->getId();
         $this->content = $this->post->getContent();
     }
 
@@ -43,6 +46,7 @@ class EditPost extends Component
 
         $this->post->update([
             'title' => $this->title,
+            'line_id' => $this->line,
             'content' => $this->content,
             'photo' => $this->photo ? $this->photo->store('photos', 'public') : $this->post->getPhoto(),
         ]);

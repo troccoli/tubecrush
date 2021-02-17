@@ -7,8 +7,13 @@
                  alt="Article">
 
             <div class="p-6">
+                <div class="mb-6 h-8">
+                <x-line-box>
+                    @slot('class'){{ $post->line->getSlug() }}@endslot
+                    {{ $post->line->getName() }}
+                </x-line-box>
+                </div>
                 <div>
-                    <span class="text-blue-600 text-xs font-medium uppercase">Circle Line</span>
                     <p class="block text-gray-800 font-semibold text-2xl mt-2">{{ $post->getTitle() }}</p>
                     <p class="text-sm text-gray-600 mt-2">{{ $post->getContent() }}</p>
                 </div>
