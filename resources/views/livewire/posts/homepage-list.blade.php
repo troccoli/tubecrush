@@ -1,7 +1,7 @@
 <div class="flex flex-col">
     @foreach($posts as $post)
         <div
-            class="font-post-content max-w-2xl mx-auto my-6 bg-white overflow-hidden shadow-md rounded-lg flex flex-col"
+            class="max-w-2xl mx-auto my-6 bg-white overflow-hidden shadow-md rounded-lg flex flex-col"
             dusk="post">
             <img class="object-cover" src="{{ \Illuminate\Support\Facades\Storage::url($post->getPhoto()) }}"
                  alt="Article">
@@ -9,7 +9,7 @@
             <div class="p-6">
                 <div>
                     <span class="text-blue-600 text-xs font-medium uppercase">Circle Line</span>
-                    <p class="block text-gray-800 font-semibold font-post-title text-2xl mt-2">{{ $post->getTitle() }}</p>
+                    <p class="block text-gray-800 font-semibold text-2xl mt-2">{{ $post->getTitle() }}</p>
                     <p class="text-sm text-gray-600 mt-2">{{ $post->getContent() }}</p>
                 </div>
 
