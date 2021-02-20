@@ -23,7 +23,9 @@ php artisan storage:link
 # ...
 
 # Clear cache
-php artisan cache:clear --no-interaction
+php artisan optimize:clear --no-interaction
+
+# Rebuild cache
 php artisan optimize --no-interaction
 php artisan view:cache --no-interaction
 php artisan event:cache --no-interaction
