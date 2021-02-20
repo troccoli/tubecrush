@@ -10,9 +10,7 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Roboto', ...defaultTheme.fontFamily.sans],
-                'post-title': ['Actor', ...defaultTheme.fontFamily.sans],
-                'post-content': ['Montserrat', ...defaultTheme.fontFamily.sans],
+                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
             animation: {
                 'pulse-bg-once': 'pulse-bg-once 3s ease-in forwards'

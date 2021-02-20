@@ -13,7 +13,7 @@ class LoginTest extends DuskTestCase
             $browser->visitRoute('login')
                 ->type('email', 'super-admin@example.com')
                 ->type('password', 'password')
-                ->press('LOGIN')
+                ->press('LOG IN')
                 ->assertRouteIs('home')
                 ->assertAuthenticatedAs($this->superAdmin);
         });

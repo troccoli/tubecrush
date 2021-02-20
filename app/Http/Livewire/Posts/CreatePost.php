@@ -11,10 +11,12 @@ class CreatePost extends Component
     use WithFileUploads;
 
     public string $title = '';
+    public int $line = 0;
     public string $content = '';
     public $photo;
     protected array $rules = [
         'title' => 'required|max:20',
+        'line' => 'exists:\App\Models\Line,id',
         'content' => 'required|min:10|max:2000',
         'photo' => 'required|mimes:jpg,jpeg,png|max:5120', // 5MB
     ];
@@ -36,6 +38,7 @@ class CreatePost extends Component
         /** @var Post $post */
         $post = Post::query()->create([
             'title' => $this->title,
+            'line_id' => $this->line,
             'content' => $this->content,
             'photo' => $this->photo->store('photos', 'public'),
             'author_id' => auth()->user()->getAuthIdentifier(),

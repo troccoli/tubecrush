@@ -30,6 +30,6 @@ class HomepageList extends Component
 
     private function loadPosts(): void
     {
-        $this->posts = Post::query()->orderByDesc('created_at')->limit($this->count)->get();
+        $this->posts = Post::query()->with(['author', 'line'])->orderByDesc('created_at')->limit($this->count)->get();
     }
 }

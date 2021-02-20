@@ -45,7 +45,7 @@ class NavigationTest extends DuskTestCase
                     $nav->assertDontSeeLink('Create Post')
                         ->assertDontSeeLink('Dashboard')
                         ->assertDontSeeLink('Profile')
-                        ->assertDontSeeLink('Logout');
+                        ->assertDontSeeLink('Log out');
                 });
 
             $browser->loginAs($this->superAdmin)
@@ -55,13 +55,13 @@ class NavigationTest extends DuskTestCase
                         ->assertDontSeeLink('Create post')
                         ->assertDontSeeLink('Dashboard')
                         ->assertDontSeeLink('Profile')
-                        ->assertDontSeeLink('Logout')
+                        ->assertDontSeeLink('Log out')
                         ->clickLink($this->superAdmin->getName(), 'button')
                         ->waitFor('@dropdown-menu')
                         ->assertSeeLink('Create post')
                         ->assertSeeLink('Dashboard')
                         ->assertSeeLink('Profile')
-                        ->assertSeeLink('Logout');
+                        ->assertSeeLink('Log out');
                 })
                 ->clickLink('Create post')
                 ->assertRouteIs('posts.create')
@@ -75,7 +75,7 @@ class NavigationTest extends DuskTestCase
                 ->assertRouteIs('profile.show')
                 ->clickLink($this->superAdmin->getName(), 'button')
                 ->waitFor('@dropdown-menu')
-                ->clickLink('Logout')
+                ->clickLink('Log out')
                 ->assertGuest();
 
             $browser->loginAs($this->editor)
@@ -85,13 +85,13 @@ class NavigationTest extends DuskTestCase
                         ->assertDontSeeLink('Create post')
                         ->assertDontSeeLink('Dashboard')
                         ->assertDontSeeLink('Profile')
-                        ->assertDontSeeLink('Logout')
+                        ->assertDontSeeLink('Log out')
                         ->clickLink($this->editor->getName(), 'button')
                         ->waitFor('@dropdown-menu')
                         ->assertSeeLink('Create post')
                         ->assertSeeLink('Dashboard')
                         ->assertSeeLink('Profile')
-                        ->assertSeeLink('Logout');
+                        ->assertSeeLink('Log out');
                 })
                 ->clickLink('Create post')
                 ->assertRouteIs('posts.create')
@@ -105,7 +105,7 @@ class NavigationTest extends DuskTestCase
                 ->assertRouteIs('profile.show')
                 ->clickLink($this->editor->getName(), 'button')
                 ->waitFor('@dropdown-menu')
-                ->clickLink('Logout')
+                ->clickLink('Log out')
                 ->assertGuest();
         });
     }

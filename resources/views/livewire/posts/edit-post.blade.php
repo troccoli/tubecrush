@@ -8,6 +8,13 @@
             <x-jet-input-error for="title" class="mt-2" dusk="title-error"/>
         </div>
 
+        <!-- Line -->
+        <div class="mb-6 md:w-full md:mr-6">
+            <x-jet-label for="line" value="{{ __('Line') }}"/>
+            <x-line-select></x-line-select>
+            <x-jet-input-error for="line" class="" dusk="line-error"/>
+        </div>
+
         <!-- Content -->
         <div class="mb-6">
             <x-jet-label for="content" value="{{ __('Content') }}"/>
