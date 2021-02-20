@@ -89,6 +89,20 @@ class EditPostTest extends TestCase
             ->assertHasNoErrors(['photo' => 'mimes']);
     }
 
+    public function testThePhotoCreditIsOptionalButMustBeFewerThan20Characters(): void
+    {
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+            ->set('photoCredit', '')
+            ->call('submit')
+            ->assertHasNoErrors(['photoCredit'])
+            ->set('photoCredit', Str::random(21))
+            ->call('submit')
+            ->assertHasErrors(['photoCredit' => 'max'])
+            ->set('photoCredit', Str::random(20))
+            ->call('submit')
+            ->assertHasNoErrors(['photoCredit']);
+    }
+
     public function testItUpdatesAPost(): void
     {
         $this->assertDatabaseMissing('posts', ['title' => 'New post']);
@@ -98,6 +112,23 @@ class EditPostTest extends TestCase
             ->set('title', "New post")
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
+            ->set('photoCredit', 'John')
+            ->call('submit');
+
+        $this->assertDatabaseHas('posts', ['title' => 'New post']);
+        $this->assertDatabaseMissing('posts', ['title' => 'Old post']);
+    }
+
+    public function testItUpdatesAPostWithoutThePhotoCredit(): void
+    {
+        $this->assertDatabaseMissing('posts', ['title' => 'New post']);
+        $this->assertDatabaseHas('posts', ['title' => 'Old post']);
+
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+            ->set('title', "New post")
+            ->set('line', 1)
+            ->set('content', 'Amazing content for this new post')
+            ->set('photoCredit', null)
             ->call('submit');
 
         $this->assertDatabaseHas('posts', ['title' => 'New post']);
