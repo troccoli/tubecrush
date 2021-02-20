@@ -28,16 +28,25 @@
             <x-jet-input-error for="photo" class="mt-2" dusk="photo-error"/>
             <div class="mt-4">
                 @if ($errors->has('photo') || !$photo)
-                    <img dusk="photo-image" src="{{ \Illuminate\Support\Facades\Storage::url($post->getPhoto()) }}" alt="Cover photo">
+                    <img dusk="photo-image" src="{{ \Illuminate\Support\Facades\Storage::url($post->getPhoto()) }}"
+                         alt="Cover photo">
                 @else
                     <img dusk="photo-image" src="{{ $photo->temporaryUrl() }}" alt="temp">
                 @endif
             </div>
         </div>
 
+        <!-- Photo Credit -->
+        <div class="mb-6 md:w-full md:mr-6">
+            <x-jet-label for="photo-credit" value="{{ __('Photo submitted by') }}"/>
+            <x-jet-input id="photo-credit" type="text" class="mt-2 block w-full" wire:model.defer="photoCredit"/>
+            <x-jet-input-error for="photoCredit" class="mt-2" dusk="photo-credit-error"/>
+        </div>
+
         <!-- Buttons -->
         <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 justify-end">
-            <x-jet-secondary-button dusk="cancel-button" wire:click="cancelEdit" class="w-full justify-center md:w-auto">{{ __('Cancel') }}</x-jet-secondary-button>
+            <x-jet-secondary-button dusk="cancel-button" wire:click="cancelEdit"
+                                    class="w-full justify-center md:w-auto">{{ __('Cancel') }}</x-jet-secondary-button>
             <x-jet-button dusk="submit-button" class="w-full justify-center md:w-auto">
                 <svg wire:loading wire:target="submit" dusk="submit-loading-icon" class="animate-spin w-4 h-4 mr-1"
                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

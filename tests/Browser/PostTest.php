@@ -4,6 +4,7 @@ namespace Tests\Browser;
 
 use App\Models\Post;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -26,6 +27,8 @@ class PostTest extends DuskTestCase
                 ->assertInputValue('#content', '')
                 ->assertSeeIn('@upload-photo-button', 'Upload a photo')
                 ->assertMissing('@photo-image')
+                ->assertSee('Photo submitted by')
+                ->assertInputValue('#photo-credit', '')
                 ->assertSeeIn('@cancel-button', 'CANCEL')
                 ->assertSeeIn('@submit-button', 'CREATE');
 
@@ -97,7 +100,20 @@ class PostTest extends DuskTestCase
                 ->assertMissing('@photo-error')
                 ->assertPresent('@photo-image');
 
-            // Create a new post
+            // The photo credit is optional but if present must be no more than 20 characters
+            $browser->visitRoute('posts.create')
+                ->press('CREATE')
+                ->waitUntilMissing('@submit-loading-icon')
+                ->assertMissing('@photo-credit-error')
+                ->type('#photo-credit', 'qwertyuiopqwertyuiopq')
+                ->press('CREATE')
+                ->waitForTextIn('@photo-credit-error', 'The photo credit may not be greater than 20 characters.')
+                ->type('#photo-credit', 'qwertyuiopqwertyuiop')
+                ->press('CREATE')
+                ->waitUntilMissing('@submit-loading-icon')
+                ->assertMissing('@photo-credit-error');
+
+            // Create a new post with credit
             $browser->visitRoute('posts.create')
                 ->type('#title', 'New post title')
                 ->click('@line-select')
@@ -107,6 +123,7 @@ class PostTest extends DuskTestCase
                 ->type('#content', 'New post amazing content')
                 ->attach('#photo', $pngFile)
                 ->waitUntilMissing('@photo-loading-icon')
+                ->type('#photo-credit', 'John')
                 ->press('CREATE')
                 ->waitForReload()
                 ->assertRouteIs('posts.list')
@@ -115,12 +132,31 @@ class PostTest extends DuskTestCase
             $this->assertDatabaseCount('posts', $postCount + 1);
             $this->assertDatabaseHas('posts', ['title' => 'New post title']);
 
+            // Create a new post without credit
+            $browser->visitRoute('posts.create')
+                ->type('#title', 'Another new post')
+                ->click('@line-select')
+                ->waitFor('@district-line-option')
+                ->click('@district-line-option')
+                ->waitForTextIn('@line-select', 'District line')
+                ->type('#content', 'More wonderful content')
+                ->attach('#photo', $jpgFile)
+                ->waitUntilMissing('@photo-loading-icon')
+                ->press('CREATE')
+                ->waitForReload()
+                ->assertRouteIs('posts.list')
+                ->assertSee('New post title');
+
+            $this->assertDatabaseCount('posts', $postCount + 2);
+            $this->assertDatabaseHas('posts', ['title' => 'Another new post']);
+
             $browser->logout();
         });
     }
 
     public function testUpdatingAPost(): void
     {
+        Post::factory()->bySuperAdmin()->create(['title' => 'Short title', 'created_at' => Carbon::now()]);
         $this->browse(function (Browser $browser): void {
             /** @var Post $latestPost */
             $latestPost = Post::query()->latest()->first();
@@ -138,6 +174,8 @@ class PostTest extends DuskTestCase
                 ->assertInputValue('#content', $latestPost->getContent())
                 ->assertSeeIn('@upload-photo-button', 'Upload a photo')
                 ->assertAttribute('@photo-image', 'src', $this->baseUrl().'/storage/'.$latestPost->getPhoto())
+                ->assertSee('Photo submitted by')
+                ->assertInputValue('#photo-credit', $latestPost->getPhotoCredit())
                 ->assertSeeIn('@cancel-button', 'CANCEL')
                 ->assertSeeIn('@submit-button', 'UPDATE');
 
@@ -191,7 +229,22 @@ class PostTest extends DuskTestCase
                 ->waitUntilMissing('@photo-loading-icon')
                 ->assertMissing('@photo-error');
 
-            // Update a post
+            // The photo credit is optional but if present must be no more than 20 characters
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+                ->type('#photo-credit', '')
+                ->press('UPDATE')
+                ->waitForReload()
+                ->assertRouteIs('posts.list')
+                ->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+                ->type('#photo-credit', 'qwertyuiopqwertyuiopq')
+                ->press('UPDATE')
+                ->waitForTextIn('@photo-credit-error', 'The photo credit may not be greater than 20 characters.')
+                ->type('#photo-credit', 'qwertyuiopqwertyuiop')
+                ->press('UPDATE')
+                ->waitForReload()
+                ->assertRouteIs('posts.list');
+
+            // Update a post with photo credit
             $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
                 ->type('#title', 'New title for post')
                 ->click('@line-select')
@@ -200,6 +253,24 @@ class PostTest extends DuskTestCase
                 ->type('#content', 'New content for post')
                 ->attach('#photo', $jpgFile)
                 ->waitUntilMissing('@photo-loading-icon')
+                ->type('#photo-credit', 'John')
+                ->press('UPDATE')
+                ->waitForReload()
+                ->assertRouteIs('posts.list')
+                ->assertSee('New title for post');
+
+            $this->assertDatabaseCount('posts', $postCount);
+
+            // Update a post without photo credit
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+                ->type('#title', 'New title for post')
+                ->click('@line-select')
+                ->waitFor('@circle-line-option')
+                ->click('@circle-line-option')
+                ->type('#content', 'New content for post')
+                ->attach('#photo', $jpgFile)
+                ->waitUntilMissing('@photo-loading-icon')
+                ->clear('#photo-credit')
                 ->press('UPDATE')
                 ->waitForReload()
                 ->assertRouteIs('posts.list')

@@ -83,7 +83,41 @@ class CreatePostTest extends TestCase
             ->assertHasNoErrors(['photo' => 'mimes']);
     }
 
+    public function testThePhotoCreditIsOptionalButMustBeFewerThan20Characters(): void
+    {
+        Livewire::test('posts.create-post')
+            ->call('submit')
+            ->assertHasNoErrors(['photoCredit'])
+            ->set('photoCredit', Str::random(21))
+            ->call('submit')
+            ->assertHasErrors(['photoCredit' => 'max'])
+            ->set('photoCredit', Str::random(20))
+            ->call('submit')
+            ->assertHasNoErrors(['photoCredit']);
+    }
+
     public function testItCreatesANewPost(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->superAdmin());
+        $photo = UploadedFile::fake()->image('photo.jpg');
+
+        Livewire::test('posts.create-post')
+            ->set('title', "New Post")
+            ->set('line', 1)
+            ->set('content', 'Amazing content for this new post')
+            ->set('photo', $photo)
+            ->set('photoCredit', 'John')
+            ->call('submit')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('posts', ['title' => 'New Post']);
+        $this->assertCount(1, $this->superAdmin()->posts);
+        Storage::disk('public')->assertExists($this->superAdmin()->posts->first()->getPhoto());
+    }
+
+    public function testItCanCreateANewPostWithoutPhotoCredit(): void
     {
         Storage::fake('public');
 

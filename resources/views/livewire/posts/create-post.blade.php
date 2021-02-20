@@ -35,6 +35,13 @@
             @endunless
         </div>
 
+        <!-- Photo Credit -->
+        <div class="mb-6 md:w-full md:mr-6">
+            <x-jet-label for="photo-credit" value="{{ __('Photo submitted by') }}"/>
+            <x-jet-input id="photo-credit" type="text" class="mt-2 block w-full" wire:model.defer="photoCredit"/>
+            <x-jet-input-error for="photoCredit" class="mt-2" dusk="photo-credit-error"/>
+        </div>
+
         <!-- Buttons -->
         <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 justify-end">
             <x-jet-secondary-button dusk="cancel-button" wire:click="cancelCreate"

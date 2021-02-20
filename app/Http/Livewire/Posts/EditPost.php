@@ -15,11 +15,13 @@ class EditPost extends Component
     public int $line = 0;
     public string $content;
     public $photo;
+    public ?string $photoCredit = null;
     protected array $rules = [
         'title' => 'required|max:20',
         'line' => 'exists:\App\Models\Line,id',
         'content' => 'required|min:10|max:2000',
         'photo' => 'nullable|sometimes|mimes:jpg,jpeg,png|max:5120', // 5MB
+        'photoCredit' => 'sometimes|max:20',
     ];
 
     public function mount(int $postId)
@@ -28,6 +30,7 @@ class EditPost extends Component
         $this->title = $this->post->getTitle();
         $this->line = $this->post->getLine()->getId();
         $this->content = $this->post->getContent();
+        $this->photoCredit = $this->post->getPhotoCredit();
     }
 
     public function updatedPhoto()
@@ -49,6 +52,7 @@ class EditPost extends Component
             'line_id' => $this->line,
             'content' => $this->content,
             'photo' => $this->photo ? $this->photo->store('photos', 'public') : $this->post->getPhoto(),
+            'photo_credit' => $this->photoCredit,
         ]);
 
         return $this->redirectBack();
