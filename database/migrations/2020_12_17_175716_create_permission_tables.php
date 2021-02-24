@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class CreatePermissionTables extends Migration
 {
@@ -82,6 +84,8 @@ class CreatePermissionTables extends Migration
             $table->primary(['permission_id', 'role_id'], 'role_has_permissions_permission_id_role_id_primary');
         });
 
+        $this->addData();
+
         app('cache')
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)
             ->forget(config('permission.cache.key'));
@@ -100,5 +104,17 @@ class CreatePermissionTables extends Migration
         Schema::drop($tableNames['model_has_permissions']);
         Schema::drop($tableNames['roles']);
         Schema::drop($tableNames['permissions']);
+    }
+
+    private function addData(): void
+    {
+        Permission::create(['name' => 'register users']);
+        Permission::create(['name' => 'create posts']);
+        Permission::create(['name' => 'view posts']);
+        Permission::create(['name' => 'update posts']);
+        Permission::create(['name' => 'delete posts']);
+
+        Role::create(['name' => 'Super Admin']);
+        Role::create(['name' => 'Editor'])->givePermissionTo(['create posts', 'view posts', 'update posts']);
     }
 }

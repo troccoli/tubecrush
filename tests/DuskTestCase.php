@@ -3,7 +3,7 @@
 namespace Tests;
 
 use App\Models\User;
-use Database\Seeders\Testing\DatabaseSeeder;
+use Database\Seeders\DatabaseSeeder;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
