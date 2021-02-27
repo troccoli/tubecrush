@@ -3,6 +3,7 @@
 namespace Tests\Browser;
 
 use App\Models\Post;
+use Illuminate\Support\Str;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -34,7 +35,12 @@ class HomepageTest extends DuskTestCase
                         ->assertSeeIn('@title', $post->getTitle())
                         ->assertSeeIn('@content', $post->getContent())
                         ->assertSeeIn('@author-with-date',
-                            $post->getAuthorName().' '.$post->getPublishedDate()->toFormattedDateString());
+                            $post->getAuthorName().' '.$post->getPublishedDate()->toFormattedDateString())
+                        ->within('@tags', function (Browser $tags) use ($post): void {
+                            foreach ($post->tags as $tag) {
+                                $tags->assertSee(Str::upper($tag->getName()));
+                            }
+                        });
                 });
         });
     }
