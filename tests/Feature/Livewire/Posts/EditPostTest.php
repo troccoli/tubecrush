@@ -153,7 +153,7 @@ class EditPostTest extends TestCase
     {
         parent::setUp();
 
-        $this->post = Post::factory()->for($this->superAdmin(), 'author')->create(['title' => 'Old post']);
+        $this->post = Post::factory()->bySuperAdmin()->withTitle('Old post')->create();
         $this->be($this->superAdmin());
     }
 }

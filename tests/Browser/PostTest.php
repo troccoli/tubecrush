@@ -4,7 +4,6 @@ namespace Tests\Browser;
 
 use App\Models\Post;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
@@ -156,7 +155,7 @@ class PostTest extends DuskTestCase
 
     public function testUpdatingAPost(): void
     {
-        Post::factory()->bySuperAdmin()->create(['title' => 'Short title', 'created_at' => Carbon::now()]);
+        Post::factory()->bySuperAdmin()->withTitle('Short title')->now()->create();
         $this->browse(function (Browser $browser): void {
             /** @var Post $latestPost */
             $latestPost = Post::query()->latest()->first();

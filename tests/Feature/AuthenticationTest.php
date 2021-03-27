@@ -76,7 +76,7 @@ class AuthenticationTest extends TestCase
     public function testAccessingPostsEditPage(): void
     {
         /** @var Post $post */
-        $post = Post::factory()->for($this->superAdmin(), 'author')->create();
+        $post = Post::query()->latest()->first();
 
         $this->get(route('posts.update', ['postId' => $post->getId()]))
             ->assertRedirect(route('login'));
