@@ -3,7 +3,6 @@
 namespace Tests\Browser;
 
 use App\Models\Post;
-use Illuminate\Support\Carbon;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -25,7 +24,7 @@ class HomepageTest extends DuskTestCase
     public function testContentOfSinglePost(): void
     {
         /** @var Post $post */
-        $post = Post::factory()->bySuperAdmin()->create(['created_at' => Carbon::now()]);
+        $post = Post::query()->latest()->first();
 
         $this->browse(function (Browser $browser) use ($post): void {
             $browser->visitRoute('home')
@@ -42,8 +41,7 @@ class HomepageTest extends DuskTestCase
 
     public function testDontShowPhotoCreditIfThereIsntOne(): void
     {
-        /** @var Post $post */
-        $post = Post::factory()->bySuperAdmin()->create(['photo_credit' => null, 'created_at' => Carbon::now()]);
+        Post::factory()->bySuperAdmin()->withoutPhotoCredit()->now()->create();
 
         $this->browse(function (Browser $browser): void {
             $browser->visitRoute('home')

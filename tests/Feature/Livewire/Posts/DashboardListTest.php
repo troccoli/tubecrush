@@ -21,7 +21,7 @@ class DashboardListTest extends TestCase
         $this->actingAs($this->superAdmin());
 
         /** @var Post $post */
-        $post = Post::factory()->for($this->superAdmin(), 'author')->create();
+        $post = Post::factory()->bySuperAdmin()->create();
 
         Livewire::test('posts.dashboard-list')
             ->assertSet('confirmingId', null)
@@ -37,7 +37,7 @@ class DashboardListTest extends TestCase
         $this->actingAs($this->superAdmin());
 
         /** @var Post $post */
-        $post = Post::factory()->for($this->superAdmin(), 'author')->create();
+        $post = Post::factory()->bySuperAdmin()->create();
 
         Livewire::test('posts.dashboard-list')
             ->call('confirmDelete', $post->getId())
@@ -53,7 +53,7 @@ class DashboardListTest extends TestCase
         $this->actingAs($this->superAdmin());
 
         /** @var Post $post */
-        $post = Post::factory()->for($this->superAdmin(), 'author')->create();
+        $post = Post::factory()->bySuperAdmin()->create();
 
         $this->expectException(ModelNotFoundException::class);
 
@@ -71,9 +71,9 @@ class DashboardListTest extends TestCase
         $this->actingAs($this->superAdmin());
 
         /** @var Post $post1 */
-        $post1 = Post::factory()->for($this->superAdmin(), 'author')->create();
+        $post1 = Post::factory()->bySuperAdmin()->create();
         /** @var Post $post2 */
-        $post2 = Post::factory()->for($this->superAdmin(), 'author')->create();
+        $post2 = Post::factory()->bySuperAdmin()->create();
 
         Livewire::test('posts.dashboard-list')
             ->call('confirmDelete', $post1->getId())
