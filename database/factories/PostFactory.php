@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Line;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 
 class PostFactory extends Factory
 {
@@ -24,11 +25,38 @@ class PostFactory extends Factory
         ];
     }
 
+    public function now()
+    {
+        return $this->state(function (array $attributes): array {
+            return [
+                'created_at' => Carbon::now(),
+            ];
+        });
+    }
+
     public function bySuperAdmin()
     {
         return $this->state(function (array $attributes): array {
             return [
                 'author_id' => 1,
+            ];
+        });
+    }
+
+    public function withoutPhotoCredit()
+    {
+        return $this->state(function (array $attributes): array {
+            return [
+                'photo_credit' => null,
+            ];
+        });
+    }
+
+    public function withTitle(string $title)
+    {
+        return $this->state(function (array $attributes) use ($title): array {
+            return [
+                'title' => $title,
             ];
         });
     }
