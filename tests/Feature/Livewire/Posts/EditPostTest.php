@@ -4,6 +4,8 @@ namespace Tests\Feature\Livewire\Posts;
 
 use App\Models\Line;
 use App\Models\Post;
+use App\Models\Tag;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -13,6 +15,7 @@ use Tests\Feature\TestCase;
 class EditPostTest extends TestCase
 {
     protected Post $post;
+    protected Collection $tags;
 
     public function testTheComponentIsRendered(): void
     {
@@ -20,7 +23,7 @@ class EditPostTest extends TestCase
             ->assertSeeLivewire('posts.edit-post');
     }
 
-    public function testTheTileIsRequiredAndCannotBeLongerThan50Characters(): void
+    public function testTheTitleIsRequiredAndCannotBeLongerThan50Characters(): void
     {
         Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
             ->set('title', '')
@@ -103,20 +106,38 @@ class EditPostTest extends TestCase
             ->assertHasNoErrors(['photoCredit']);
     }
 
+    public function testTheTagsAreOptional(): void
+    {
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+            ->set('tags', [])
+            ->call('submit')
+            ->assertHasNoErrors(['tags', 'tags.*']);
+    }
+
     public function testItUpdatesAPost(): void
     {
         $this->assertDatabaseMissing('posts', ['title' => 'New post']);
         $this->assertDatabaseHas('posts', ['title' => 'Old post']);
+
+        $newTags = Tag::query()->inRandomOrder()->limit(5)->get();
 
         Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
             ->set('title', "New post")
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
             ->set('photoCredit', 'John')
+            ->set('tags', $newTags->pluck('id')->toArray())
             ->call('submit');
 
         $this->assertDatabaseHas('posts', ['title' => 'New post']);
         $this->assertDatabaseMissing('posts', ['title' => 'Old post']);
+
+        /** @var Collection $postTags */
+        $postTags = $this->superAdmin()->posts->first()->tags;
+        $this->assertSameSize($newTags, $postTags);
+        foreach ($newTags as $tag) {
+            $this->assertTrue($postTags->contains($tag));
+        }
     }
 
     public function testItUpdatesAPostWithoutThePhotoCredit(): void
@@ -129,6 +150,22 @@ class EditPostTest extends TestCase
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
             ->set('photoCredit', null)
+            ->call('submit');
+
+        $this->assertDatabaseHas('posts', ['title' => 'New post']);
+        $this->assertDatabaseMissing('posts', ['title' => 'Old post']);
+    }
+
+    public function testItUpdatesAPostWithoutTags(): void
+    {
+        $this->assertDatabaseMissing('posts', ['title' => 'New post']);
+        $this->assertDatabaseHas('posts', ['title' => 'Old post']);
+
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+            ->set('title', "New post")
+            ->set('line', 1)
+            ->set('content', 'Amazing content for this new post')
+            ->set('photoCredit', 'John')
             ->call('submit');
 
         $this->assertDatabaseHas('posts', ['title' => 'New post']);
@@ -154,6 +191,10 @@ class EditPostTest extends TestCase
         parent::setUp();
 
         $this->post = Post::factory()->bySuperAdmin()->withTitle('Old post')->create();
+        $this->tags = Tag::query()->inRandomOrder()->limit(3)->get();
+
+        $this->post->tags()->sync($this->tags);
+
         $this->be($this->superAdmin());
     }
 }

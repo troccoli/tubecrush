@@ -3,6 +3,8 @@
 namespace Tests\Feature\Livewire\Posts;
 
 use App\Models\Line;
+use App\Models\Tag;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -96,12 +98,20 @@ class CreatePostTest extends TestCase
             ->assertHasNoErrors(['photoCredit']);
     }
 
+    public function testTheTagsAreOptional(): void
+    {
+        Livewire::test('posts.create-post')
+            ->call('submit')
+            ->assertHasNoErrors(['tags', 'tags.*']);
+    }
+
     public function testItCreatesANewPost(): void
     {
         Storage::fake('public');
 
         $this->actingAs($this->superAdmin());
         $photo = UploadedFile::fake()->image('photo.jpg');
+        $tags = Tag::query()->inRandomOrder()->limit(3)->get();
 
         Livewire::test('posts.create-post')
             ->set('title', "New Post")
@@ -109,11 +119,18 @@ class CreatePostTest extends TestCase
             ->set('content', 'Amazing content for this new post')
             ->set('photo', $photo)
             ->set('photoCredit', 'John')
+            ->set('tags', $tags->pluck('id')->toArray())
             ->call('submit')
             ->assertHasNoErrors();
 
         $this->assertDatabaseHas('posts', ['title' => 'New Post']);
         $this->assertCount(1, $this->superAdmin()->posts);
+        /** @var Collection $postTags */
+        $postTags = $this->superAdmin()->posts->first()->tags;
+        $this->assertSameSize($tags, $postTags);
+        foreach ($tags as $tag) {
+            $this->assertTrue($postTags->contains($tag));
+        }
         Storage::disk('public')->assertExists($this->superAdmin()->posts->first()->getPhoto());
     }
 
@@ -129,6 +146,27 @@ class CreatePostTest extends TestCase
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
             ->set('photo', $photo)
+            ->call('submit')
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('posts', ['title' => 'New Post']);
+        $this->assertCount(1, $this->superAdmin()->posts);
+        Storage::disk('public')->assertExists($this->superAdmin()->posts->first()->getPhoto());
+    }
+
+    public function testItCanCreateANewPostWithoutTags(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs($this->superAdmin());
+        $photo = UploadedFile::fake()->image('photo.jpg');
+
+        Livewire::test('posts.create-post')
+            ->set('title', "New Post")
+            ->set('line', 1)
+            ->set('content', 'Amazing content for this new post')
+            ->set('photo', $photo)
+            ->set('photoCredit', 'John')
             ->call('submit')
             ->assertHasNoErrors();
 
