@@ -1,3 +1,7 @@
+@push('styles')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{ mix('css/select2.css') }}">
+@endpush
 <div>
     <form wire:submit.prevent="submit">
         <!-- Title -->
@@ -42,6 +46,19 @@
             <x-jet-input-error for="photoCredit" class="mt-2" dusk="photo-credit-error"/>
         </div>
 
+        <!-- Tags -->
+        <div class="mb-6 md:w-full md:mr-6">
+            <x-jet-label for="tags" value="{{ __('Tags') }}"/>
+            <div wire:ignore class="mt-2" dusk="tags-select">
+                <select id="tags" class="form-input block w-full " name="tags" multiple>
+                    @foreach($availableTags as $tag)
+                        <option value="{{ $tag['id'] }}">{{ $tag['text'] }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <x-jet-input-error for="tags" class="mt-2" dusk="tags-error"/>
+        </div>
+
         <!-- Buttons -->
         <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 justify-end">
             <x-jet-secondary-button dusk="cancel-button" wire:click="cancelCreate"
@@ -59,3 +76,19 @@
         </div>
     </form>
 </div>
+@push('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tags')
+                .select2({
+                    placeholder: 'Start typing to search for tags'
+                })
+                .on('change', function (e) {
+                    var data = $('#tags').select2("val");
+                    @this.set('tags', data);
+                });
+        });
+    </script>
+@endpush
