@@ -9,6 +9,6 @@ class HomepageListTest extends TestCase
     public function testTheComponentIsRendered(): void
     {
         $this->get(route('home'))
-            ->assertSeeLivewire('posts.homepage-list');
+            ->assertSeeLivewire('posts.list-posts');
     }
 }

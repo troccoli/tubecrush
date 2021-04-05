@@ -8,7 +8,7 @@ class HomepageTest extends TestCase
     {
         $this->get(route('home'))
             ->assertSeeLivewire('navigation-dropdown')
-            ->assertSeeLivewire('posts.homepage-list')
+            ->assertSeeLivewire('posts.list-posts')
             ->assertSeeLivewire('footer');
     }
 }

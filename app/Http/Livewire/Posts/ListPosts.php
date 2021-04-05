@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Posts;
 use App\Models\Post;
 use Livewire\Component;
 
-class HomepageList extends Component
+class ListPosts extends Component
 {
     private const POST_PER_PAGE = 3;
     public $posts;
@@ -19,7 +19,7 @@ class HomepageList extends Component
 
     public function render()
     {
-        return view('livewire.posts.homepage-list');
+        return view('livewire.posts.list-posts');
     }
 
     public function loadMorePosts(): void
