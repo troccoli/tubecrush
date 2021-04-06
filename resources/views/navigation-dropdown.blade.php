@@ -21,9 +21,9 @@
                 </div>
             </div>
 
-            @if (auth()->check())
+        @if (auth()->check())
             <!-- Settings Dropdown -->
-            <div dusk="dropdown-menu" class="hidden sm:flex sm:items-center sm:ml-6">
+                <div dusk="dropdown-menu" class="hidden sm:flex sm:items-center sm:ml-6">
                     <x-jet-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
@@ -43,10 +43,10 @@
 
                         <x-slot name="content">
                             @can('create posts')
-                            <x-jet-dropdown-link href="{{ route('posts.create') }}">
-                                {{ __('Create post') }}
-                            </x-jet-dropdown-link>
-                            <div class="border-t border-gray-100"></div>
+                                <x-jet-dropdown-link href="{{ route('posts.create') }}">
+                                    {{ __('Create post') }}
+                                </x-jet-dropdown-link>
+                                <div class="border-t border-gray-100"></div>
                             @endcan
                             <x-jet-dropdown-link href="{{ route('dashboard') }}">
                                 {{ __('Dashboard') }}
@@ -70,9 +70,9 @@
                         </x-slot>
                     </x-jet-dropdown>
                 </div>
-            @endif
+        @endif
 
-            <!-- Hamburger -->
+        <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
                 <button @click="open = ! open"
                         class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
@@ -92,41 +92,43 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
-            @if (auth()->check())
-                <div class="flex items-center px-4">
-                    <div class="ml-3">
-                        <div class="font-medium text-base text-gray-800">{{ auth()->user()->getName() }}</div>
-                        <div class="font-medium text-sm text-gray-500">{{ auth()->user()->getEmail() }}</div>
-                    </div>
-                </div>
-            @endif
-
             <div class="mt-3 space-y-1">
-                @can('create posts')
-                    <x-jet-responsive-nav-link href="{{ route('posts.create') }}" :active="request()->routeIs('posts.create')">
-                        {{ __('Create post') }}
-                    </x-jet-responsive-nav-link>
-                @endcan
-                <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
+                <x-jet-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                    {{ __('Home') }}
                 </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="{{ route('profile.show') }}"
-                                           :active="request()->routeIs('profile.show')">
-                    {{ __('Profile') }}
+                <x-jet-responsive-nav-link href="#" :active="request()->routeIs('news')">
+                    {{ __('News') }}
                 </x-jet-responsive-nav-link>
-
                 @if (auth()->check())
-                    <div class="border-t border-gray-100"></div>
-
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-
-                        <x-jet-responsive-nav-link href="{{ route('logout') }}"
-                                                   onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                            {{ __('Log out') }}
+                    @can('create posts')
+                        <div class="border-t border-gray-100">
+                            <x-jet-responsive-nav-link href="{{ route('posts.create') }}"
+                                                       :active="request()->routeIs('posts.create')">
+                                {{ __('Create post') }}
+                            </x-jet-responsive-nav-link>
+                        </div>
+                    @endcan
+                    <div class="border-t border-gray-100">
+                        <x-jet-responsive-nav-link href="{{ route('dashboard') }}"
+                                                   :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
                         </x-jet-responsive-nav-link>
-                    </form>
+                        <x-jet-responsive-nav-link href="{{ route('profile.show') }}"
+                                                   :active="request()->routeIs('profile.show')">
+                            {{ __('Profile') }}
+                        </x-jet-responsive-nav-link>
+                    </div>
+                    <div class="border-t border-gray-100">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <x-jet-responsive-nav-link href="{{ route('logout') }}"
+                                                       onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Log out') }}
+                            </x-jet-responsive-nav-link>
+                        </form>
+                    </div>
                 @endif
             </div>
         </div>
