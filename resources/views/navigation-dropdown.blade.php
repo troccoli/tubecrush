@@ -1,4 +1,5 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100" dusk="main-nav">
+<nav x-data="{ openMenu: false, openProfileMenu: false, openLinesMenu: false }"
+     class="bg-white border-b border-gray-100" dusk="main-nav">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -14,11 +15,15 @@
                         {{ __('Home') }}
                     </x-jet-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="#" :active="request()->routeIs('news')">
-                        {{ __('News') }}
-                    </x-jet-nav-link>
-                </div>
+                <x-jet-nav-dropdown dusk="lines-dropdown-menu" :active="request()->routeIs('posts-by-lines')">
+                    <x-slot name="name">{{ __('Lines') }}</x-slot>
+                    @foreach(\App\Models\Line::query()->orderBy('name')->get() as $line)
+                        <x-jet-dropdown-link href="{{ route('posts-by-lines', ['slug' => $line->getSlug()]) }}"
+                                             dusk="{{ $line->getSlug() }}-link">
+                            {{ $line->getName() }}
+                        </x-jet-dropdown-link>
+                    @endforeach
+                </x-jet-nav-dropdown>
             </div>
 
         @if (auth()->check())
@@ -74,13 +79,14 @@
 
         <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = ! open"
+                <button @click="openMenu = ! openMenu"
                         class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex"
+                        <path :class="{'hidden': openMenu, 'inline-flex': ! openMenu }" class="inline-flex"
                               stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M4 6h16M4 12h16M4 18h16"/>
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round"
+                        <path :class="{'hidden': ! openMenu, 'inline-flex': openMenu }" class="hidden"
+                              stroke-linecap="round"
                               stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
@@ -89,45 +95,96 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div :class="{'block': openMenu, 'hidden': ! openMenu}" class="hidden sm:hidden">
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="mt-3 space-y-1">
                 <x-jet-responsive-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
                     {{ __('Home') }}
                 </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="#" :active="request()->routeIs('news')">
-                    {{ __('News') }}
-                </x-jet-responsive-nav-link>
+                <div>
+                    <button @click="openLinesMenu = ! openLinesMenu"
+                            class="flex justify-between w-full py-2 text-base font-medium text-gray-600">
+                        <div class="ml-4 text-left">{{ __('Lines') }}</div>
+                        <div class="mr-5 flex flex-wrap content-center">
+                            <svg :class="{'block': ! openLinesMenu, 'hidden': openLinesMenu}"
+                                 class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                            <svg :class="{'block': openLinesMenu, 'hidden': ! openLinesMenu}"
+                                 class="fill-current h-4 w-4"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                 fill="currentColor">
+                                <path fill-rule="evenodd"
+                                      d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+                <div :class="{'block': openLinesMenu, 'hidden': ! openLinesMenu}" class="hidden sm:hidden">
+                    @foreach(\App\Models\Line::query()->orderBy('name')->get() as $line)
+                        <x-jet-responsive-nav-link href="{{ route('posts-by-lines', ['slug' => $line->getSlug()]) }}">
+                            {{ $line->getName() }}
+                        </x-jet-responsive-nav-link>
+                    @endforeach</div>
                 @if (auth()->check())
-                    @can('create posts')
+                    <div class="border-t border-gray-100">
+                        <button @click="openProfileMenu = ! openProfileMenu"
+                                class="flex justify-between w-full py-2 text-base font-medium text-gray-600">
+                            <div class="ml-4 text-left">{{ auth()->user()->getName() }}</div>
+                            <div class="mr-5 flex flex-wrap content-center">
+                                <svg :class="{'block': ! openProfileMenu, 'hidden': openProfileMenu}"
+                                     class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                     viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                          clip-rule="evenodd"/>
+                                </svg>
+                                <svg :class="{'block': openProfileMenu, 'hidden': ! openProfileMenu}"
+                                     class="fill-current h-4 w-4"
+                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                     fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                          d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                                          clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </button>
+                    </div>
+                    <div :class="{'block': openProfileMenu, 'hidden': ! openProfileMenu}" class="hidden sm:hidden">
+                        @can('create posts')
+                            <div class="border-t border-gray-100">
+                                <x-jet-responsive-nav-link href="{{ route('posts.create') }}"
+                                                           :active="request()->routeIs('posts.create')">
+                                    {{ __('Create post') }}
+                                </x-jet-responsive-nav-link>
+                            </div>
+                        @endcan
                         <div class="border-t border-gray-100">
-                            <x-jet-responsive-nav-link href="{{ route('posts.create') }}"
-                                                       :active="request()->routeIs('posts.create')">
-                                {{ __('Create post') }}
+                            <x-jet-responsive-nav-link href="{{ route('dashboard') }}"
+                                                       :active="request()->routeIs('dashboard')">
+                                {{ __('Dashboard') }}
+                            </x-jet-responsive-nav-link>
+                            <x-jet-responsive-nav-link href="{{ route('profile.show') }}"
+                                                       :active="request()->routeIs('profile.show')">
+                                {{ __('Profile') }}
                             </x-jet-responsive-nav-link>
                         </div>
-                    @endcan
-                    <div class="border-t border-gray-100">
-                        <x-jet-responsive-nav-link href="{{ route('dashboard') }}"
-                                                   :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-jet-responsive-nav-link>
-                        <x-jet-responsive-nav-link href="{{ route('profile.show') }}"
-                                                   :active="request()->routeIs('profile.show')">
-                            {{ __('Profile') }}
-                        </x-jet-responsive-nav-link>
-                    </div>
-                    <div class="border-t border-gray-100">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+                        <div class="border-t border-gray-100">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
 
-                            <x-jet-responsive-nav-link href="{{ route('logout') }}"
-                                                       onclick="event.preventDefault();
+                                <x-jet-responsive-nav-link href="{{ route('logout') }}"
+                                                           onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log out') }}
-                            </x-jet-responsive-nav-link>
-                        </form>
+                                    {{ __('Log out') }}
+                                </x-jet-responsive-nav-link>
+                            </form>
+                        </div>
                     </div>
                 @endif
             </div>
