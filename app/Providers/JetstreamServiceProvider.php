@@ -22,6 +22,7 @@ class JetstreamServiceProvider extends ServiceProvider
 
         $this->callAfterResolving(BladeCompiler::class, function () {
             Blade::component('jetstream::components.textarea', 'jet-textarea');
+            Blade::component('jetstream::components.nav-dropdown', 'jet-nav-dropdown');
         });
     }
 

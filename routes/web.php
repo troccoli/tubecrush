@@ -27,6 +27,8 @@ Route::get('/press-enquiries', [\App\Http\Controllers\StaticPagesController::cla
     ->name('press-enquiries');
 Route::get('/contact-us', \App\Http\Controllers\ContactUsController::class)
     ->name('contact-us');
+Route::get('/lines/{slug}', \App\Http\Controllers\PostsByLinesController::class)
+    ->name('posts-by-lines');
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {

@@ -22,13 +22,16 @@ php artisan storage:link
 # Note: If you're using queue workers, this is the place to restart them.
 # ...
 
-# Clear cache
+# Clear caches
 php artisan optimize:clear --no-interaction
+php artisan permission:cache-reset
+rm ./bootstrap/cache/*.php
 
 # Rebuild cache
 php artisan optimize --no-interaction
 php artisan view:cache --no-interaction
 php artisan event:cache --no-interaction
+php artisan livewire:discover
 
 # Reload PHP to update opcache
 echo "" | sudo -S service php7.4-fpm reload

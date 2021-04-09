@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use App\Models\Line;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -13,7 +14,7 @@ class NavigationTest extends DuskTestCase
             $browser->visitRoute('home')
                 ->within('@main-nav', function (Browser $nav): void {
                     $nav->assertSeeLink('Home')
-                        ->assertSeeLink('News');
+                        ->assertSee('Lines');
                 })->clickLink('Home')
                 ->assertRouteIs('home');
 
@@ -21,7 +22,7 @@ class NavigationTest extends DuskTestCase
                 ->visitRoute('home')
                 ->within('@main-nav', function (Browser $nav): void {
                     $nav->assertSeeLink('Home')
-                        ->assertSeeLink('News');
+                        ->assertSee('Lines');
                 })->clickLink('Home')
                 ->assertRouteIs('home')
                 ->logout();
@@ -30,11 +31,44 @@ class NavigationTest extends DuskTestCase
                 ->visitRoute('home')
                 ->within('@main-nav', function (Browser $nav): void {
                     $nav->assertSeeLink('Home')
-                        ->assertSeeLink('News');
+                        ->assertSee('Lines');
                 })->clickLink('Home')
                 ->assertRouteIs('home')
                 ->logout();
         });
+    }
+
+    public function testLinesDropdownNavigation(): void
+    {
+        $this->browse(function (Browser $browser): void {
+            $browser->visitRoute('home');
+            $this->assertLinesDropdownNavigation($browser);
+
+            $browser->loginAs($this->superAdmin)
+                ->visitRoute('home');
+            $this->assertLinesDropdownNavigation($browser);
+            $browser->logout();
+
+            $browser->loginAs($this->editor)
+                ->visitRoute('home');
+            $this->assertLinesDropdownNavigation($browser);
+            $browser->logout();
+        });
+    }
+
+    private function assertLinesDropdownNavigation(Browser $browser): void
+    {
+        foreach (Line::all() as $line) {
+            $browser
+                ->within('@main-nav', function (Browser $nav) use ($line): void {
+                    $nav->assertDontSeeLink($line->getName())
+                        ->clickLink('Lines', 'button')
+                        ->waitFor("@{$line->getSlug()}-link")
+                        ->assertSeeLink($line->getName())
+                        ->clickLink($line->getName())
+                        ->assertRouteIs('posts-by-lines', ['slug' => $line->getSlug()]);
+                });
+        }
     }
 
     public function testDropdownNavigation(): void

@@ -3,6 +3,6 @@
         <x-banner/>
     </x-slot>
 
-    <livewire:posts.homepage-list/>
+    <livewire:posts.list-posts/>
 
 </x-app-layout>
