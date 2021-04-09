@@ -31,7 +31,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="mt-4 flex justify-start" dusk="tags">
+                <div class="mt-4 flex flex-wrap justify-start" dusk="tags">
                 @foreach($post->tags as $tag)
                     <x-tag>{{ $tag->getName() }}</x-tag>
                 @endforeach
