@@ -41,6 +41,9 @@ class HomepageTest extends DuskTestCase
                                 $tags->assertSee(Str::upper($tag->getName()));
                             }
                         });
+
+                    $row->click('@line')
+                        ->assertRouteIs('posts-by-lines', ['slug' => $post->line->getSlug()]);
                 });
         });
     }
