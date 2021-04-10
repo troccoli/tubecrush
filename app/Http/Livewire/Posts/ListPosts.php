@@ -12,11 +12,14 @@ class ListPosts extends Component
     public $posts;
     public $count;
     public ?int $lineId = null;
+    public ?int $tagId = null;
 
-    public function mount(?string $lineId = null)
+    public function mount(?string $lineId = null, ?string $tagId = null)
     {
         if ($lineId) {
             $this->lineId = $lineId;
+        } elseif ($tagId) {
+            $this->tagId = $tagId;
         }
         $this->count = self::POST_PER_PAGE;
         $this->loadPosts();
@@ -42,6 +45,8 @@ class ListPosts extends Component
 
         if ($this->lineId) {
             $query->onLine($this->lineId);
+        } elseif ($this->tagId) {
+            $query->withTag($this->tagId);
         }
 
         $this->posts = $query->get();

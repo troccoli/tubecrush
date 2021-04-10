@@ -76,4 +76,11 @@ class Post extends Model
     {
         return $query->where('line_id', $lineId);
     }
+
+    public function scopeWithTag(Builder $query, int $tagId): Builder
+    {
+        return $query->whereHas('tags', function (Builder $query) use ($tagId): Builder {
+            return $query->where('id', $tagId);
+        });
+    }
 }
