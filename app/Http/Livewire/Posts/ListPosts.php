@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Posts;
 
-use App\Models\Line;
 use App\Models\Post;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class ListPosts extends Component
@@ -12,11 +12,14 @@ class ListPosts extends Component
     public $posts;
     public $count;
     public ?int $lineId = null;
+    public ?int $tagId = null;
 
-    public function mount(?string $lineId = null)
+    public function mount(?string $lineId = null, ?string $tagId = null)
     {
         if ($lineId) {
             $this->lineId = $lineId;
+        } elseif ($tagId) {
+            $this->tagId = $tagId;
         }
         $this->count = self::POST_PER_PAGE;
         $this->loadPosts();
@@ -37,12 +40,14 @@ class ListPosts extends Component
     {
         $query = Post::query()
             ->with(['author', 'line', 'tags'])
-            ->orderByDesc('created_at')
+            ->when($this->lineId, function (Builder $query): Builder {
+                return $query->onLine($this->lineId);
+            })
+            ->when($this->tagId, function (Builder $query): Builder {
+                return $query->withTag($this->tagId);
+            })
+            ->latest()
             ->limit($this->count);
-
-        if ($this->lineId) {
-            $query->onLine($this->lineId);
-        }
 
         $this->posts = $query->get();
     }

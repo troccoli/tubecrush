@@ -29,6 +29,8 @@ Route::get('/contact-us', \App\Http\Controllers\ContactUsController::class)
     ->name('contact-us');
 Route::get('/lines/{slug}', \App\Http\Controllers\PostsByLinesController::class)
     ->name('posts-by-lines');
+Route::get('/tag/{slug}', \App\Http\Controllers\PostsByTagsController::class)
+    ->name('posts-by-tags');
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {

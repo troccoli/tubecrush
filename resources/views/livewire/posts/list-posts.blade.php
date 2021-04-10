@@ -1,8 +1,8 @@
 <div class="flex flex-col">
     @foreach($posts as $post)
-        <div  x-data x-bind:key="{{ $post->getId() }}"
-            class="max-w-2xl mx-auto my-6 bg-white overflow-hidden shadow-md rounded-lg flex flex-col"
-            dusk="post">
+        <div x-data x-bind:key="{{ $post->getId() }}"
+             class="max-w-2xl mx-auto my-6 bg-white overflow-hidden shadow-md rounded-lg flex flex-col"
+             dusk="post">
             <img class="object-cover" src="{{ \Illuminate\Support\Facades\Storage::url($post->getPhoto()) }}"
                  alt="Cover photo" dusk="photo">
 
@@ -13,7 +13,8 @@
             @endif
 
             <div class="p-6">
-                <div class="mb-6 h-8 cursor-pointer flex flex-auto" dusk="line" @click="window.location.href='{{ route('posts-by-lines', ['slug' => $post->line->getSlug()]) }}'">
+                <div class="mb-6 h-8 cursor-pointer flex flex-auto" dusk="line"
+                     @click="window.location.href='{{ route('posts-by-lines', ['slug' => $post->line->getSlug()]) }}'">
                     <x-line-box>
                         @slot('class'){{ $post->line->getSlug() }}@endslot
                         {{ $post->line->getName() }}
@@ -32,9 +33,12 @@
                     </div>
                 </div>
                 <div class="mt-4 flex flex-wrap justify-start" dusk="tags">
-                @foreach($post->tags as $tag)
-                    <x-tag>{{ $tag->getName() }}</x-tag>
-                @endforeach
+                    @foreach($post->tags as $tag)
+                        <div dusk="tag-{{ $tag->getSlug() }}" class="cursor-pointer"
+                             @click="window.location.href='{{ route('posts-by-tags', ['slug' => $tag->getSlug()]) }}'">
+                            <x-tag>{{ $tag->getName() }}</x-tag>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
