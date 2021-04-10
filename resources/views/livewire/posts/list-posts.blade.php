@@ -1,6 +1,6 @@
 <div class="flex flex-col">
     @foreach($posts as $post)
-        <div
+        <div  x-data x-bind:key="{{ $post->getId() }}"
             class="max-w-2xl mx-auto my-6 bg-white overflow-hidden shadow-md rounded-lg flex flex-col"
             dusk="post">
             <img class="object-cover" src="{{ \Illuminate\Support\Facades\Storage::url($post->getPhoto()) }}"
@@ -13,7 +13,7 @@
             @endif
 
             <div class="p-6">
-                <div class="mb-6 h-8" dusk="line">
+                <div class="mb-6 h-8 cursor-pointer flex flex-auto" dusk="line" @click="window.location.href='{{ route('posts-by-lines', ['slug' => $post->line->getSlug()]) }}'">
                     <x-line-box>
                         @slot('class'){{ $post->line->getSlug() }}@endslot
                         {{ $post->line->getName() }}
