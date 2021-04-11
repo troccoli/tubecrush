@@ -13,11 +13,15 @@ module.exports = {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
             animation: {
-                'pulse-bg-once': 'pulse-bg-once 3s ease-in forwards'
+                'pulse-bg-once': 'pulse-bg-once 3s ease-in forwards',
+                'reverse-spin': 'reverse-spin 1s linear infinite'
             },
             keyframes: {
                 'pulse-bg-once': {
                     to: {backgroundColor: 'transparent'}
+                },
+                'reverse-spin': {
+                    from: {transform: 'rotate(360deg)'},
                 }
             }
         },

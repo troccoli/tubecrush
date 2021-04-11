@@ -6,12 +6,7 @@
             @can('create posts')
                 <a href="{{ route('posts.create') }}" title="Create post" dusk="create-post-button"
                    class="w-1/5 md:w-auto p-1 flex justify-around rounded-md text-indigo-100 bg-indigo-600 hover:text-indigo-300 hover:bg-indigo-700">
-                    <!-- Heroicon name: document-add -->
-                    <svg class="h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                         stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
+                    <x-heroicons-o-document-add class="h-10 w-10" />
                 </a>
             @endcan
         </div>
@@ -53,12 +48,7 @@
                                        title="Edit post"
                                        class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 mr-1 border border-transparent rounded-md bg-gray-400 hover:bg-gray-500 transition duration-300"
                                        dusk="edit-post-button">
-                                        <!-- Heroicon name: pencil -->
-                                        <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                             viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                        </svg>
+                                        <x-heroicons-o-pencil class="h-8 w-8" />
                                     </a>
                                 @endcan
                                 @can('delete posts')
@@ -66,13 +56,7 @@
                                        title="Delete post"
                                        class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 ml-1 border border-transparent rounded-md bg-red-400 hover:bg-red-500 transition duration-300"
                                        dusk="delete-post-button">
-                                        <!-- Heroicon name: trash -->
-                                        <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                             viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                  stroke-width="2"
-                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                        </svg>
+                                        <x-heroicons-o-trash class="h-8 w-8" />
                                     </a>
                                 @endcan
                             </div>

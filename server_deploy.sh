@@ -32,6 +32,7 @@ php artisan optimize --no-interaction
 php artisan view:cache --no-interaction
 php artisan event:cache --no-interaction
 php artisan livewire:discover
+php artisan icons:cache
 
 # Reload PHP to update opcache
 echo "" | sudo -S service php7.4-fpm reload
