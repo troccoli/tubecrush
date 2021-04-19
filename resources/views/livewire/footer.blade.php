@@ -83,7 +83,7 @@
                 <p class="text-sm text-gray-700 capitalize text-center">© {{ date('Y') }} All rights reserved - Made
                     with <span
                         id="heart" class="tooltip static">&#x2764;<span
-                            class="tooltip-text p-2 absolute ml-2 -mt-16 inline-block text-sm text-left normal-case rounded-lg bg-gray-600 text-white transition duration-500">
+                            class="hidden sm:block tooltip-text p-2 absolute ml-2 -mt-16 inline-block text-sm text-left normal-case rounded-lg bg-gray-600 text-white transition duration-500">
                             PHP {{ $phpVersion }}<br/>
                             Laravel {{ $laravelVersion }}<br/>
                             Livewire {{ $livewireVersion }}<br/>
