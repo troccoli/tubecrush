@@ -3,7 +3,6 @@
 namespace Tests\Browser;
 
 use App\Models\Line;
-use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
 class NavigationTest extends DuskTestCase

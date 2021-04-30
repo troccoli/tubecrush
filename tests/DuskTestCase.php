@@ -13,6 +13,7 @@ use Illuminate\Database\SQLiteConnection;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Fluent;
 use Laravel\Dusk\TestCase as BaseTestCase;
+use Tests\Browser\Browser;
 
 abstract class DuskTestCase extends BaseTestCase
 {
@@ -32,10 +33,11 @@ abstract class DuskTestCase extends BaseTestCase
         }
     }
 
-    public function browse(\Closure $callback): void
+    protected function newBrowser($driver)
     {
-        parent::browse($callback);
-        static::$browsers->first()->driver->manage()->deleteAllCookies();
+        return (new Browser($driver))
+            ->visitRoute('dusk.cookies')
+            ->cookie(config('cookie-consent.cookie_name'), config('cookie-consent.consent_value'));
     }
 
     protected function setUp(): void

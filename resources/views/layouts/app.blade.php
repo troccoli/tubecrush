@@ -35,6 +35,8 @@
     @livewire('footer')
 </div>
 
+@livewire('cookie-consent')
+
 @stack('modals')
 
 <!-- Scripts -->

@@ -4,7 +4,6 @@ namespace Tests\Browser;
 
 use App\Models\Post;
 use Illuminate\Support\Str;
-use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
 class HomepageTest extends DuskTestCase
