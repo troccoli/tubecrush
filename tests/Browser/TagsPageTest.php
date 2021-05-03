@@ -5,7 +5,6 @@ namespace Tests\Browser;
 use App\Models\Tag;
 use App\Models\Post;
 use Illuminate\Support\Str;
-use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
 class TagsPageTest extends DuskTestCase

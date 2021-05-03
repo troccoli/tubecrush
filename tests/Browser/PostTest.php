@@ -7,7 +7,6 @@ use App\Models\Tag;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
-use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
 class PostTest extends DuskTestCase

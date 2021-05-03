@@ -3,7 +3,6 @@
 namespace Tests\Browser;
 
 use App\Models\Line;
-use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
 class NavigationTest extends DuskTestCase
@@ -56,21 +55,6 @@ class NavigationTest extends DuskTestCase
         });
     }
 
-    private function assertLinesDropdownNavigation(Browser $browser): void
-    {
-        foreach (Line::all() as $line) {
-            $browser
-                ->within('@main-nav', function (Browser $nav) use ($line): void {
-                    $nav->assertDontSeeLink($line->getName())
-                        ->clickLink('Lines', 'button')
-                        ->waitFor("@{$line->getSlug()}-link")
-                        ->assertSeeLink($line->getName())
-                        ->clickLink($line->getName())
-                        ->assertRouteIs('posts-by-lines', ['slug' => $line->getSlug()]);
-                });
-        }
-    }
-
     public function testDropdownNavigation(): void
     {
         $this->browse(function (Browser $browser): void {
@@ -92,10 +76,12 @@ class NavigationTest extends DuskTestCase
                         ->assertDontSeeLink('Log out')
                         ->clickLink($this->superAdmin->getName(), 'button')
                         ->waitFor('@dropdown-menu')
-                        ->assertSeeLink('Create post')
-                        ->assertSeeLink('Dashboard')
-                        ->assertSeeLink('Profile')
-                        ->assertSeeLink('Log out');
+                        ->within('@dropdown-menu', function (Browser $dropdown): void {
+                            $dropdown->assertSeeLink('Create post')
+                                ->assertSeeLink('Dashboard')
+                                ->assertSeeLink('Profile')
+                                ->assertSeeLink('Log out');
+                        });
                 })
                 ->clickLink('Create post')
                 ->assertRouteIs('posts.create')
@@ -122,10 +108,12 @@ class NavigationTest extends DuskTestCase
                         ->assertDontSeeLink('Log out')
                         ->clickLink($this->editor->getName(), 'button')
                         ->waitFor('@dropdown-menu')
-                        ->assertSeeLink('Create post')
-                        ->assertSeeLink('Dashboard')
-                        ->assertSeeLink('Profile')
-                        ->assertSeeLink('Log out');
+                        ->within('@dropdown-menu', function (Browser $dropdown): void {
+                            $dropdown->assertSeeLink('Create post')
+                                ->assertSeeLink('Dashboard')
+                                ->assertSeeLink('Profile')
+                                ->assertSeeLink('Log out');
+                        });
                 })
                 ->clickLink('Create post')
                 ->assertRouteIs('posts.create')
@@ -142,5 +130,20 @@ class NavigationTest extends DuskTestCase
                 ->clickLink('Log out')
                 ->assertGuest();
         });
+    }
+
+    private function assertLinesDropdownNavigation(Browser $browser): void
+    {
+        foreach (Line::all() as $line) {
+            $browser
+                ->within('@main-nav', function (Browser $nav) use ($line): void {
+                    $nav->assertDontSeeLink($line->getName())
+                        ->clickLink('Lines', 'button')
+                        ->waitFor("@{$line->getSlug()}-link")
+                        ->assertSeeLink($line->getName())
+                        ->clickLink($line->getName())
+                        ->assertRouteIs('posts-by-lines', ['slug' => $line->getSlug()]);
+                });
+        }
     }
 }
