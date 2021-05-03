@@ -56,11 +56,14 @@ abstract class DuskTestCase extends BaseTestCase
 
     protected function driver(): RemoteWebDriver
     {
-        $options = (new ChromeOptions)->addArguments([
-            '--disable-gpu',
-            '--headless',
+        $options = (new ChromeOptions)->addArguments(collect([
             '--window-size=1920,1080',
-        ]);
+        ])->unless($this->hasHeadlessDisabled(), function ($items) {
+            return $items->merge([
+                '--disable-gpu',
+                '--headless',
+            ]);
+        })->all());
 
         return RemoteWebDriver::create(
             $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
@@ -68,6 +71,12 @@ abstract class DuskTestCase extends BaseTestCase
                 ChromeOptions::CAPABILITY, $options
             )
         );
+    }
+
+    protected function hasHeadlessDisabled(): bool
+    {
+        return isset($_SERVER['DUSK_HEADLESS_DISABLED']) ||
+            isset($_ENV['DUSK_HEADLESS_DISABLED']);
     }
 
     /**
