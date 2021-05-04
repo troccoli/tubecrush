@@ -39,7 +39,8 @@ class HomepageTest extends DuskTestCase
                             foreach ($post->tags as $tag) {
                                 $tags->assertSee(Str::upper($tag->getName()));
                             }
-                        });
+                        })
+                        ->assertSeeIn('@likes', trans_choice('post.likes', $post->getLikes()));
 
                     $row->click('@line')
                         ->assertRouteIs('posts-by-lines', ['slug' => $post->line->getSlug()]);

@@ -6,12 +6,18 @@
             <img class="object-cover" src="{{ \Illuminate\Support\Facades\Storage::url($post->getPhoto()) }}"
                  alt="Cover photo" dusk="photo">
 
-            @if($post->getPhotoCredit())
-                <div class="pl-6 pt-2 text-sm" dusk="photo-credit">
-                    Photo by: {{ $post->getPhotoCredit() }}
+            <div class="flex justify-between px-6 pt-2 text-sm">
+                <div class="flex" dusk="likes">
+                    <x-heroicons-o-fire class="h-5 w-5 inline-block mr-1"/>
+                    <p class="my-auto">{{ trans_choice('post.likes', $post->getLikes()) }}</p>
                 </div>
-            @endif
+                @if($post->getPhotoCredit())
+                    <div dusk="photo-credit">
+                        Photo by: {{ $post->getPhotoCredit() }}
+                    </div>
+                @endif
 
+            </div>
             <div class="p-6">
                 <div class="mb-6 h-8 cursor-pointer flex flex-auto" dusk="line"
                      @click="window.location.href='{{ route('posts-by-lines', ['slug' => $post->line->getSlug()]) }}'">

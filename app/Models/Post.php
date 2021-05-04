@@ -72,6 +72,25 @@ class Post extends Model
         return $this->line;
     }
 
+    public function getLikes(): int
+    {
+        return $this->likes;
+    }
+
+    public function incrementLikes(int $amount = 1): self
+    {
+        $this->increment('likes', $amount);
+
+        return $this;
+    }
+
+    public function decrementLikes(int $amount = 1): self
+    {
+        $this->decrement('likes', $amount);
+
+        return $this;
+    }
+
     public function scopeOnLine(Builder $query, int $lineId): Builder
     {
         return $query->where('line_id', $lineId);

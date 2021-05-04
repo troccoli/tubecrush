@@ -2,27 +2,14 @@
 
 namespace Tests\Browser;
 
-use App\Models\Tag;
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Support\Str;
 use Tests\DuskTestCase;
 
 class TagsPageTest extends DuskTestCase
 {
     private Tag $tag;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->tag = Tag::query()->inRandomOrder()->first();
-
-        Post::factory()->bySuperAdmin()->count(10)
-            ->afterCreating(function (Post $post): void {
-                $post->tags()->sync($this->tag);
-            })
-            ->create();
-    }
 
     public function testListOfPosts(): void
     {
@@ -55,8 +42,22 @@ class TagsPageTest extends DuskTestCase
                             foreach ($post->tags as $tag) {
                                 $tags->assertSee(Str::upper($tag->getName()));
                             }
-                        });
+                        })
+                        ->assertSeeIn('@likes', trans_choice('post.likes', $post->getLikes()));
                 });
         });
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->tag = Tag::query()->inRandomOrder()->first();
+
+        Post::factory()->bySuperAdmin()->count(10)
+            ->afterCreating(function (Post $post): void {
+                $post->tags()->sync($this->tag);
+            })
+            ->create();
     }
 }
