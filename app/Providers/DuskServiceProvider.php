@@ -16,7 +16,7 @@ class DuskServiceProvider extends ServiceProvider
         if (!$this->app->environment('production')) {
             Route::get('/cookietest', function () {
                 return 'TEST';
-            })->name('dusk.cookies');
+            })->name('dusk.cookies-consent');
         }
     }
 }
