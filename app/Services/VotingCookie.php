@@ -20,8 +20,10 @@ class VotingCookie implements VotingService
         $this->cookieLifetime = config('cookies.voting.cookie_lifetime');
         $this->service = $service;
         if ($this->service->consentHasBeenGiven()) {
+            $this->votes = json_decode(Request::cookie($this->cookieName), true) ?? [];
             $this->refreshCookie();
         } else {
+            $this->votes = [];
             $this->removeCookie();
         }
     }
@@ -29,7 +31,7 @@ class VotingCookie implements VotingService
     public function hasVoted(Post $post): bool
     {
         if ($this->service->consentHasBeenGiven()) {
-            return in_array($post->getId(), $this->getVotes());
+            return in_array($post->getId(), $this->votes);
         }
 
         return false;
@@ -38,14 +40,16 @@ class VotingCookie implements VotingService
     public function addVote(Post $post): void
     {
         if ($this->service->consentHasBeenGiven()) {
-            $this->setVotes(array_unique(array_merge($this->getVotes(), [$post->getId()])));
+            $this->votes = array_unique(array_merge($this->votes, [$post->getId()]));
+            $this->setVotes();
         }
     }
 
     public function removeVote(Post $post): void
     {
         if ($this->service->consentHasBeenGiven()) {
-            $this->setVotes(array_values(array_diff($this->getVotes(), [$post->getId()])));
+            $this->votes = array_values(array_diff($this->votes, [$post->getId()]));
+            $this->setVotes();
         }
     }
 
@@ -58,22 +62,22 @@ class VotingCookie implements VotingService
         return $this->votes;
     }
 
-    private function setVotes(array $votes)
+    private function setVotes()
     {
         if (Cookie::hasQueued($this->cookieName)) {
             Cookie::unqueue($this->cookieName);
         }
 
-        Cookie::queue($this->cookieName, $votes, $this->cookieLifetime);
+        Cookie::queue($this->cookieName, json_encode($this->votes), $this->cookieLifetime);
     }
 
     private function refreshCookie()
     {
-        $this->setVotes($this->getVotes());
+        $this->setVotes();
     }
 
     private function removeCookie()
     {
-        Cookie::queue($this->cookieName, [], 0);
+        Cookie::queue($this->cookieName, json_encode([]), 0);
     }
 }

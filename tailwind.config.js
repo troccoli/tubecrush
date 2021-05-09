@@ -30,6 +30,7 @@ module.exports = {
     variants: {
         opacity: ['responsive', 'hover', 'focus', 'disabled'],
         backgroundColor: ['hover', 'disabled'],
+        cursor: ['disabled']
     },
 
     plugins: [

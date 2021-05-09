@@ -1,4 +1,5 @@
-<div x-data x-bind:key="{{ $post->getId() }}"
+<div x-data="{ userCanVote: @entangle('userCanVote'), userHasVoted: @entangle('userHasVoted') }"
+     :key="{{ $post->getId() }}"
      class="max-w-2xl mx-auto my-6 bg-white overflow-hidden shadow-md rounded-lg flex flex-col"
      dusk="post">
     <img class="object-cover" src="{{ \Illuminate\Support\Facades\Storage::url($post->getPhoto()) }}"
@@ -6,7 +7,15 @@
 
     <div class="flex justify-between px-6 pt-2 text-sm">
         <div class="flex" dusk="likes">
-            <x-heroicons-o-fire class="h-5 w-5 inline-block mr-1"/>
+            <button :disabled="!userCanVote" dusk="likes-button"
+                    class="disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none"
+                    @click="if (userHasVoted) { $wire.unvote() } else { $wire.vote() }"
+            >
+                <x-heroicons-o-fire class="h-5 w-5 inline-block mr-1" dusk="likes-icon-not-voted"
+                                    x-show="!userHasVoted"/>
+                <x-heroicons-s-fire class="h-5 w-5 inline-block mr-1 text-red-600" dusk="likes-icon-voted"
+                                    x-show="userCanVote && userHasVoted"/>
+            </button>
             <p class="my-auto">{{ trans_choice('post.likes', $post->getLikes()) }}</p>
         </div>
         @if($post->getPhotoCredit())
