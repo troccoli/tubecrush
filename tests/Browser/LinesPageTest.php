@@ -11,15 +11,6 @@ class LinesPageTest extends DuskTestCase
 {
     private Line $line;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->line = Line::query()->inRandomOrder()->first();
-
-        Post::factory()->bySuperAdmin()->for($this->line, 'line')->count(10)->create();
-    }
-
     public function testListOfPosts(): void
     {
         $this->browse(function (Browser $browser): void {
@@ -51,8 +42,18 @@ class LinesPageTest extends DuskTestCase
                             foreach ($post->tags as $tag) {
                                 $tags->assertSee(Str::upper($tag->getName()));
                             }
-                        });
+                        })
+                        ->assertSeeIn('@likes', trans_choice('post.likes', $post->getLikes()));
                 });
         });
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->line = Line::query()->inRandomOrder()->first();
+
+        Post::factory()->bySuperAdmin()->for($this->line, 'line')->count(10)->create();
     }
 }

@@ -35,9 +35,7 @@ abstract class DuskTestCase extends BaseTestCase
 
     protected function newBrowser($driver)
     {
-        return (new Browser($driver))
-            ->visitRoute('dusk.cookies')
-            ->cookie(config('cookie-consent.cookie_name'), config('cookie-consent.consent_value'));
+        return (new Browser($driver))->acceptCookies();
     }
 
     protected function setUp(): void

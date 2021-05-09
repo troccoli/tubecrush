@@ -7,6 +7,22 @@ use PHPUnit\Framework\Assert as PHPUnit;
 
 class Browser extends \Laravel\Dusk\Browser
 {
+    public function acceptCookies(): self
+    {
+        $this->visitRoute('dusk.cookies-consent')
+            ->cookie(config('cookies.consent.cookie_name'), config('cookies.consent.consent_value'));
+
+        return $this;
+    }
+
+    public function refuseCookies(): self
+    {
+        $this->visitRoute('dusk.cookies-consent')
+            ->cookie(config('cookies.consent.cookie_name'), config('cookies.consent.refuse_value'));
+
+        return $this;
+    }
+
     public function withEach(string $selector, \Closure $callback): self
     {
         if (Str::startsWith($selector, '@')) {

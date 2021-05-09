@@ -9,9 +9,9 @@ class CookieConsentTest extends DuskTestCase
     public function testCookieConsent(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->deleteCookie(config('cookie-consent.cookie_name'))
+            $browser->deleteCookie(config('cookies.consent.cookie_name'))
                 ->visitRoute('home')
-                ->assertCookieMissing(config('cookie-consent.cookie_name'))
+                ->assertCookieMissing(config('cookies.consent.cookie_name'))
                 ->assertVisible('@cookie-consent-modal')
                 ->within('@cookie-consent-modal', function (Browser $modal): void {
                     $modal->assertVisible('@cookie-consent-cookie-policy-button')
@@ -34,28 +34,28 @@ class CookieConsentTest extends DuskTestCase
     public function testAcceptingCookies(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->deleteCookie(config('cookie-consent.cookie_name'))
+            $browser->deleteCookie(config('cookies.consent.cookie_name'))
                 ->visitRoute('home')
-                ->assertCookieMissing(config('cookie-consent.cookie_name'))
+                ->assertCookieMissing(config('cookies.consent.cookie_name'))
                 ->assertVisible('@cookie-consent-modal')
                 ->click('@cookie-consent-accept-button')
                 ->waitUntilMissing('@cookie-consent-modal')
-                ->assertHasCookie(config('cookie-consent.cookie_name'))
-                ->assertCookieValue(config('cookie-consent.cookie_name'), config('cookie-consent.consent_value'));
+                ->assertHasCookie(config('cookies.consent.cookie_name'))
+                ->assertCookieValue(config('cookies.consent.cookie_name'), config('cookies.consent.consent_value'));
         });
     }
 
     public function testRefusingCookies(): void
     {
         $this->browse(function (Browser $browser) {
-            $browser->deleteCookie(config('cookie-consent.cookie_name'))
+            $browser->deleteCookie(config('cookies.consent.cookie_name'))
                 ->visitRoute('home')
-                ->assertCookieMissing(config('cookie-consent.cookie_name'))
+                ->assertCookieMissing(config('cookies.consent.cookie_name'))
                 ->assertVisible('@cookie-consent-modal')
                 ->click('@cookie-consent-refuse-button')
                 ->waitUntilMissing('@cookie-consent-modal')
-                ->assertHasCookie(config('cookie-consent.cookie_name'))
-                ->assertCookieValue(config('cookie-consent.cookie_name'), config('cookie-consent.refuse_value'));
+                ->assertHasCookie(config('cookies.consent.cookie_name'))
+                ->assertCookieValue(config('cookies.consent.cookie_name'), config('cookies.consent.refuse_value'));
         });
     }
 }

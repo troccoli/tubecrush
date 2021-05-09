@@ -28,7 +28,7 @@
 
         @if (auth()->check())
             <!-- Settings Dropdown -->
-                <div dusk="dropdown-menu" class="hidden sm:flex sm:items-center sm:ml-6">
+                <div class="hidden sm:flex sm:items-center sm:ml-6">
                     <x-jet-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
@@ -42,31 +42,33 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            @can('create posts')
-                                <x-jet-dropdown-link href="{{ route('posts.create') }}">
-                                    {{ __('Create post') }}
+                            <div dusk="dropdown-menu">
+                                @can('create posts')
+                                    <x-jet-dropdown-link href="{{ route('posts.create') }}">
+                                        {{ __('Create post') }}
+                                    </x-jet-dropdown-link>
+                                    <div class="border-t border-gray-100"></div>
+                                @endcan
+                                <x-jet-dropdown-link href="{{ route('dashboard') }}">
+                                    {{ __('Dashboard') }}
                                 </x-jet-dropdown-link>
+                                <x-jet-dropdown-link href="{{ route('profile.show') }}">
+                                    {{ __('Profile') }}
+                                </x-jet-dropdown-link>
+
                                 <div class="border-t border-gray-100"></div>
-                            @endcan
-                            <x-jet-dropdown-link href="{{ route('dashboard') }}">
-                                {{ __('Dashboard') }}
-                            </x-jet-dropdown-link>
-                            <x-jet-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Profile') }}
-                            </x-jet-dropdown-link>
 
-                            <div class="border-t border-gray-100"></div>
+                                <!-- Authentication -->
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
 
-                            <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-
-                                <x-jet-dropdown-link href="{{ route('logout') }}"
-                                                     onclick="event.preventDefault();
+                                    <x-jet-dropdown-link href="{{ route('logout') }}"
+                                                         onclick="event.preventDefault();
                                                             this.closest('form').submit();">
-                                    {{ __('Log out') }}
-                                </x-jet-dropdown-link>
-                            </form>
+                                        {{ __('Log out') }}
+                                    </x-jet-dropdown-link>
+                                </form>
+                            </div>
                         </x-slot>
                     </x-jet-dropdown>
                 </div>

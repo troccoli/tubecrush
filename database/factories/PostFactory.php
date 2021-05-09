@@ -20,6 +20,7 @@ class PostFactory extends Factory
             'photo' => 'photos/placeholder-'.mt_rand(1, 10).'.jpg',
             'photo_credit' => $this->faker->name(),
             'line_id' => mt_rand(1, Line::query()->count()),
+            'likes' => mt_rand(1, 200),
             'created_at' => $date,
             'updated_at' => $date,
         ];
@@ -57,6 +58,15 @@ class PostFactory extends Factory
         return $this->state(function (array $attributes) use ($title): array {
             return [
                 'title' => $title,
+            ];
+        });
+    }
+
+    public function notLiked()
+    {
+        return $this->state(function (array $attributes): array {
+            return [
+                'likes' => 0,
             ];
         });
     }

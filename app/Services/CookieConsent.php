@@ -23,18 +23,18 @@ class CookieConsent
     public function giveConsent(): void
     {
         Cookie::queue(
-            config('cookie-consent.cookie_name'),
-            config('cookie-consent.consent_value'),
-            config('cookie-consent.consent_cookie_lifetime')
+            config('cookies.consent.cookie_name'),
+            config('cookies.consent.consent_value'),
+            config('cookies.consent.consent_cookie_lifetime')
         );
     }
 
     public function refuseConsent(): void
     {
         Cookie::queue(
-            config('cookie-consent.cookie_name'),
-            config('cookie-consent.refuse_value'),
-            config('cookie-consent.refuse_cookie_lifetime')
+            config('cookies.consent.cookie_name'),
+            config('cookies.consent.refuse_value'),
+            config('cookies.consent.refuse_cookie_lifetime')
         );
     }
 
@@ -43,11 +43,11 @@ class CookieConsent
      */
     private function getCookie()
     {
-        return request()->cookie(config('cookie-consent.cookie_name'));
+        return request()->cookie(config('cookies.consent.cookie_name'));
     }
 
     private function getConsentValue(): string
     {
-        return config('cookie-consent.consent_value');
+        return config('cookies.consent.consent_value');
     }
 }

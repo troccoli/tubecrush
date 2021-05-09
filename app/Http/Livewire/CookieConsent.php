@@ -6,6 +6,9 @@ use Livewire\Component;
 
 class CookieConsent extends Component
 {
+    public const EVENT_COOKIES_ACCEPTED = __CLASS__ . "::cookieConsentGiven";
+    public const EVENT_COOKIES_DENIED = __CLASS__ . "::cookieConsentRefused";
+
     public bool $askForConsent;
 
     public bool $openConsentModal;
@@ -29,6 +32,8 @@ class CookieConsent extends Component
 
         $this->openConsentModal = false;
         $this->askForConsent = false;
+
+        $this->emit(self::EVENT_COOKIES_ACCEPTED);
     }
 
     public function refuseConsent(\App\Services\CookieConsent $service)
@@ -37,6 +42,8 @@ class CookieConsent extends Component
 
         $this->openConsentModal = false;
         $this->askForConsent = false;
+
+        $this->emit(self::EVENT_COOKIES_DENIED);
     }
 
     public function render()
