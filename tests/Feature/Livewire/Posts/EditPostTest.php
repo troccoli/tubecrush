@@ -132,8 +132,13 @@ class EditPostTest extends TestCase
         $this->assertDatabaseHas('posts', ['title' => 'New post']);
         $this->assertDatabaseMissing('posts', ['title' => 'Old post']);
 
+        /** @var Post $post */
+        $post = $this->superAdmin()->posts->first();
+        // The slug is NOT updated when changing the title
+        $this->assertSame('old-post', $post->getSlug());
+
         /** @var Collection $postTags */
-        $postTags = $this->superAdmin()->posts->first()->tags;
+        $postTags = $post->tags;
         $this->assertSameSize($newTags, $postTags);
         foreach ($newTags as $tag) {
             $this->assertTrue($postTags->contains($tag));

@@ -13,6 +13,7 @@ class EditPost extends Component
 
     public Post $post;
     public string $title;
+    public string $slug;
     public int $line = 0;
     public string $content;
     public $photo;
@@ -42,6 +43,7 @@ class EditPost extends Component
 
         $this->post = Post::findOrFail($postId);
         $this->title = $this->post->getTitle();
+        $this->slug = $this->post->getSlug();
         $this->line = $this->post->getLine()->getId();
         $this->content = $this->post->getContent();
         $this->photoCredit = $this->post->getPhotoCredit();
