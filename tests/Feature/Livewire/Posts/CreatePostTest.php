@@ -3,6 +3,7 @@
 namespace Tests\Feature\Livewire\Posts;
 
 use App\Models\Line;
+use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
@@ -125,8 +126,13 @@ class CreatePostTest extends TestCase
 
         $this->assertDatabaseHas('posts', ['title' => 'New Post']);
         $this->assertCount(1, $this->superAdmin()->posts);
+
+        /** @var Post $post */
+        $post = $this->superAdmin()->posts->first();
+        $this->assertSame('new-post', $post->getSlug());
+
         /** @var Collection $postTags */
-        $postTags = $this->superAdmin()->posts->first()->tags;
+        $postTags = $post->tags;
         $this->assertSameSize($tags, $postTags);
         foreach ($tags as $tag) {
             $this->assertTrue($postTags->contains($tag));

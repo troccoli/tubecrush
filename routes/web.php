@@ -31,6 +31,8 @@ Route::get('/lines/{slug}', \App\Http\Controllers\PostsByLinesController::class)
     ->name('posts-by-lines');
 Route::get('/tag/{slug}', \App\Http\Controllers\PostsByTagsController::class)
     ->name('posts-by-tags');
+Route::get('/post/{post:slug}', \App\Http\Controllers\SinglePostController::class)
+    ->name('single-post');
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {

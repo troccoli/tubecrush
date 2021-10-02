@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ use Illuminate\Support\Carbon;
 class Post extends Model
 {
     use HasFactory;
+    use Sluggable;
     use SoftDeletes;
 
     protected $fillable = ['title', 'line_id', 'content', 'photo', 'photo_credit', 'author_id'];
@@ -77,6 +79,11 @@ class Post extends Model
         return $this->likes;
     }
 
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
     public function incrementLikes(int $amount = 1): self
     {
         $this->increment('likes', $amount);
@@ -101,5 +108,14 @@ class Post extends Model
         return $query->whereHas('tags', function (Builder $query) use ($tagId): Builder {
             return $query->where('id', $tagId);
         });
+    }
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title',
+            ],
+        ];
     }
 }

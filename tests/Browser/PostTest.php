@@ -197,7 +197,7 @@ class PostTest extends DuskTestCase
                 ->assertSee('Content')
                 ->assertInputValue('#content', $latestPost->getContent())
                 ->assertSeeIn('@upload-photo-button', 'Upload a photo')
-                ->assertAttribute('@photo-image', 'src', $this->baseUrl().'/storage/'.$latestPost->getPhoto())
+                ->assertAttribute('@photo-image', 'src', '/storage/'.$latestPost->getPhoto())
                 ->assertSee('Photo submitted by')
                 ->assertInputValue('#photo-credit', $latestPost->getPhotoCredit())
                 ->assertSee('Tags')
@@ -249,7 +249,7 @@ class PostTest extends DuskTestCase
             $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
                 ->attach('#photo', $textFile)
                 ->waitForTextIn('@photo-error', 'The photo must be a file of type: jpg, jpeg, png.')
-                ->assertAttribute('@photo-image', 'src', $this->baseUrl().'/storage/'.$latestPost->getPhoto())
+                ->assertAttribute('@photo-image', 'src', '/storage/'.$latestPost->getPhoto())
                 ->attach('#photo', $jpgFile)
                 ->waitUntilMissing('@photo-loading-icon')
                 ->assertMissing('@photo-error')
@@ -353,6 +353,32 @@ class PostTest extends DuskTestCase
             $this->assertEmpty($latestPost->tags);
 
             $browser->logout();
+        });
+    }
+
+    public function testViewingSinglePost(): void
+    {
+        $post = Post::factory()->bySuperAdmin()->withTitle('Short title')->hasTags(3)->now()->create();
+        $this->browse(function (Browser $browser) use ($post): void {
+            $browser->visitRoute('single-post', ['post' => 'short-title'])
+                ->with('[dusk="post"]', function (Browser $row) use ($post): void {
+                    $row->assertSeeIn('@photo-credit', $post->getPhotoCredit())
+                        ->assertSeeIn('@line', $post->getLine()->getName())
+                        ->assertSeeIn('@title', $post->getTitle())
+                        ->assertSeeIn('@content', $post->getContent())
+                        ->assertSeeIn('@author-with-date',
+                            $post->getAuthorName().' '.$post->getPublishedDate()->toFormattedDateString())
+                        ->within('@tags', function (Browser $tags) use ($post): void {
+                            foreach ($post->tags as $tag) {
+                                $tags->assertSee(Str::upper($tag->getName()));
+                            }
+                        })
+                        ->assertSeeIn('@likes', trans_choice('post.likes', $post->getLikes()));
+
+                    $row->click('@line')
+                        ->assertRouteIs('posts-by-lines', ['slug' => $post->line->getSlug()]);
+                });
+
         });
     }
 
