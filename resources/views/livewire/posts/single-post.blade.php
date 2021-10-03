@@ -35,16 +35,10 @@
         </div>
         <div>
             <p class="block text-gray-800 font-semibold text-2xl mt-2" dusk="title">{{ $post->getTitle() }}</p>
+            <p class="mt-2 text-gray-600 text-xs font-normal" dusk="published-date">{{ $post->getPublishedDate()->toFormattedDateString() }}</p>
             <p class="text-sm text-gray-600 mt-2" dusk="content">{{ $post->getContent() }}</p>
         </div>
 
-        <div class="mt-4" dusk="author-with-date">
-            <div class="flex items-center">
-                <p class="text-gray-700 font-semibold">{{ $post->author->getName() }} <span
-                        class="mx-1 text-gray-600 text-xs font-normal">{{ $post->getPublishedDate()->toFormattedDateString() }}</span>
-                </p>
-            </div>
-        </div>
         <div class="mt-4 flex flex-wrap justify-start" dusk="tags">
             @foreach($post->tags as $tag)
                 <div dusk="tag-{{ $tag->getSlug() }}" class="cursor-pointer"

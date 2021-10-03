@@ -35,9 +35,8 @@ class TagsPageTest extends DuskTestCase
                     $row->assertSeeIn('@photo-credit', $post->getPhotoCredit())
                         ->assertSeeIn('@line', $post->line->getName())
                         ->assertSeeIn('@title', $post->getTitle())
+                        ->assertSeeIn('@published-date', $post->getPublishedDate()->toFormattedDateString())
                         ->assertSeeIn('@content', $post->getContent())
-                        ->assertSeeIn('@author-with-date',
-                            $post->getAuthorName().' '.$post->getPublishedDate()->toFormattedDateString())
                         ->within('@tags', function (Browser $tags) use ($post): void {
                             foreach ($post->tags as $tag) {
                                 $tags->assertSee(Str::upper($tag->getName()));
