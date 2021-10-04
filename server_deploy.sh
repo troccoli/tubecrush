@@ -35,7 +35,7 @@ php artisan livewire:discover
 php artisan icons:cache
 
 # Reload PHP to update opcache
-echo "" | sudo -S service php7.4-fpm reload
+echo "" | sudo -S service php8.0-fpm reload
 
 # Fix permissions
 chown -R www-data .
