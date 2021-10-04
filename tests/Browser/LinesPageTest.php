@@ -42,7 +42,12 @@ class LinesPageTest extends DuskTestCase
                                 $tags->assertSee(Str::upper($tag->getName()));
                             }
                         })
-                        ->assertSeeIn('@likes', trans_choice('post.likes', $post->getLikes()));
+                        ->assertSeeIn('@likes', trans_choice('post.likes', $post->getLikes()))
+                        ->within('@shares', function (Browser $shares): void {
+                            $shares->assertVisible('@twitter-share')
+                                ->assertVisible('@facebook-share')
+                                ->assertVisible('@copy-link-share');
+                        });
                 });
         });
     }

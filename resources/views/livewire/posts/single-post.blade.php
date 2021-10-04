@@ -47,5 +47,10 @@
                 </div>
             @endforeach
         </div>
+        <div class="mt-4 flex space-x-2" dusk="shares">
+            <x-twitter-share :post="$post"/>
+            <x-facebook-share :post="$post"/>
+            <x-copy-link-share :post="$post"/>
+        </div>
     </div>
 </div>

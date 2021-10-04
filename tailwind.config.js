@@ -1,10 +1,13 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
+    // mode: 'jit',
     purge: [
         './vendor/laravel/jetstream/**/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './public/**/*.html',
+        './src/**/*.{js,jsx,ts,tsx,vue}',
     ],
 
     theme: {
@@ -22,6 +25,14 @@ module.exports = {
                 },
                 'reverse-spin': {
                     from: {transform: 'rotate(360deg)'},
+                }
+            },
+            colors: {
+                twitter: {
+                    DEFAULT: '#55acee',
+                },
+                facebook: {
+                    DEFAULT: '#3b5998',
                 }
             }
         },
