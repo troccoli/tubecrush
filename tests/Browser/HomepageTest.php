@@ -51,6 +51,12 @@ class HomepageTest extends DuskTestCase
                 });
 
             $browser->visitRoute('home')
+                    ->with('[dusk="post"]:first-child', function (Browser $row) use ($post): void {
+                        $row->click('@title')
+                            ->assertRouteIs('single-post', ['post' => $post]);
+                    });
+
+            $browser->visitRoute('home')
                 ->with('[dusk="post"]:first-child', function (Browser $row) use ($post): void {
                     $tag = $post->tags->first();
                     $row->click('@tag-' . $tag->getSlug())

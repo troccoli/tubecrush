@@ -34,7 +34,7 @@
             </x-line-box>
         </div>
         <div>
-            <p class="block text-gray-800 font-semibold text-2xl mt-2" dusk="title">{{ $post->getTitle() }}</p>
+            <a href="{{ route('single-post', ['post' => $post]) }}" class="cursor-pointer block text-gray-800 font-semibold text-2xl mt-2" dusk="title">{{ $post->getTitle() }}</a>
             <p class="mt-2 text-gray-600 text-xs font-normal" dusk="published-date">{{ $post->getPublishedDate()->toFormattedDateString() }}</p>
             <p class="text-sm text-gray-600 mt-2" dusk="content">{{ $post->getContent() }}</p>
         </div>
