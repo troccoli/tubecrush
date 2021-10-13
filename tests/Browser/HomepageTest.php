@@ -76,4 +76,15 @@ class HomepageTest extends DuskTestCase
                 });
         });
     }
+
+    public function testCommentCountsIsAvailableOnTheHomepage(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visitRoute('home')
+                    ->with('[dusk="post"]:first-child', function (Browser $post): void {
+                        $post->assertVisible('@comments-count')
+                             ->assertSeeIn('@comments-count', '0 Comments');
+                    });
+        });
+    }
 }

@@ -414,4 +414,14 @@ class PostTest extends DuskTestCase
                 ->logout();
         });
     }
+
+    public function testCommentsAreAvailableOnTheSinglePostPage(): void
+    {
+        $post = Post::query()->latest()->first();
+
+        $this->browse(function (Browser $browser) use ($post) {
+            $browser->visitRoute('single-post', ['post' => $post])
+                ->assertVisible('@comments');
+        });
+    }
 }

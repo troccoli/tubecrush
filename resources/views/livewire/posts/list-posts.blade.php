@@ -1,6 +1,6 @@
 <div class="flex flex-col">
     @foreach($posts as $post)
-        <livewire:posts.single-post :post="$post" :wire:key="$post->getId()"/>
+        <livewire:posts.single-post :post="$post" :wire:key="$post->getId()" :withComments="false"/>
     @endforeach
     <div class="flex">
         <button wire:click="loadMorePosts" wire:loading.attr="disabled"
@@ -10,3 +10,11 @@
         </button>
     </div>
 </div>
+@push('scripts')
+    <script id="dsq-count-scr" src="//{{ config('disqus.username') }}.disqus.com/count.js" async></script>
+    <script type="application/javascript">
+        Livewire.on('morePostsLoaded', () => {
+            DISQUSWIDGETS.getCount({reset: true});
+        })
+    </script>
+@endpush

@@ -47,10 +47,22 @@
                 </div>
             @endforeach
         </div>
-        <div class="mt-4 flex space-x-2" dusk="shares">
-            <x-twitter-share :post="$post"/>
-            <x-facebook-share :post="$post"/>
-            <x-copy-link-share :post="$post"/>
+        <div class="mt-4 flex justify-between">
+            <div class="flex space-x-2" dusk="shares">
+                <x-twitter-share :post="$post"/>
+                <x-facebook-share :post="$post"/>
+                <x-copy-link-share :post="$post"/>
+            </div>
+            @unless($withComments || !config('disqus.enabled'))
+            <div wire:ignore class="text-sm" dusk="comments-count">
+                <span class="disqus-comment-count" data-disqus-url="{{ route('single-post', ['post' => $post]) }}">0 Comments</span>
+            </div>
+            @endunless
         </div>
+        @if(config('disqus.enabled') && $withComments)
+        <div wire:ignore dusk="comments">
+            <div id="disqus_thread"></div>
+        </div>
+        @endif
     </div>
 </div>
