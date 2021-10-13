@@ -11,6 +11,7 @@ class SinglePost extends Component
 {
     /** @var Post */
     public $post;
+    public bool $withComments = true;
     public bool $userCanVote = false;
     public bool $userHasVoted = false;
 

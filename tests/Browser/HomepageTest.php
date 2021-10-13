@@ -51,6 +51,12 @@ class HomepageTest extends DuskTestCase
                 });
 
             $browser->visitRoute('home')
+                    ->with('[dusk="post"]:first-child', function (Browser $row) use ($post): void {
+                        $row->click('@title')
+                            ->assertRouteIs('single-post', ['post' => $post]);
+                    });
+
+            $browser->visitRoute('home')
                 ->with('[dusk="post"]:first-child', function (Browser $row) use ($post): void {
                     $tag = $post->tags->first();
                     $row->click('@tag-' . $tag->getSlug())
@@ -68,6 +74,17 @@ class HomepageTest extends DuskTestCase
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
                     $row->assertMissing('@photo-credit');
                 });
+        });
+    }
+
+    public function testCommentCountsIsAvailableOnTheHomepage(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visitRoute('home')
+                    ->with('[dusk="post"]:first-child', function (Browser $post): void {
+                        $post->assertVisible('@comments-count')
+                             ->assertSeeIn('@comments-count', '0 Comments');
+                    });
         });
     }
 }

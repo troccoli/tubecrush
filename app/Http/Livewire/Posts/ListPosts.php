@@ -50,5 +50,7 @@ class ListPosts extends Component
             ->limit($this->count);
 
         $this->posts = $query->get();
+
+        $this->emit('morePostsLoaded');
     }
 }

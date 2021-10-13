@@ -34,7 +34,7 @@
             </x-line-box>
         </div>
         <div>
-            <p class="block text-gray-800 font-semibold text-2xl mt-2" dusk="title">{{ $post->getTitle() }}</p>
+            <a href="{{ route('single-post', ['post' => $post]) }}" class="cursor-pointer block text-gray-800 font-semibold text-2xl mt-2" dusk="title">{{ $post->getTitle() }}</a>
             <p class="mt-2 text-gray-600 text-xs font-normal" dusk="published-date">{{ $post->getPublishedDate()->toFormattedDateString() }}</p>
             <p class="text-sm text-gray-600 mt-2" dusk="content">{{ $post->getContent() }}</p>
         </div>
@@ -47,10 +47,22 @@
                 </div>
             @endforeach
         </div>
-        <div class="mt-4 flex space-x-2" dusk="shares">
-            <x-twitter-share :post="$post"/>
-            <x-facebook-share :post="$post"/>
-            <x-copy-link-share :post="$post"/>
+        <div class="mt-4 flex justify-between">
+            <div class="flex space-x-2" dusk="shares">
+                <x-twitter-share :post="$post"/>
+                <x-facebook-share :post="$post"/>
+                <x-copy-link-share :post="$post"/>
+            </div>
+            @unless($withComments || !config('disqus.enabled'))
+            <div wire:ignore class="text-sm" dusk="comments-count">
+                <span class="disqus-comment-count" data-disqus-url="{{ route('single-post', ['post' => $post]) }}">0 Comments</span>
+            </div>
+            @endunless
         </div>
+        @if(config('disqus.enabled') && $withComments)
+        <div wire:ignore dusk="comments">
+            <div id="disqus_thread"></div>
+        </div>
+        @endif
     </div>
 </div>
