@@ -17,7 +17,7 @@ class DashboardList extends Component
     public function render()
     {
         return view('livewire.posts.dashboard-list', [
-            'posts' => Post::query()->orderByDesc('created_at')->paginate(5),
+            'posts' => Post::query()->latest()->paginate(5),
         ]);
     }
 

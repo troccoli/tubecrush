@@ -20,6 +20,9 @@ abstract class DuskTestCase extends BaseTestCase
     use CreatesApplication;
     use DatabaseMigrations;
 
+    protected $seeder = DatabaseSeeder::class;
+    protected $seed = true;
+
     protected User $superAdmin;
     protected User $editor;
 
@@ -42,8 +45,6 @@ abstract class DuskTestCase extends BaseTestCase
     {
         $this->hotfixSqlite();
         parent::setUp();
-
-        $this->seed(DatabaseSeeder::class);
 
         $this->superAdmin = User::whereEmail('super-admin@example.com')->first();
         $this->editor = User::whereEmail('editor@example.com')->first();

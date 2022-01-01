@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\PostStatus;
 use App\Models\Line;
 use App\Models\Post;
 use App\Models\User;
@@ -11,6 +12,11 @@ use Illuminate\Support\Carbon;
 class PostFactory extends Factory
 {
     protected $model = Post::class;
+
+    public function bySuperAdmin()
+    {
+        return $this->state(fn(array $attributes) => ['author_id' => 1]);
+    }
 
     public function definition()
     {
@@ -23,53 +29,44 @@ class PostFactory extends Factory
             'photo_credit' => $this->faker->name(),
             'line_id' => mt_rand(1, Line::query()->count()),
             'likes' => mt_rand(1, 200),
+            'status' => PostStatus::Published,
+            'author_id' => User::query()->inRandomOrder()->first(),
             'created_at' => $date,
             'updated_at' => $date,
+            'published_at' => $date,
         ];
-    }
-
-    public function now()
-    {
-        return $this->state(function (array $attributes): array {
-            return [
-                'created_at' => Carbon::now(),
-            ];
-        });
-    }
-
-    public function bySuperAdmin()
-    {
-        return $this->state(function (array $attributes): array {
-            return [
-                'author_id' => 1,
-            ];
-        });
-    }
-
-    public function withoutPhotoCredit()
-    {
-        return $this->state(function (array $attributes): array {
-            return [
-                'photo_credit' => null,
-            ];
-        });
-    }
-
-    public function withTitle(string $title)
-    {
-        return $this->state(function (array $attributes) use ($title): array {
-            return [
-                'title' => $title,
-            ];
-        });
     }
 
     public function notLiked()
     {
-        return $this->state(function (array $attributes): array {
-            return [
-                'likes' => 0,
-            ];
-        });
+        return $this->state(fn(array $attributes) => ['likes' => 0]);
+    }
+
+    public function now()
+    {
+        $now = Carbon::now();
+        return $this->state(fn(array $attributes) => ['created_at' => $now, 'updated_at' => $now]);
+    }
+
+    public function draft()
+    {
+        return $this->state(
+            fn($attributes) => ['status' => PostStatus::Draft, 'published_at' => null]
+        );
+    }
+
+    public function publishedNow()
+    {
+        return $this->state(fn($attributes) => ['published_at' => Carbon::now()]);
+    }
+
+    public function withTitle(string $title)
+    {
+        return $this->state(fn(array $attributes) => ['title' => $title]);
+    }
+
+    public function withoutPhotoCredit()
+    {
+        return $this->state(fn(array $attributes) => ['photo_credit' => null]);
     }
 }

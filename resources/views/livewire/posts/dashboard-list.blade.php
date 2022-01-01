@@ -36,11 +36,11 @@
                                 <div class="mt-1 text-sm text-gray-500">by <span
                                         class="italic">{{ $post->author->getName() }}</span>
                                     <span class="md:hidden"> on <span
-                                            class="font-semibold">{{ $post->getPublishedDate()->toFormattedDateString() }}</span></span>
+                                            class="font-semibold">{{ $post->getCreationDate()->toFormattedDateString() }}</span></span>
                                 </div>
                             </div>
                             <div class="hidden md:flex w-1/3 pl-2 text-sm">
-                                {{ $post->getPublishedDate()->toFormattedDateString() }}
+                                {{ $post->getCreationDate()->toFormattedDateString() }}
                             </div>
                             <div class="flex flex-row items-center mt-4 md:mt-0">
                                 @can('update posts')

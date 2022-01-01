@@ -46,7 +46,8 @@ class ListPosts extends Component
             ->when($this->tagId, function (Builder $query): Builder {
                 return $query->withTag($this->tagId);
             })
-            ->latest()
+            ->published()
+            ->latest('published_at')
             ->limit($this->count);
 
         $this->posts = $query->get();

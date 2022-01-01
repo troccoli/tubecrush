@@ -21,6 +21,18 @@ class HomepageTest extends DuskTestCase
         });
     }
 
+    public function testDraftPostsAreNotShown(): void
+    {
+        /** @var Post $draftPost */
+        $draftPost = Post::factory()->draft()->now()->create();
+        $this->browse(function (Browser $browser) use ($draftPost): void {
+            $browser->visitRoute('home')
+                ->with('[dusk="post"]:first-child', function (Browser $row) use ($draftPost): void {
+                    $row->assertDontSeeIn('@title', $draftPost->getTitle());
+                });
+        });
+    }
+
     public function testContentOfSinglePost(): void
     {
         /** @var Post $post */
@@ -67,7 +79,7 @@ class HomepageTest extends DuskTestCase
 
     public function testDontShowPhotoCreditIfThereIsntOne(): void
     {
-        Post::factory()->bySuperAdmin()->withoutPhotoCredit()->now()->create();
+        Post::factory()->withoutPhotoCredit()->now()->publishedNow()->create();
 
         $this->browse(function (Browser $browser): void {
             $browser->visitRoute('home')

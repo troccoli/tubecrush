@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PostStatus;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,7 +18,20 @@ class Post extends Model
 {
     use HasFactory, Sluggable, SoftDeletes, SluggableScopeHelpers;
 
-    protected $fillable = ['title', 'line_id', 'content', 'photo', 'photo_credit', 'author_id'];
+    protected $casts = [
+        'status' => PostStatus::class,
+        'published_at' => 'datetime',
+    ];
+    protected $fillable = [
+        'title',
+        'line_id',
+        'content',
+        'photo',
+        'photo_credit',
+        'author_id',
+        'status',
+        'published_at',
+    ];
 
     protected static function booted()
     {
@@ -78,9 +92,14 @@ class Post extends Model
         return $this->photo_credit;
     }
 
-    public function getPublishedDate(): Carbon
+    public function getCreationDate(): Carbon
     {
         return $this->created_at;
+    }
+
+    public function getPublishedDate(): Carbon
+    {
+        return $this->published_at;
     }
 
     public function getSlug(): string
@@ -129,5 +148,15 @@ class Post extends Model
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function getStatus(): PostStatus
+    {
+        return $this->status;
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->status == PostStatus::Draft;
     }
 }

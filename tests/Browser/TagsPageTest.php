@@ -24,6 +24,19 @@ class TagsPageTest extends DuskTestCase
         });
     }
 
+    public function testDraftPostsAreNotShown(): void
+    {
+        /** @var Post $draftPost */
+        $draftPost = Post::factory()->draft()->now()->create();
+        $draftPost->tags()->attach($this->tag);
+        $this->browse(function (Browser $browser) use ($draftPost): void {
+            $browser->visitRoute('posts-by-tags', ['slug' => $this->tag->getSlug()])
+                ->with('[dusk="post"]:first-child', function (Browser $row) use ($draftPost): void {
+                    $row->assertDontSeeIn('@title', $draftPost->getTitle());
+                });
+        });
+    }
+
     public function testContentOfSinglePost(): void
     {
         /** @var Post $post */
@@ -58,7 +71,7 @@ class TagsPageTest extends DuskTestCase
 
         $this->tag = Tag::query()->inRandomOrder()->first();
 
-        Post::factory()->bySuperAdmin()->count(10)
+        Post::factory()->count(10)
             ->afterCreating(function (Post $post): void {
                 $post->tags()->sync($this->tag);
             })

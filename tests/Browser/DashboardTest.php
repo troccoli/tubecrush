@@ -143,6 +143,28 @@ class DashboardTest extends DuskTestCase
         });
     }
 
+    public function testListDraftPosts(): void
+    {
+        /** @var Post $draftPost */
+        $draftPost = Post::factory()->draft()->now()->withTitle('Draft posts')->create();
+
+        $this->browse(function (Browser $browser) use ($draftPost): void {
+            $browser->loginAs($this->superAdmin)
+                ->visitRoute('posts.list')
+                ->with('[dusk="post"]:first-child', function (Browser $row): void {
+                    $row->assertSee('Draft post');
+                })
+                ->logout();
+
+            $browser->loginAs($this->editor)
+                ->visitRoute('posts.list')
+                ->with('[dusk="post"]:first-child', function (Browser $row): void {
+                    $row->assertSee('Draft post');
+                })
+                ->logout();
+        });
+    }
+
     public function testCreatePost(): void
     {
         $this->browse(function (Browser $browser): void {
