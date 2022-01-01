@@ -45,7 +45,7 @@ class DashboardListTest extends TestCase
             ->call('keepPost')
             ->assertSet('confirmingId', null);
 
-        $this->assertDatabaseHas('posts', ['id' => $post->getKey()]);
+        $this->assertNotSoftDeleted('posts', ['id' => $post->getKey()]);
     }
 
     public function testItDoesNotDeleteNonExistingPosts(): void
@@ -63,7 +63,7 @@ class DashboardListTest extends TestCase
             ->call('deletePost')
             ->assertSet('confirmingId', null);
 
-        $this->assertDatabaseHas('posts', ['id' => $post->getKey()]);
+        $this->assertNotSoftDeleted('posts', ['id' => $post->getKey()]);
     }
 
     public function testItDeleteTheLastConfirmedPost(): void
@@ -83,7 +83,7 @@ class DashboardListTest extends TestCase
             ->call('deletePost')
             ->assertSet('confirmingId', null);
 
-        $this->assertDatabaseHas('posts', ['id' => $post1->getKey()]);
+        $this->assertNotSoftDeleted('posts', ['id' => $post1->getKey()]);
         $this->assertSoftDeleted('posts', ['id' => $post2->getKey()]);
     }
 }
