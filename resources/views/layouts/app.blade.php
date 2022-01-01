@@ -15,10 +15,13 @@
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     @livewireStyles
     @stack('styles')
+
+    <!-- Scripts -->
+    <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
 <body class="font-sans antialiased">
 <div class="min-h-screen bg-gray-100">
-    @livewire('navigation-dropdown')
+    <x-navigation-dropdown/>
 
     <!-- Page Heading -->
     <header class="bg-white">
@@ -39,8 +42,6 @@
 
 @stack('modals')
 
-<!-- Scripts -->
-<script src="{{ mix('js/app.js') }}" defer></script>
 @livewireScripts
 @stack('scripts')
 </body>

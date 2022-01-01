@@ -1,4 +1,4 @@
-<div class="relative mt-2" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false" dusk="line-select">
+<div class="relative mt-2" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false" dusk="line-select">
     <div @click="open = ! open">
         <button type="button" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label"
                 class="relative w-full bg-white border border-gray-500 rounded-md shadow-sm pl-3 pr-10 py-3 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -22,11 +22,11 @@
 
     <div x-show="open"
          x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="transform opacity-0 scale-95"
-         x-transition:enter-end="transform opacity-100 scale-100"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
          x-transition:leave="transition ease-in duration-75"
-         x-transition:leave-start="transform opacity-100 scale-100"
-         x-transition:leave-end="transform opacity-0 scale-95"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
          class="absolute z-50 mt-2 w-full mr-6 rounded-md shadow-lg origin-top-left left-0"
          style="display: none;"
          @click="open = false">

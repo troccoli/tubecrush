@@ -37,7 +37,7 @@
                     </span>
                 </div>
             </div>
-            <div class="flex flex-wrap flex-grow mt-10 -mb-10 text-center md:pl-20 md:mt-0 md:text-left">
+            <div class="flex flex-wrap grow mt-10 -mb-10 text-center md:pl-20 md:mt-0 md:text-left">
                 <div class="w-full px-4 lg:w-1/4 md:w-1/2">
                     <h2 class="mb-3 text-sm font-medium tracking-widest text-gray-900 uppercase title-font">{{__('About')}}</h2>
                     <nav class="mb-10 list-none">
@@ -82,13 +82,16 @@
             <div class="container px-5 py-4 mx-auto">
                 <p class="text-sm text-gray-700 capitalize text-center">© {{ date('Y') }} All rights reserved - Made
                     with <span
-                        id="heart" class="tooltip static">&#x2764;<span
+                        id="heart" class="tooltip static">&#x2764;
+                        @env('local')
+                        <span
                             class="hidden sm:block tooltip-text p-2 absolute ml-2 -mt-16 inline-block text-sm text-left normal-case rounded-lg bg-gray-600 text-white transition duration-500">
                             PHP {{ $phpVersion }}<br/>
                             Laravel {{ $laravelVersion }}<br/>
                             Livewire {{ $livewireVersion }}<br/>
                             TailwindCSS {{ $tailwindcssVersion }}
                         </span>
+                        @endenv
                     </span>
                     by <a href="http://www.troccoli.it" class="hover:underline">Giulio Troccoli-Allard</a>
                 </p>
