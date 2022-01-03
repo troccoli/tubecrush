@@ -83,8 +83,13 @@ class DashboardTest extends DuskTestCase
         });
     }
 
-    public function testListPostsInCreationDateOrderIncludingDraftPosts(): void
+    public function testListPosts(): void
     {
+        /*
+         * The list should be ordered by creation date, in descending order,
+         * i.e. the latest one on top. It should also include draft posts.
+         */
+
         /* This draft post will be top of the list */
         Post::factory()->draft()->withTitle('This is the top post and it is a draft')->now()->create();
         $topFivePosts = Post::query()->orderByDesc('created_at')->limit(5)->get();
@@ -103,6 +108,7 @@ class DashboardTest extends DuskTestCase
                     $row->assertSeeIn('@post-title', $post->getTitle())
                         ->assertSeeIn('@post-author', $post->getAuthorName())
                         ->assertSeeIn('@post-creation-date', $post->getCreationDate()->toFormattedDateString())
+                        ->assertSeeIn('@post-publication-date', $post->isDraft() ? 'Draft' : $post->getPublishedDate()->toFormattedDateString())
                         ->assertPresent('@edit-post-button')
                         ->assertPresent('@delete-post-button');
                 })
@@ -113,11 +119,15 @@ class DashboardTest extends DuskTestCase
                 ->within('@posts-list', function (Browser $list): void {
                     $list->assertCountInElement(5, '@post');
                 })
+                ->with('[dusk="post"]:first-child', function (Browser $row): void {
+                    $row->assertSeeIn('@post-title', 'This is the top post and it is a draft');
+                })
                 ->withEach('@post', function (Browser $row, int $line) use ($topFivePosts): void {
                     $post = $topFivePosts[$line - 1];
                     $row->assertSeeIn('@post-title', $post->getTitle())
                         ->assertSeeIn('@post-author', $post->getAuthorName())
                         ->assertSeeIn('@post-creation-date', $post->getCreationDate()->toFormattedDateString())
+                        ->assertSeeIn('@post-publication-date', $post->isDraft() ? 'Draft' : $post->getPublishedDate()->toFormattedDateString())
                         ->assertPresent('@edit-post-button')
                         ->assertMissing('@delete-post-button');
                 })

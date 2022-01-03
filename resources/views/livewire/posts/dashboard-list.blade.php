@@ -15,8 +15,10 @@
             <div class="hidden md:flex flex-row bg-gray-100 rounded-t-lg h-10 items-center">
                 <p class="w-1/2 pl-4 text-left text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider">
                     title</p>
-                <p class="w-1/4 pl-2 text-left text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                <p class="w-1/6 pl-2 text-left text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider">
                     date</p>
+                <p class="w-1/6 pl-2 text-left text-xs lg:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                    status</p>
             </div>
 
             <div class="relative border-t border-t-gray-200">
@@ -45,9 +47,26 @@
                                         </span>
                                     </span>
                                 </div>
+                                <div class="mt-1 text-sm text-gray-500 md:hidden" dusk="post-status">
+                                    @if($post->isDraft())
+                                        Draft
+                                    @else
+                                        Published on
+                                        <span class="font-semibold">
+                                        {{ $post->getPublishedDate()->toFormattedDateString() }}
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
-                            <div class="hidden md:flex w-1/3 pl-2 text-sm" dusk="post-creation-date">
+                            <div class="hidden md:flex w-1/6 pl-2 text-sm" dusk="post-creation-date">
                                 {{ $post->getCreationDate()->toFormattedDateString() }}
+                            </div>
+                            <div class="hidden md:flex w-1/6 pl-2 text-sm" dusk="post-publication-date">
+                                @if($post->isDraft())
+                                    Draft
+                                @else
+                                {{ $post->getPublishedDate()->toFormattedDateString() }}
+                                @endif
                             </div>
                             <div class="flex flex-row items-center mt-4 md:mt-0">
                                 @can('update posts')
