@@ -32,14 +32,21 @@
                         <div dusk="post"
                              class="@if($post->getKey() === session('new-post-id')) animate-pulse-bg-once bg-green-50 @endif hover:bg-gray-100 py-4 flex flex-col md:flex-row">
                             <div class="w-full md:w-1/2 md:pl-4 text-lg text-gray-900">
-                                {{ $post->getTitle() }}
-                                <div class="mt-1 text-sm text-gray-500">by <span
-                                        class="italic">{{ $post->author->getName() }}</span>
-                                    <span class="md:hidden"> on <span
-                                            class="font-semibold">{{ $post->getCreationDate()->toFormattedDateString() }}</span></span>
+                                <span dusk="post-title">{{ $post->getTitle() }}</span>
+                                <div class="mt-1 text-sm text-gray-500">
+                                    by
+                                    <span class="italic" dusk="post-author">
+                                        {{ $post->author->getName() }}
+                                    </span>
+                                    <span class="md:hidden">
+                                        on
+                                        <span class="font-semibold">
+                                            {{ $post->getCreationDate()->toFormattedDateString() }}
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
-                            <div class="hidden md:flex w-1/3 pl-2 text-sm">
+                            <div class="hidden md:flex w-1/3 pl-2 text-sm" dusk="post-creation-date">
                                 {{ $post->getCreationDate()->toFormattedDateString() }}
                             </div>
                             <div class="flex flex-row items-center mt-4 md:mt-0">
