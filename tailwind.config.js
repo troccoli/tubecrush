@@ -38,6 +38,8 @@ module.exports = {
             blue: colors.blue,
             pink: colors.pink,
             indigo: colors.indigo,
+            cyan: colors.cyan,
+            emerald: colors.emerald,
             twitter: '#55acee',
             facebook: '#3b5998',
         }

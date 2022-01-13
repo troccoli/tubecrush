@@ -65,7 +65,7 @@
                                 @if($post->isDraft())
                                     Draft
                                 @else
-                                {{ $post->getPublishedDate()->toFormattedDateString() }}
+                                    {{ $post->getPublishedDate()->toFormattedDateString() }}
                                 @endif
                             </div>
                             <div class="flex flex-row items-center mt-4 md:mt-0">
@@ -78,12 +78,29 @@
                                     </a>
                                 @endcan
                                 @can('delete posts')
-                                    <a href="#" wire:click="confirmDelete({{ $post->getKey() }})"
+                                    <a href="#" wire:click="confirmAction({{ $post->getKey() }}, 'delete')"
                                        title="Delete post"
                                        class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 ml-1 border border-transparent rounded-md bg-red-400 hover:bg-red-500 transition duration-300"
                                        dusk="delete-post-button">
                                         <x-heroicons-o-trash class="h-8 w-8"/>
                                     </a>
+                                @endcan
+                                @can('publish posts')
+                                    @if($post->isDraft())
+                                        <a href="#" wire:click="confirmAction({{ $post->getId() }}, 'publish')"
+                                           title="Publish post"
+                                           class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 ml-1 border border-transparent rounded-md bg-emerald-400 hover:bg-emerald-500 transition duration-300"
+                                           dusk="publish-post-button">
+                                            <x-heroicons-o-eye class="h-8 w-8"/>
+                                        </a>
+                                    @else
+                                        <a href="#" wire:click="confirmAction({{ $post->getId() }}, 'unpublish')"
+                                           title="Unpublish post"
+                                           class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 ml-1 border border-transparent rounded-md bg-cyan-400 hover:bg-cyan-500 transition duration-300"
+                                           dusk="unpublish-post-button">
+                                            <x-heroicons-o-eye-off class="h-8 w-8"/>
+                                        </a>
+                                    @endif
                                 @endcan
                             </div>
                         </div>
@@ -102,7 +119,7 @@
         {{--        </div>--}}
         {{ $posts->links() }}
     </div>
-    <x-jet-confirmation-modal wire:model="confirmingId" id="confirm-delete-post-dialog">
+    <x-jet-confirmation-modal wire:model="confirmingDeletingId" id="confirm-delete-post-dialog">
         <x-slot name="title">
             <p class="text-2xl font-bold tracking-wide">Delete a post</p>
         </x-slot>
@@ -123,5 +140,46 @@
             </x-jet-danger-button>
         </x-slot>
     </x-jet-confirmation-modal>
+    <x-jet-confirmation-modal wire:model="confirmingPublishingId" id="confirm-publish-post-dialog">
+        <x-slot name="title">
+            <p class="text-2xl font-bold tracking-wide">Publish a post</p>
+        </x-slot>
+        <x-slot name="content">
+            <div class="mt-3">
+                <p>{{ __('Are you sure you want to publish the following post?') }}</p>
+                <p class="italic">{{ $confirmingTitle }}</p>
+            </div>
+        </x-slot>
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="keepPost" wire:loading.attr="disabled" dusk="cancel-publish-post-button">
+                {{ __("Whoops, no thanks") }}
+            </x-jet-secondary-button>
 
+            <x-jet-danger-button class="ml-2" wire:click="publishPost" wire:loading.attr="disabled"
+                                 dusk="confirm-publish-post-button">
+                {{ __('Yep, let\'s go') }}
+            </x-jet-danger-button>
+        </x-slot>
+    </x-jet-confirmation-modal>
+    <x-jet-confirmation-modal wire:model="confirmingUnpublishingId" id="confirm-unpublish-post-dialog">
+        <x-slot name="title">
+            <p class="text-2xl font-bold tracking-wide">Unpublish a post</p>
+        </x-slot>
+        <x-slot name="content">
+            <div class="mt-3">
+                <p>{{ __('Are you sure you want to unpublish the following post?') }}</p>
+                <p class="italic">{{ $confirmingTitle }}</p>
+            </div>
+        </x-slot>
+        <x-slot name="footer">
+            <x-jet-secondary-button wire:click="keepPost" wire:loading.attr="disabled" dusk="cancel-unpublish-post-button">
+                {{ __("Naah, leave it") }}
+            </x-jet-secondary-button>
+
+            <x-jet-danger-button class="ml-2" wire:click="unpublishPost" wire:loading.attr="disabled"
+                                 dusk="confirm-unpublish-post-button">
+                {{ __('Oh yeah') }}
+            </x-jet-danger-button>
+        </x-slot>
+    </x-jet-confirmation-modal>
 </div>

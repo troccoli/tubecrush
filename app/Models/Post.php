@@ -162,6 +162,26 @@ class Post extends Model
 
     public function isDraft(): bool
     {
-        return $this->status == PostStatus::Draft;
+        return $this->status === PostStatus::Draft;
+    }
+
+    public function publish(): self
+    {
+        $this->status = PostStatus::Published;
+        $this->published_at = now();
+
+        $this->save();
+
+        return $this->refresh();
+    }
+
+    public function unpublish(): self
+    {
+        $this->status = PostStatus::Draft;
+        $this->published_at = null;
+
+        $this->save();
+
+        return $this->refresh();
     }
 }
