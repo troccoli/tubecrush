@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use App\Models\AlternativePostSlug;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,6 +14,10 @@ class PostTest extends DuskTestCase
 {
     public function testCreatingAPost(): void
     {
+        // Create a post with the slug 'must-be-unique'
+        $post = Post::factory()->create(['title' => 'Must be unique']);
+        // Create a alternative slug for the same post
+        AlternativePostSlug::factory()->for($post)->create(['slug' => 'old-existing-slug']);
         $this->browse(function (Browser $browser): void {
             $postCount = Post::query()->count();
             $tags = Tag::query()->inRandomOrder()->limit(3)->get();
@@ -45,16 +50,25 @@ class PostTest extends DuskTestCase
                 ->assertRouteIs('posts.list');
             $this->assertDatabaseCount('posts', $postCount);
 
-            // The title is mandatory, and cannot be more than 20 characters
+            // The title is mandatory, and cannot be more than 50 characters
             $browser->visitRoute('posts.create')
                 ->press('CREATE')
                 ->waitForTextIn('@title-error', 'The title field is required.')
-                ->type('#title', '123456789012345678901')
+                ->type('#title', Str::random(51))
                 ->press('CREATE')
-                ->waitForTextIn('@title-error', 'The title may not be greater than 20 characters.')
-                ->type('#title', '12345678901234567890')
+                ->waitForTextIn('@title-error', 'The title may not be greater than 50 characters.')
+                ->type('#title', Str::random(50))
                 ->press('CREATE')
                 ->waitUntilMissing('@title-error');
+
+            // The generated slug must be unique
+            $browser->visitRoute('posts.create')
+                ->type('#title', 'Must be unique')
+                ->press('CREATE')
+                ->waitForTextIn('@title-error', 'A slug for this title has already been used in the past.')
+                ->type('#title', 'Old Existing SLUG')
+                ->press('CREATE')
+                ->waitForTextIn('@title-error', 'A slug for this title has already been used in the past.');
 
             // The line is mandatory
             $browser->visitRoute('posts.create')
@@ -71,13 +85,13 @@ class PostTest extends DuskTestCase
             $browser->visitRoute('posts.create')
                 ->press('CREATE')
                 ->waitForTextIn('@content-error', 'The content field is required.')
-                ->type('#content', '123456789')
+                ->type('#content', Str::random(9))
                 ->press('CREATE')
                 ->waitForTextIn('@content-error', 'The content must be at least 10 characters.')
-//                ->type('#content', Str::random(2001))
-//                ->press('CREATE')
-//                ->waitForTextIn('@content-error', 'The content may not be greater than 2000 characters.')
-                ->type('#content', '1234567890')
+                ->type('#content', Str::random(2001))
+                ->press('CREATE')
+                ->waitForTextIn('@content-error', 'The content may not be greater than 2000 characters.')
+                ->type('#content', Str::random(mt_rand(10,2000)))
                 ->press('CREATE')
                 ->waitUntilMissing('@content-error');
 
@@ -360,7 +374,7 @@ class PostTest extends DuskTestCase
     {
         $post = Post::factory()->bySuperAdmin()->withTitle('Short title')->hasTags(3)->now()->create();
         $this->browse(function (Browser $browser) use ($post): void {
-            $browser->visitRoute('single-post', ['post' => 'short-title'])
+            $browser->visitRoute('single-post', compact('post'))
                 ->with('[dusk="post"]', function (Browser $row) use ($post): void {
                     $row->assertSeeIn('@photo-credit', $post->getPhotoCredit())
                         ->assertSeeIn('@line', $post->getLine()->getName())

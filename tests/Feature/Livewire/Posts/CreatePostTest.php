@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Livewire\Posts;
 
+use App\Models\AlternativePostSlug;
 use App\Models\Line;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Rules\UniquePostSlug;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +30,23 @@ class CreatePostTest extends TestCase
             ->assertHasErrors(['title' => 'required'])
             ->set('title', Str::random(51))
             ->call('submit')
-            ->assertHasErrors(['title' => 'max']);
+            ->assertHasErrors(['title' => 'max'])
+            ->set('title', Str::random(50))
+            ->call('submit')
+            ->assertHasNoErrors(['title']);
+    }
+
+    public function testTheSlugMustBeUnique()
+    {
+        Post::factory()->create(['title' => 'First post']);
+        AlternativePostSlug::factory()->for(Post::factory())->create(['slug' => 'existing-slug']);
+        Livewire::test('posts.create-post')
+            ->set('title', 'First post')
+            ->call('submit')
+            ->assertHasErrors(['title' => UniquePostSlug::class])
+            ->set('title', 'Existing Slug')
+            ->call('submit')
+            ->assertHasErrors(['title' => UniquePostSlug::class]);
     }
 
     public function testTheLineIsRequiredAndMustBeAnExistingLine(): void
@@ -52,6 +70,9 @@ class CreatePostTest extends TestCase
             ->set('content', Str::random(2001))
             ->call('submit')
             ->assertHasErrors(['content' => 'max'])
+            ->set('content', Str::random(2000))
+            ->call('submit')
+            ->assertHasNoErrors(['content' => 'max'])
             ->set('content', Str::random(9))
             ->call('submit')
             ->assertHasErrors(['content' => 'min'])

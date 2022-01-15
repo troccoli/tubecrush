@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Posts;
 
 use App\Models\Post;
 use App\Models\Tag;
+use App\Rules\UniquePostSlug;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -11,23 +12,18 @@ class CreatePost extends Component
 {
     use WithFileUploads;
 
-    public string $title = '';
-    public int $line = 0;
+    public array $availableTags;
     public string $content = '';
+    public int $line = 0;
     public $photo;
     public ?string $photoCredit = null;
-    public array $availableTags;
     public array $tags = [];
+    public string $title = '';
 
-    protected array $rules = [
-        'title' => 'required|max:20',
-        'line' => 'exists:\App\Models\Line,id',
-        'content' => 'required|min:10|max:2000',
-        'photo' => 'required|mimes:jpg,jpeg,png|max:5120', // 5MB
-        'photoCredit' => 'sometimes|max:20',
-        'tags' => 'sometimes|array',
-        'tags.*' => 'exists:\App\Models\Tag,id',
-    ];
+    public function cancelCreate()
+    {
+        return $this->redirectBack();
+    }
 
     public function mount()
     {
@@ -38,11 +34,6 @@ class CreatePost extends Component
                     'text' => $tag->getName(),
                 ];
             })->toArray();
-    }
-
-    public function updatedPhoto()
-    {
-        $this->validateOnly('photo');
     }
 
     public function render()
@@ -71,9 +62,22 @@ class CreatePost extends Component
         return $this->redirectBack();
     }
 
-    public function cancelCreate()
+    public function updatedPhoto()
     {
-        return $this->redirectBack();
+        $this->validateOnly('photo');
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'title' => ['required', 'max:50', new UniquePostSlug()],
+            'line' => 'exists:\App\Models\Line,id',
+            'content' => 'required|min:10|max:2000',
+            'photo' => 'required|mimes:jpg,jpeg,png|max:5120', // 5MB
+            'photoCredit' => 'sometimes|max:20',
+            'tags' => 'sometimes|array',
+            'tags.*' => 'exists:\App\Models\Tag,id',
+        ];
     }
 
     private function redirectBack()

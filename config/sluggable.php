@@ -26,7 +26,7 @@ return [
      * want to make sure your slugs aren't too long.
      */
 
-    'maxLength' => null,
+    'maxLength' => 255,
 
     /**
      * If you are setting a maximum length on your slugs, you may not want the
@@ -77,7 +77,7 @@ return [
      *     my-slug-2
      */
 
-    'unique' => true,
+    'unique' => false,
 
     /**
      * If you are enforcing unique slugs, the default is to add an
@@ -87,7 +87,7 @@ return [
      * "similar" slugs.  The closure should return the new unique
      * suffix to append to the slug.
      */
-    
+
     'uniqueSuffix' => null,
 
     /**
@@ -146,8 +146,8 @@ return [
      * is probably not a good idea from an SEO point of view.
      * Only set this to true if you understand the possible consequences.
      */
-    
-    'onUpdate' => false,
+
+    'onUpdate' => true,
 
     /**
      * If the default slug engine of cocur/slugify is used, this array of
