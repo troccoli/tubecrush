@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Line;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
@@ -15,8 +16,9 @@ class PostFactory extends Factory
     {
         $date = $this->faker->dateTime();
         return [
-            'title' => $this->faker->sentence(4),
+            'title' => $this->faker->unique()->sentence(4),
             'content' => $this->faker->realText(),
+            'author_id' => mt_rand(1, User::query()->count()),
             'photo' => 'photos/placeholder-'.mt_rand(1, 10).'.jpg',
             'photo_credit' => $this->faker->name(),
             'line_id' => mt_rand(1, Line::query()->count()),

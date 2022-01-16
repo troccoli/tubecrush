@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Livewire\Posts;
 
+use App\Models\AlternativePostSlug;
 use App\Models\Line;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Rules\UniquePostSlug;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -31,7 +33,23 @@ class EditPostTest extends TestCase
             ->assertHasErrors(['title' => 'required'])
             ->set('title', Str::random(51))
             ->call('submit')
-            ->assertHasErrors(['title' => 'max']);
+            ->assertHasErrors(['title' => 'max'])
+            ->set('title', Str::random(50))
+            ->call('submit')
+            ->assertHasNoErrors(['title']);;
+    }
+
+    public function testTheSlugMustBeUnique()
+    {
+        Post::factory()->create(['title' => 'First post']);
+        AlternativePostSlug::factory()->for(Post::factory())->create(['slug' => 'existing-slug']);
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+            ->set('title', 'First post')
+            ->call('submit')
+            ->assertHasErrors(['title' => UniquePostSlug::class])
+            ->set('title', 'Existing Slug')
+            ->call('submit')
+            ->assertHasErrors(['title' => UniquePostSlug::class]);
     }
 
     public function testTheLineIsRequiredAndMustBeAnExistingLine(): void
@@ -57,12 +75,15 @@ class EditPostTest extends TestCase
             ->set('content', Str::random(2001))
             ->call('submit')
             ->assertHasErrors(['content' => 'max'])
+            ->set('content', Str::random(2000))
+            ->call('submit')
+            ->assertHasNoErrors(['content'])
             ->set('content', Str::random(9))
             ->call('submit')
             ->assertHasErrors(['content' => 'min'])
             ->set('content', Str::random(10))
             ->call('submit')
-            ->assertHasNoErrors(['content' => 'min']);
+            ->assertHasNoErrors(['content']);
     }
 
     public function testThePhotoMustBeAnImage(): void
@@ -134,8 +155,8 @@ class EditPostTest extends TestCase
 
         /** @var Post $post */
         $post = $this->superAdmin()->posts->first();
-        // The slug is NOT updated when changing the title
-        $this->assertSame('old-post', $post->getSlug());
+        $this->assertSame('new-post', $post->getSlug());
+        $this->assertDatabaseHas('alternative_post_slugs', ['slug' => 'old-post', 'post_id' => $post->getKey()]);
 
         /** @var Collection $postTags */
         $postTags = $post->tags;

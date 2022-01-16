@@ -3,45 +3,54 @@
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 class Post extends Model
 {
-    use HasFactory;
-    use Sluggable;
-    use SoftDeletes;
+    use HasFactory, Sluggable, SoftDeletes, SluggableScopeHelpers;
 
     protected $fillable = ['title', 'line_id', 'content', 'photo', 'photo_credit', 'author_id'];
+
+    protected static function booted()
+    {
+        static::updated(function (Post $post) {
+            if (array_key_exists('slug', $post->getDirty())) {
+                AlternativePostSlug::create([
+                    'slug' => $post->getOriginal('slug'),
+                    'post_id' => $post->getKey(),
+                ]);
+            }
+        });
+    }
+
+    public function alternativeSlugs(): HasMany
+    {
+        return $this->hasMany(AlternativePostSlug::class);
+    }
 
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');
     }
 
-    public function line(): BelongsTo
+    public function decrementLikes(int $amount = 1): self
     {
-        return $this->belongsTo(Line::class);
+        $this->decrement('likes', $amount);
+
+        return $this;
     }
 
-    public function tags(): BelongsToMany
+    public function getAuthorName(): string
     {
-        return $this->belongsToMany(Tag::class);
-    }
-
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
+        return $this->author->getName();
     }
 
     public function getContent(): string
@@ -49,14 +58,19 @@ class Post extends Model
         return $this->content;
     }
 
-    public function getPublishedDate(): Carbon
+    public function getId(): int
     {
-        return $this->created_at;
+        return $this->id;
     }
 
-    public function getAuthorName(): string
+    public function getLikes(): int
     {
-        return $this->author->getName();
+        return $this->likes;
+    }
+
+    public function getLine(): Line
+    {
+        return $this->line;
     }
 
     public function getPhoto(): string
@@ -69,19 +83,19 @@ class Post extends Model
         return $this->photo_credit;
     }
 
-    public function getLine(): Line
+    public function getPublishedDate(): Carbon
     {
-        return $this->line;
-    }
-
-    public function getLikes(): int
-    {
-        return $this->likes;
+        return $this->created_at;
     }
 
     public function getSlug(): string
     {
         return $this->slug;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 
     public function incrementLikes(int $amount = 1): self
@@ -91,11 +105,9 @@ class Post extends Model
         return $this;
     }
 
-    public function decrementLikes(int $amount = 1): self
+    public function line(): BelongsTo
     {
-        $this->decrement('likes', $amount);
-
-        return $this;
+        return $this->belongsTo(Line::class);
     }
 
     public function scopeOnLine(Builder $query, int $lineId): Builder
@@ -117,5 +129,10 @@ class Post extends Model
                 'source' => 'title',
             ],
         ];
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Posts;
 
 use App\Models\Post;
 use App\Models\Tag;
+use App\Rules\UniquePostSlug;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -20,16 +21,6 @@ class EditPost extends Component
     public ?string $photoCredit = null;
     public array $availableTags;
     public array $tags = [];
-
-    protected array $rules = [
-        'title' => 'required|max:20',
-        'line' => 'exists:\App\Models\Line,id',
-        'content' => 'required|min:10|max:2000',
-        'photo' => 'nullable|sometimes|mimes:jpg,jpeg,png|max:5120', // 5MB
-        'photoCredit' => 'sometimes|max:20',
-        'tags' => 'sometimes|array',
-        'tags.*' => 'exists:\App\Models\Tag,id',
-    ];
 
     public function mount(int $postId)
     {
@@ -77,13 +68,26 @@ class EditPost extends Component
         return $this->redirectBack();
     }
 
+    private function redirectBack()
+    {
+        return redirect()->route('posts.list');
+    }
+
     public function cancelEdit()
     {
         return $this->redirectBack();
     }
 
-    private function redirectBack()
+    protected function rules(): array
     {
-        return redirect()->route('posts.list');
+        return [
+            'title' => ['required', 'max:50', new UniquePostSlug($this->post)],
+            'line' => 'exists:\App\Models\Line,id',
+            'content' => 'required|min:10|max:2000',
+            'photo' => 'nullable|sometimes|mimes:jpg,jpeg,png|max:5120', // 5MB
+            'photoCredit' => 'sometimes|max:20',
+            'tags' => 'sometimes|array',
+            'tags.*' => 'exists:\App\Models\Tag,id',
+        ];
     }
 }
