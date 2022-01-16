@@ -87,14 +87,14 @@
                                 @endcan
                                 @can('publish posts')
                                     @if($post->isDraft())
-                                        <a href="#" wire:click="confirmAction({{ $post->getId() }}, 'publish')"
+                                        <a href="#" wire:click="confirmAction({{ $post->getKey() }}, 'publish')"
                                            title="Publish post"
                                            class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 ml-1 border border-transparent rounded-md bg-emerald-400 hover:bg-emerald-500 transition duration-300"
                                            dusk="publish-post-button">
                                             <x-heroicons-o-eye class="h-8 w-8"/>
                                         </a>
                                     @else
-                                        <a href="#" wire:click="confirmAction({{ $post->getId() }}, 'unpublish')"
+                                        <a href="#" wire:click="confirmAction({{ $post->getKey() }}, 'unpublish')"
                                            title="Unpublish post"
                                            class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 ml-1 border border-transparent rounded-md bg-cyan-400 hover:bg-cyan-500 transition duration-300"
                                            dusk="unpublish-post-button">
@@ -151,7 +151,8 @@
             </div>
         </x-slot>
         <x-slot name="footer">
-            <x-jet-secondary-button wire:click="keepPost" wire:loading.attr="disabled" dusk="cancel-publish-post-button">
+            <x-jet-secondary-button wire:click="keepPost" wire:loading.attr="disabled"
+                                    dusk="cancel-publish-post-button">
                 {{ __("Whoops, no thanks") }}
             </x-jet-secondary-button>
 
@@ -172,7 +173,8 @@
             </div>
         </x-slot>
         <x-slot name="footer">
-            <x-jet-secondary-button wire:click="keepPost" wire:loading.attr="disabled" dusk="cancel-unpublish-post-button">
+            <x-jet-secondary-button wire:click="keepPost" wire:loading.attr="disabled"
+                                    dusk="cancel-unpublish-post-button">
                 {{ __("Naah, leave it") }}
             </x-jet-secondary-button>
 

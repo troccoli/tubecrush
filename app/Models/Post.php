@@ -18,7 +18,6 @@ use Illuminate\Support\Carbon;
 /**
  * @method PostFactory factory()
  */
-
 class Post extends Model
 {
     use HasFactory, Sluggable, SoftDeletes, SluggableScopeHelpers;
@@ -102,7 +101,7 @@ class Post extends Model
         return $this->created_at;
     }
 
-    public function getPublishedDate(): Carbon
+    public function getPublishedDate(): ?Carbon
     {
         return $this->published_at;
     }
@@ -163,6 +162,11 @@ class Post extends Model
     public function isDraft(): bool
     {
         return $this->status === PostStatus::Draft;
+    }
+
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query->where('status', PostStatus::Published);
     }
 
     public function publish(): self
