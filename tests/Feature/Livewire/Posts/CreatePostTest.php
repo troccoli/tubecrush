@@ -72,13 +72,13 @@ class CreatePostTest extends TestCase
             ->assertHasErrors(['content' => 'max'])
             ->set('content', Str::random(2000))
             ->call('submit')
-            ->assertHasNoErrors(['content' => 'max'])
+            ->assertHasNoErrors(['content'])
             ->set('content', Str::random(9))
             ->call('submit')
             ->assertHasErrors(['content' => 'min'])
             ->set('content', Str::random(10))
             ->call('submit')
-            ->assertHasNoErrors(['content' => 'min']);
+            ->assertHasNoErrors(['content']);
     }
 
     public function testThePhotoIsRequiredAndMustBeAnImageAndMustNotBeBiggerThan5MB(): void

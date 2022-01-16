@@ -9,19 +9,23 @@ use Illuminate\Contracts\Validation\Rule;
 
 class UniquePostSlug implements Rule
 {
+    public function __construct(private Post $excludingPost)
+    {
+    }
+
     public function message(): string
     {
         return 'A slug for this :attribute has already been used in the past.';
     }
 
     /**
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      */
     public function passes($attribute, $value): bool
     {
         $slug = SlugService::createSlug(Post::class, 'slug', $value);
         return null === AlternativePostSlug::findBySlug($slug) &&
-            null === Post::findBySlug($slug);
+            null === Post::query()->whereSlug($slug)->where('id', '<>', $this->excludingPost->getKey())->first();
     }
 }

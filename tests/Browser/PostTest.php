@@ -91,7 +91,10 @@ class PostTest extends DuskTestCase
                 ->type('#content', Str::random(2001))
                 ->press('CREATE')
                 ->waitForTextIn('@content-error', 'The content may not be greater than 2000 characters.')
-                ->type('#content', Str::random(mt_rand(10,2000)))
+                ->type('#content', Str::random(10))
+                ->press('CREATE')
+                ->waitUntilMissing('@content-error')
+                ->type('#content', Str::random(2000))
                 ->press('CREATE')
                 ->waitUntilMissing('@content-error');
 
@@ -194,6 +197,10 @@ class PostTest extends DuskTestCase
 
     public function testUpdatingAPost(): void
     {
+        // Create a post with the slug 'must-be-unique'
+        $post = Post::factory()->create(['title' => 'Must be unique']);
+        // Create a alternative slug for the same post
+        AlternativePostSlug::factory()->for($post)->create(['slug' => 'old-existing-slug']);
         Post::factory()->bySuperAdmin()->withTitle('Short title')->hasTags(3)->now()->create();
         $this->browse(function (Browser $browser): void {
             /** @var Post $latestPost */
@@ -211,7 +218,7 @@ class PostTest extends DuskTestCase
                 ->assertSee('Content')
                 ->assertInputValue('#content', $latestPost->getContent())
                 ->assertSeeIn('@upload-photo-button', 'Upload a photo')
-                ->assertAttribute('@photo-image', 'src', '/storage/'.$latestPost->getPhoto())
+                ->assertAttribute('@photo-image', 'src', '/storage/' . $latestPost->getPhoto())
                 ->assertSee('Photo submitted by')
                 ->assertInputValue('#photo-credit', $latestPost->getPhotoCredit())
                 ->assertSee('Tags')
@@ -233,27 +240,35 @@ class PostTest extends DuskTestCase
 
             $this->assertDatabaseHas('posts', ['title' => $latestPost->getTitle()]);
 
-            // The title is mandatory, and cannot be more than 20 characters
+            // The title is mandatory, and cannot be more than 50 characters
             $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
                 ->keys('#title', ['{control}', 'a'], '{backspace}') // clear() or type('#title','') don't seem to work
                 ->press('UPDATE')
                 ->waitForTextIn('@title-error', 'The title field is required.')
-                ->type('#title', '123456789012345678901')
+                ->type('#title', Str::random(51))
                 ->press('UPDATE')
-                ->waitForTextIn('@title-error', 'The title may not be greater than 20 characters.');
+                ->waitForTextIn('@title-error', 'The title may not be greater than 50 characters.');
+
+            // The generated slug must be unique
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+                ->type('#title', 'Must be unique')
+                ->press('UPDATE')
+                ->waitForTextIn('@title-error', 'A slug for this title has already been used in the past.')
+                ->type('#title', 'Old Existing SLUG')
+                ->press('UPDATE')
+                ->waitForTextIn('@title-error', 'A slug for this title has already been used in the past.');
 
             // The content is mandatory, must be at least 10 characters and cannot be more than 2000 characters
             $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
                 ->keys('#content', ['{control}', 'a'], '{backspace}') // clear() or type('#title','') don't seem to work
                 ->press('UPDATE')
                 ->waitForTextIn('@content-error', 'The content field is required.')
-                ->type('#content', '123456789')
+                ->type('#content', Str::random(9))
                 ->press('UPDATE')
                 ->waitForTextIn('@content-error', 'The content must be at least 10 characters.')
-//                ->type('#content', Str::random(2001))
-//                ->press('UPDATE')
-//                ->waitForTextIn('@content-error', 'The content may not be greater than 2000 characters.')
-            ;
+                ->type('#content', Str::random(2001))
+                ->press('UPDATE')
+                ->waitForTextIn('@content-error', 'The content may not be greater than 2000 characters.');
 
             // The photo must be jpg, jpeg or png
             $textFile = UploadedFile::fake()->create('file.txt', 1000, 'text/plain');
@@ -263,7 +278,7 @@ class PostTest extends DuskTestCase
             $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
                 ->attach('#photo', $textFile)
                 ->waitForTextIn('@photo-error', 'The photo must be a file of type: jpg, jpeg, png.')
-                ->assertAttribute('@photo-image', 'src', '/storage/'.$latestPost->getPhoto())
+                ->assertAttribute('@photo-image', 'src', '/storage/' . $latestPost->getPhoto())
                 ->attach('#photo', $jpgFile)
                 ->waitUntilMissing('@photo-loading-icon')
                 ->assertMissing('@photo-error')
@@ -281,10 +296,10 @@ class PostTest extends DuskTestCase
                 ->waitForReload()
                 ->assertRouteIs('posts.list')
                 ->visitRoute('posts.update', ['postId' => $latestPost->getId()])
-                ->type('#photo-credit', 'qwertyuiopqwertyuiopq')
+                ->type('#photo-credit', Str::random(21))
                 ->press('UPDATE')
                 ->waitForTextIn('@photo-credit-error', 'The photo credit may not be greater than 20 characters.')
-                ->type('#photo-credit', 'qwertyuiopqwertyuiop')
+                ->type('#photo-credit', Str::random(20))
                 ->press('UPDATE')
                 ->waitForReload()
                 ->assertRouteIs('posts.list');
@@ -294,7 +309,7 @@ class PostTest extends DuskTestCase
                 ->within('@tags-select', function (Browser $select) use ($latestPost): void {
                     foreach ($latestPost->tags as $tag) {
                         $select->keys('.select2-search__field', '{backspace}');
-                        for ($i=1; $i<=Str::length($tag->getName()); $i++) {
+                        for ($i = 1; $i <= Str::length($tag->getName()); $i++) {
                             $select->keys('.select2-search__field', '{backspace}');
                         }
                     }
@@ -306,18 +321,33 @@ class PostTest extends DuskTestCase
 
             // Update a post with photo credit and tags
             $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
-                ->keys('#title', ['{control}', 'a'], '{backspace}', 'New title for post') // clear() or type('#title','') don't seem to work
+                ->keys(
+                    '#title',
+                    ['{control}', 'a'],
+                    '{backspace}',
+                    'New title for post'
+                ) // clear() or type('#title','') don't seem to work
                 ->click('@line-select')
                 ->waitFor('@circle-line-option')
                 ->click('@circle-line-option')
-                ->keys('#content', ['{control}', 'a'], '{backspace}', 'New content for post') // clear() or type('#content','') don't seem to work
+                ->keys(
+                    '#content',
+                    ['{control}', 'a'],
+                    '{backspace}',
+                    'New content for post'
+                ) // clear() or type('#content','') don't seem to work
                 ->attach('#photo', $jpgFile)
                 ->waitUntilMissing('@photo-loading-icon')
-                ->keys('#photo-credit', ['{control}', 'a'], '{backspace}', 'John') // clear() or type('#photo-credit','') don't seem to work
+                ->keys(
+                    '#photo-credit',
+                    ['{control}', 'a'],
+                    '{backspace}',
+                    'John'
+                ) // clear() or type('#photo-credit','') don't seem to work
                 ->within('@tags-select', function (Browser $select) use ($latestPost, $newTags): void {
                     foreach ($latestPost->tags as $tag) {
                         $select->keys('.select2-search__field', '{backspace}');
-                        for ($i=1; $i<=Str::length($tag->getName()); $i++) {
+                        for ($i = 1; $i <= Str::length($tag->getName()); $i++) {
                             $select->keys('.select2-search__field', '{backspace}');
                         }
                     }
@@ -344,14 +374,23 @@ class PostTest extends DuskTestCase
                 ->click('@line-select')
                 ->waitFor('@circle-line-option')
                 ->click('@circle-line-option')
-                ->keys('#content', ['{control}', 'a'], '{backspace}', 'New content for post') // clear() or type('#content','') don't seem to work
+                ->keys(
+                    '#content',
+                    ['{control}', 'a'],
+                    '{backspace}',
+                    'New content for post'
+                ) // clear() or type('#content','') don't seem to work
                 ->attach('#photo', $jpgFile)
                 ->waitUntilMissing('@photo-loading-icon')
-                ->keys('#photo-credit', ['{control}', 'a'], '{backspace}') // clear() or type('#photo-credit','') don't seem to work
+                ->keys(
+                    '#photo-credit',
+                    ['{control}', 'a'],
+                    '{backspace}'
+                ) // clear() or type('#photo-credit','') don't seem to work
                 ->within('@tags-select', function (Browser $select) use ($latestPost): void {
                     foreach ($latestPost->tags as $tag) {
                         $select->keys('.select2-search__field', '{backspace}');
-                        for ($i=1; $i<=Str::length($tag->getName()); $i++) {
+                        for ($i = 1; $i <= Str::length($tag->getName()); $i++) {
                             $select->keys('.select2-search__field', '{backspace}');
                         }
                     }
@@ -396,7 +435,6 @@ class PostTest extends DuskTestCase
                     $row->click('@line')
                         ->assertRouteIs('posts-by-lines', ['slug' => $post->line->getSlug()]);
                 });
-
         });
     }
 
