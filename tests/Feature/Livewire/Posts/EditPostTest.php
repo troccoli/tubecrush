@@ -156,7 +156,7 @@ class EditPostTest extends TestCase
         /** @var Post $post */
         $post = $this->superAdmin()->posts->first();
         $this->assertSame('new-post', $post->getSlug());
-//        $this->assertDatabaseHas('alternative_post_slugs', ['slug' => 'old-post', 'post_id'=>$post->getKey()]);
+        $this->assertDatabaseHas('alternative_post_slugs', ['slug' => 'old-post', 'post_id' => $post->getKey()]);
 
         /** @var Collection $postTags */
         $postTags = $post->tags;

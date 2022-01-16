@@ -19,6 +19,18 @@ class Post extends Model
 
     protected $fillable = ['title', 'line_id', 'content', 'photo', 'photo_credit', 'author_id'];
 
+    protected static function booted()
+    {
+        static::updated(function (Post $post) {
+            if (array_key_exists('slug', $post->getDirty())) {
+                AlternativePostSlug::create([
+                    'slug' => $post->getOriginal('slug'),
+                    'post_id' => $post->getKey(),
+                ]);
+            }
+        });
+    }
+
     public function alternativeSlugs(): HasMany
     {
         return $this->hasMany(AlternativePostSlug::class);
