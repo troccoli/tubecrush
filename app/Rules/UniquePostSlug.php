@@ -9,7 +9,7 @@ use Illuminate\Contracts\Validation\Rule;
 
 class UniquePostSlug implements Rule
 {
-    public function __construct(private Post $excludingPost)
+    public function __construct(private ?Post $excludingPost = null)
     {
     }
 
@@ -25,7 +25,18 @@ class UniquePostSlug implements Rule
     public function passes($attribute, $value): bool
     {
         $slug = SlugService::createSlug(Post::class, 'slug', $value);
-        return null === AlternativePostSlug::findBySlug($slug) &&
-            null === Post::query()->whereSlug($slug)->where('id', '<>', $this->excludingPost->getKey())->first();
+
+        if (AlternativePostSlug::findBySlug($slug)) {
+            return false;
+        }
+
+        $post = Post::query()
+            ->when($this->excludingPost, fn($query) => $query->whereKeyNot($this->excludingPost))
+            ->whereSlug($slug)->first();
+        if ($post) {
+            return false;
+        }
+
+        return true;
     }
 }
