@@ -58,11 +58,6 @@ class Post extends Model
         return $this->content;
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
     public function getLikes(): int
     {
         return $this->likes;

@@ -30,7 +30,7 @@ class CreatePost extends Component
         $this->availableTags = Tag::query()->orderBy('slug')->get()
             ->map(function (Tag $tag): array {
                 return [
-                    'id' => $tag->getId(),
+                    'id' => $tag->getKey(),
                     'text' => $tag->getName(),
                 ];
             })->toArray();
@@ -57,7 +57,7 @@ class CreatePost extends Component
 
         $post->tags()->sync($this->tags);
 
-        session()->flash('new-post-id', $post->getId());
+        session()->flash('new-post-id', $post->getKey());
 
         return $this->redirectBack();
     }

@@ -61,11 +61,6 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function getId() : int
-    {
-        return $this->id;
-    }
-
     public function getName(): string
     {
         return $this->name;

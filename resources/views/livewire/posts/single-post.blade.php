@@ -1,5 +1,5 @@
 <div x-data="{ userCanVote: @entangle('userCanVote'), userHasVoted: @entangle('userHasVoted') }"
-     :key="{{ $post->getId() }}"
+     :key="{{ $post->getKey() }}"
      class="max-w-2xl mx-auto my-6 bg-white overflow-hidden shadow-md rounded-lg flex flex-col"
      dusk="post">
     <img class="object-cover" src="{{ \Illuminate\Support\Facades\Storage::url($post->getPhoto()) }}"
@@ -34,8 +34,11 @@
             </x-line-box>
         </div>
         <div>
-            <a href="{{ route('single-post', ['post' => $post]) }}" class="cursor-pointer block text-gray-800 font-semibold text-2xl mt-2" dusk="title">{{ $post->getTitle() }}</a>
-            <p class="mt-2 text-gray-600 text-xs font-normal" dusk="published-date">{{ $post->getPublishedDate()->toFormattedDateString() }}</p>
+            <a href="{{ route('single-post', ['post' => $post]) }}"
+               class="cursor-pointer block text-gray-800 font-semibold text-2xl mt-2"
+               dusk="title">{{ $post->getTitle() }}</a>
+            <p class="mt-2 text-gray-600 text-xs font-normal"
+               dusk="published-date">{{ $post->getPublishedDate()->toFormattedDateString() }}</p>
             <p class="text-sm text-gray-600 mt-2" dusk="content">{{ $post->getContent() }}</p>
         </div>
 
@@ -54,15 +57,15 @@
                 <x-copy-link-share :post="$post"/>
             </div>
             @unless($withComments || !config('disqus.enabled'))
-            <div wire:ignore class="text-sm" dusk="comments-count">
-                <span class="disqus-comment-count" data-disqus-url="{{ route('single-post', ['post' => $post]) }}">0 Comments</span>
-            </div>
+                <div wire:ignore class="text-sm" dusk="comments-count">
+                    <span class="disqus-comment-count" data-disqus-url="{{ route('single-post', ['post' => $post]) }}">0 Comments</span>
+                </div>
             @endunless
         </div>
         @if(config('disqus.enabled') && $withComments)
-        <div wire:ignore dusk="comments">
-            <div id="disqus_thread"></div>
-        </div>
+            <div wire:ignore dusk="comments">
+                <div id="disqus_thread"></div>
+            </div>
         @endif
     </div>
 </div>

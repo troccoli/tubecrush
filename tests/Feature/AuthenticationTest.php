@@ -78,15 +78,15 @@ class AuthenticationTest extends TestCase
         /** @var Post $post */
         $post = Post::query()->latest()->first();
 
-        $this->get(route('posts.update', ['postId' => $post->getId()]))
+        $this->get(route('posts.update', ['postId' => $post->getKey()]))
             ->assertRedirect(route('login'));
 
         $this->actingAs($this->superAdmin())
-            ->get(route('posts.update', ['postId' => $post->getId()]))
+            ->get(route('posts.update', ['postId' => $post->getKey()]))
             ->assertSuccessful();
 
         $this->actingAs($this->editor())
-            ->get(route('posts.update', ['postId' => $post->getId()]))
+            ->get(route('posts.update', ['postId' => $post->getKey()]))
             ->assertSuccessful();
     }
 }

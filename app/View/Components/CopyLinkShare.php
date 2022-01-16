@@ -23,6 +23,6 @@ class CopyLinkShare extends Component
 
     public function uniqueId(): int
     {
-        return $this->post->getId();
+        return $this->post->getKey();
     }
 }

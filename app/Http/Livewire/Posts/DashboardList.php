@@ -23,7 +23,7 @@ class DashboardList extends Component
 
     public function confirmDelete(Post $post)
     {
-        $this->confirmingId = $post->getId();
+        $this->confirmingId = $post->getKey();
         $this->confirmingTitle = $post->getTitle();
     }
 

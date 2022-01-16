@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Line;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class PostsByLinesController extends Controller
 {
@@ -12,6 +12,6 @@ class PostsByLinesController extends Controller
     {
         /** @var Line $line */
         $line = Line::whereSlug($slug)->first();
-        return view('lines', ['id' => $line->getId(), 'name' => $line->getName()]);
+        return view('lines', ['id' => $line->getKey(), 'name' => $line->getName()]);
     }
 }

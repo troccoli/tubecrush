@@ -27,7 +27,7 @@ class EditPost extends Component
         $this->availableTags = Tag::query()->orderBy('slug')->get()
             ->map(function (Tag $tag): array {
                 return [
-                    'id' => $tag->getId(),
+                    'id' => $tag->getKey(),
                     'text' => $tag->getName(),
                 ];
             })->toArray();
@@ -35,7 +35,7 @@ class EditPost extends Component
         $this->post = Post::findOrFail($postId);
         $this->title = $this->post->getTitle();
         $this->slug = $this->post->getSlug();
-        $this->line = $this->post->getLine()->getId();
+        $this->line = $this->post->getLine()->getKey();
         $this->content = $this->post->getContent();
         $this->photoCredit = $this->post->getPhotoCredit();
         $this->tags = $this->post->tags()->pluck('id')->toArray();

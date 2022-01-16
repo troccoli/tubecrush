@@ -6,7 +6,7 @@
             @can('create posts')
                 <a href="{{ route('posts.create') }}" title="Create post" dusk="create-post-button"
                    class="w-1/5 md:w-auto p-1 flex justify-around rounded-md text-indigo-100 bg-indigo-600 hover:text-indigo-300 hover:bg-indigo-700">
-                    <x-heroicons-o-document-add class="h-10 w-10" />
+                    <x-heroicons-o-document-add class="h-10 w-10"/>
                 </a>
             @endcan
         </div>
@@ -30,7 +30,7 @@
                 @foreach($posts as $post)
                     <!-- single post row -->
                         <div dusk="post"
-                             class="@if($post->getId() === session('new-post-id')) animate-pulse-bg-once bg-green-50 @endif hover:bg-gray-100 py-4 flex flex-col md:flex-row">
+                             class="@if($post->getKey() === session('new-post-id')) animate-pulse-bg-once bg-green-50 @endif hover:bg-gray-100 py-4 flex flex-col md:flex-row">
                             <div class="w-full md:w-1/2 md:pl-4 text-lg text-gray-900">
                                 {{ $post->getTitle() }}
                                 <div class="mt-1 text-sm text-gray-500">by <span
@@ -44,19 +44,19 @@
                             </div>
                             <div class="flex flex-row items-center mt-4 md:mt-0">
                                 @can('update posts')
-                                    <a href="{{ route('posts.update', ['postId' => $post->getId()]) }}"
+                                    <a href="{{ route('posts.update', ['postId' => $post->getKey()]) }}"
                                        title="Edit post"
                                        class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 mr-1 border border-transparent rounded-md bg-gray-400 hover:bg-gray-500 transition duration-300"
                                        dusk="edit-post-button">
-                                        <x-heroicons-o-pencil class="h-8 w-8" />
+                                        <x-heroicons-o-pencil class="h-8 w-8"/>
                                     </a>
                                 @endcan
                                 @can('delete posts')
-                                    <a href="#" wire:click="confirmDelete({{ $post->getId() }})"
+                                    <a href="#" wire:click="confirmDelete({{ $post->getKey() }})"
                                        title="Delete post"
                                        class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 ml-1 border border-transparent rounded-md bg-red-400 hover:bg-red-500 transition duration-300"
                                        dusk="delete-post-button">
-                                        <x-heroicons-o-trash class="h-8 w-8" />
+                                        <x-heroicons-o-trash class="h-8 w-8"/>
                                     </a>
                                 @endcan
                             </div>
@@ -91,7 +91,8 @@
                 {{ __("Never mind") }}
             </x-jet-secondary-button>
 
-            <x-jet-danger-button class="ml-2" wire:click="deletePost" wire:loading.attr="disabled" dusk="confirm-delete-post-button">
+            <x-jet-danger-button class="ml-2" wire:click="deletePost" wire:loading.attr="disabled"
+                                 dusk="confirm-delete-post-button">
                 {{ __('Yes please') }}
             </x-jet-danger-button>
         </x-slot>
