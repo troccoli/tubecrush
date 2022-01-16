@@ -41,8 +41,8 @@ class DashboardListTest extends TestCase
 
         Livewire::test('posts.dashboard-list')
             ->assertSet('confirmingPublishingId', null)
-            ->call('confirmAction', $post->getId(), 'publish')
-            ->assertSet('confirmingPublishingId', $post->getId())
+            ->call('confirmAction', $post->getKey(), 'publish')
+            ->assertSet('confirmingPublishingId', $post->getKey())
             ->call('publishPost');
 
         $post->refresh();
@@ -58,8 +58,8 @@ class DashboardListTest extends TestCase
 
         Livewire::test('posts.dashboard-list')
             ->assertSet('confirmingUnpublishingId', null)
-            ->call('confirmAction', $post->getId(), 'unpublish')
-            ->assertSet('confirmingUnpublishingId', $post->getId())
+            ->call('confirmAction', $post->getKey(), 'unpublish')
+            ->assertSet('confirmingUnpublishingId', $post->getKey())
             ->call('unpublishPost');
 
         $post->refresh();
@@ -90,8 +90,8 @@ class DashboardListTest extends TestCase
         $post = Post::factory()->draft()->create();
 
         Livewire::test('posts.dashboard-list')
-            ->call('confirmAction', $post->getId(), 'publish')
-            ->assertSet('confirmingPublishingId', $post->getId())
+            ->call('confirmAction', $post->getKey(), 'publish')
+            ->assertSet('confirmingPublishingId', $post->getKey())
             ->call('keepPost')
             ->assertSet('confirmingPublishingId', null);
 
@@ -107,8 +107,8 @@ class DashboardListTest extends TestCase
         $post = Post::factory()->create();
 
         Livewire::test('posts.dashboard-list')
-            ->call('confirmAction', $post->getId(), 'unpublish')
-            ->assertSet('confirmingUnpublishingId', $post->getId())
+            ->call('confirmAction', $post->getKey(), 'unpublish')
+            ->assertSet('confirmingUnpublishingId', $post->getKey())
             ->call('keepPost')
             ->assertSet('confirmingUnpublishingId', null);
 
@@ -144,9 +144,9 @@ class DashboardListTest extends TestCase
         $post2 = Post::factory()->create();
 
         Livewire::test('posts.dashboard-list')
-            ->call('confirmAction', $post1->getKey(),'delete')
+            ->call('confirmAction', $post1->getKey(), 'delete')
             ->assertSet('confirmingDeletingId', $post1->getKey())
-            ->call('confirmAction', $post2->getKey(),'delete')
+            ->call('confirmAction', $post2->getKey(), 'delete')
             ->assertSet('confirmingDeletingId', $post2->getKey())
             ->call('deletePost')
             ->assertSet('confirmingDeletingId', null);
@@ -165,10 +165,10 @@ class DashboardListTest extends TestCase
         $post2 = Post::factory()->draft()->create();
 
         Livewire::test('posts.dashboard-list')
-            ->call('confirmAction', $post1->getId(),'publish')
-            ->assertSet('confirmingPublishingId', $post1->getId())
-            ->call('confirmAction', $post2->getId(),'publish')
-            ->assertSet('confirmingPublishingId', $post2->getId())
+            ->call('confirmAction', $post1->getKey(), 'publish')
+            ->assertSet('confirmingPublishingId', $post1->getKey())
+            ->call('confirmAction', $post2->getKey(), 'publish')
+            ->assertSet('confirmingPublishingId', $post2->getKey())
             ->call('publishPost')
             ->assertSet('confirmingPublishingId', null);
 
@@ -188,10 +188,10 @@ class DashboardListTest extends TestCase
         $post2 = Post::factory()->create();
 
         Livewire::test('posts.dashboard-list')
-            ->call('confirmAction', $post1->getId(),'unpublish')
-            ->assertSet('confirmingUnpublishingId', $post1->getId())
-            ->call('confirmAction', $post2->getId(),'unpublish')
-            ->assertSet('confirmingUnpublishingId', $post2->getId())
+            ->call('confirmAction', $post1->getKey(), 'unpublish')
+            ->assertSet('confirmingUnpublishingId', $post1->getKey())
+            ->call('confirmAction', $post2->getKey(), 'unpublish')
+            ->assertSet('confirmingUnpublishingId', $post2->getKey())
             ->call('unpublishPost')
             ->assertSet('confirmingUnpublishingId', null);
 

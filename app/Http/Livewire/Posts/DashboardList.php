@@ -26,9 +26,9 @@ class DashboardList extends Component
     public function confirmAction(Post $post, string $action)
     {
         match ($action) {
-            'delete' => $this->confirmingDeletingId = $post->getId(),
+            'delete' => $this->confirmingDeletingId = $post->getKey(),
             'publish' => $this->confirmingPublishingId = $post->getKey(),
-            'unpublish' => $this->confirmingUnpublishingId = $post->getId(),
+            'unpublish' => $this->confirmingUnpublishingId = $post->getKey(),
         };
         $this->confirmingTitle = $post->getTitle();
     }
