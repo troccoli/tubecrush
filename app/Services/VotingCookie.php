@@ -28,38 +28,9 @@ class VotingCookie implements VotingService
         }
     }
 
-    public function hasVoted(Post $post): bool
+    private function refreshCookie()
     {
-        if ($this->service->consentHasBeenGiven()) {
-            return in_array($post->getId(), $this->votes);
-        }
-
-        return false;
-    }
-
-    public function addVote(Post $post): void
-    {
-        if ($this->service->consentHasBeenGiven()) {
-            $this->votes = array_unique(array_merge($this->votes, [$post->getId()]));
-            $this->setVotes();
-        }
-    }
-
-    public function removeVote(Post $post): void
-    {
-        if ($this->service->consentHasBeenGiven()) {
-            $this->votes = array_values(array_diff($this->votes, [$post->getId()]));
-            $this->setVotes();
-        }
-    }
-
-    private function getVotes(): array
-    {
-        if (null === $this->votes) {
-            $this->votes = json_decode(Request::cookie($this->cookieName), true) ?? [];
-        }
-
-        return $this->votes;
+        $this->setVotes();
     }
 
     private function setVotes()
@@ -71,13 +42,42 @@ class VotingCookie implements VotingService
         Cookie::queue($this->cookieName, json_encode($this->votes), $this->cookieLifetime);
     }
 
-    private function refreshCookie()
-    {
-        $this->setVotes();
-    }
-
     private function removeCookie()
     {
         Cookie::queue($this->cookieName, json_encode([]), 0);
+    }
+
+    public function hasVoted(Post $post): bool
+    {
+        if ($this->service->consentHasBeenGiven()) {
+            return in_array($post->getKey(), $this->votes);
+        }
+
+        return false;
+    }
+
+    public function addVote(Post $post): void
+    {
+        if ($this->service->consentHasBeenGiven()) {
+            $this->votes = array_unique(array_merge($this->votes, [$post->getKey()]));
+            $this->setVotes();
+        }
+    }
+
+    public function removeVote(Post $post): void
+    {
+        if ($this->service->consentHasBeenGiven()) {
+            $this->votes = array_values(array_diff($this->votes, [$post->getKey()]));
+            $this->setVotes();
+        }
+    }
+
+    private function getVotes(): array
+    {
+        if (null === $this->votes) {
+            $this->votes = json_decode(Request::cookie($this->cookieName), true) ?? [];
+        }
+
+        return $this->votes;
     }
 }

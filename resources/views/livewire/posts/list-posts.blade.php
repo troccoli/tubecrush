@@ -1,6 +1,6 @@
 <div class="flex flex-col">
     @foreach($posts as $post)
-        <livewire:posts.single-post :post="$post" :wire:key="$post->getId()" :withComments="false"/>
+        <livewire:posts.single-post :post="$post" :wire:key="$post->getKey()" :withComments="false"/>
     @endforeach
     <div class="flex">
         <button wire:click="loadMorePosts" wire:loading.attr="disabled"

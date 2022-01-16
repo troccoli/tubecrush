@@ -25,11 +25,11 @@ class DashboardListTest extends TestCase
 
         Livewire::test('posts.dashboard-list')
             ->assertSet('confirmingId', null)
-            ->call('confirmDelete', $post->getId())
-            ->assertSet('confirmingId', $post->getId())
+            ->call('confirmDelete', $post->getKey())
+            ->assertSet('confirmingId', $post->getKey())
             ->call('deletePost');
 
-        $this->assertSoftDeleted('posts', ['id' => $post->getId()]);
+        $this->assertSoftDeleted('posts', ['id' => $post->getKey()]);
     }
 
     public function testCanCancelDeletion(): void
@@ -40,12 +40,12 @@ class DashboardListTest extends TestCase
         $post = Post::factory()->bySuperAdmin()->create();
 
         Livewire::test('posts.dashboard-list')
-            ->call('confirmDelete', $post->getId())
-            ->assertSet('confirmingId', $post->getId())
+            ->call('confirmDelete', $post->getKey())
+            ->assertSet('confirmingId', $post->getKey())
             ->call('keepPost')
             ->assertSet('confirmingId', null);
 
-        $this->assertDatabaseHas('posts', ['id' => $post->getId()]);
+        $this->assertDatabaseHas('posts', ['id' => $post->getKey()]);
     }
 
     public function testItDoesNotDeleteNonExistingPosts(): void
@@ -58,12 +58,12 @@ class DashboardListTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
 
         Livewire::test('posts.dashboard-list')
-            ->call('confirmDelete', $post->getId() + 1)
-            ->assertSet('confirmingId', $post->getId() + 1)
+            ->call('confirmDelete', $post->getKey() + 1)
+            ->assertSet('confirmingId', $post->getKey() + 1)
             ->call('deletePost')
             ->assertSet('confirmingId', null);
 
-        $this->assertDatabaseHas('posts', ['id' => $post->getId()]);
+        $this->assertDatabaseHas('posts', ['id' => $post->getKey()]);
     }
 
     public function testItDeleteTheLastConfirmedPost(): void
@@ -76,14 +76,14 @@ class DashboardListTest extends TestCase
         $post2 = Post::factory()->bySuperAdmin()->create();
 
         Livewire::test('posts.dashboard-list')
-            ->call('confirmDelete', $post1->getId())
-            ->assertSet('confirmingId', $post1->getId())
-            ->call('confirmDelete', $post2->getId())
-            ->assertSet('confirmingId', $post2->getId())
+            ->call('confirmDelete', $post1->getKey())
+            ->assertSet('confirmingId', $post1->getKey())
+            ->call('confirmDelete', $post2->getKey())
+            ->assertSet('confirmingId', $post2->getKey())
             ->call('deletePost')
             ->assertSet('confirmingId', null);
 
-        $this->assertDatabaseHas('posts', ['id' => $post1->getId()]);
-        $this->assertSoftDeleted('posts', ['id' => $post2->getId()]);
+        $this->assertDatabaseHas('posts', ['id' => $post1->getKey()]);
+        $this->assertSoftDeleted('posts', ['id' => $post2->getKey()]);
     }
 }

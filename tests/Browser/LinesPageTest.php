@@ -27,7 +27,7 @@ class LinesPageTest extends DuskTestCase
     public function testContentOfSinglePost(): void
     {
         /** @var Post $post */
-        $post = Post::query()->onLine($this->line->getId())->latest()->first();
+        $post = Post::query()->onLine($this->line->getKey())->latest()->first();
 
         $this->browse(function (Browser $browser) use ($post): void {
             $browser->visitRoute('posts-by-lines', ['slug' => $this->line->getSlug()])

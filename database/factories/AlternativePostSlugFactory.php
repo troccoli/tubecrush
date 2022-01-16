@@ -15,7 +15,7 @@ class AlternativePostSlugFactory extends Factory
     {
         return [
             'slug' => Str::slug($this->faker->sentence(4)),
-            'post_id' => Post::factory()->create()->getId(),
+            'post_id' => Post::factory()->create()->getKey(),
         ];
     }
 }

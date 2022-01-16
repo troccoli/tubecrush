@@ -170,7 +170,8 @@ class PostTest extends DuskTestCase
             $postTags = Post::query()->whereTitle('New post title')->first()->tags->pluck('id');
             $this->assertSameSize($tags, $postTags);
             foreach ($tags as $tag) {
-                $this->assertTrue($postTags->contains($tag->getId()));
+                /** @var Tag $tag */
+                $this->assertTrue($postTags->contains($tag->getKey()));
             }
 
             // Create a new post without credit or tags
@@ -210,7 +211,7 @@ class PostTest extends DuskTestCase
             $browser->loginAs($this->superAdmin);
 
             // The form has the correct fields, values and buttons
-            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->assertSee('Title')
                 ->assertInputValue('#title', $latestPost->getTitle())
                 ->assertSee('Line')
@@ -232,7 +233,7 @@ class PostTest extends DuskTestCase
                 ->assertSeeIn('@submit-button', 'UPDATE');
 
             // Can cancel the operation
-            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->press('CANCEL')
                 ->waitForReload()
                 ->assertRouteIs('posts.list')
@@ -241,7 +242,7 @@ class PostTest extends DuskTestCase
             $this->assertDatabaseHas('posts', ['title' => $latestPost->getTitle()]);
 
             // The title is mandatory, and cannot be more than 50 characters
-            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->keys('#title', ['{control}', 'a'], '{backspace}') // clear() or type('#title','') don't seem to work
                 ->press('UPDATE')
                 ->waitForTextIn('@title-error', 'The title field is required.')
@@ -250,7 +251,7 @@ class PostTest extends DuskTestCase
                 ->waitForTextIn('@title-error', 'The title may not be greater than 50 characters.');
 
             // The generated slug must be unique
-            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->type('#title', 'Must be unique')
                 ->press('UPDATE')
                 ->waitForTextIn('@title-error', 'A slug for this title has already been used in the past.')
@@ -259,7 +260,7 @@ class PostTest extends DuskTestCase
                 ->waitForTextIn('@title-error', 'A slug for this title has already been used in the past.');
 
             // The content is mandatory, must be at least 10 characters and cannot be more than 2000 characters
-            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->keys('#content', ['{control}', 'a'], '{backspace}') // clear() or type('#title','') don't seem to work
                 ->press('UPDATE')
                 ->waitForTextIn('@content-error', 'The content field is required.')
@@ -275,7 +276,7 @@ class PostTest extends DuskTestCase
             $jpgFile = UploadedFile::fake()->image('photo1.jpg');
             $jpegFile = UploadedFile::fake()->image('photo2.jpeg');
             $pngFile = UploadedFile::fake()->image('photo3.png');
-            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->attach('#photo', $textFile)
                 ->waitForTextIn('@photo-error', 'The photo must be a file of type: jpg, jpeg, png.')
                 ->assertAttribute('@photo-image', 'src', '/storage/' . $latestPost->getPhoto())
@@ -290,12 +291,12 @@ class PostTest extends DuskTestCase
                 ->assertMissing('@photo-error');
 
             // The photo credit is optional but if present must be no more than 20 characters
-            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->type('#photo-credit', '')
                 ->press('UPDATE')
                 ->waitForReload()
                 ->assertRouteIs('posts.list')
-                ->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+                ->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->type('#photo-credit', Str::random(21))
                 ->press('UPDATE')
                 ->waitForTextIn('@photo-credit-error', 'The photo credit may not be greater than 20 characters.')
@@ -305,7 +306,7 @@ class PostTest extends DuskTestCase
                 ->assertRouteIs('posts.list');
 
             // The tags are optional
-            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->within('@tags-select', function (Browser $select) use ($latestPost): void {
                     foreach ($latestPost->tags as $tag) {
                         $select->keys('.select2-search__field', '{backspace}');
@@ -320,7 +321,7 @@ class PostTest extends DuskTestCase
                 ->assertRouteIs('posts.list');
 
             // Update a post with photo credit and tags
-            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->keys(
                     '#title',
                     ['{control}', 'a'],
@@ -365,11 +366,12 @@ class PostTest extends DuskTestCase
             $latestPost->refresh();
             $this->assertSameSize($newTags, $latestPost->tags->pluck('id'));
             foreach ($newTags as $tag) {
-                $this->assertTrue($latestPost->tags->contains($tag->getId()));
+                /** @var Tag $tag */
+                $this->assertTrue($latestPost->tags->contains($tag->getKey()));
             }
 
             // Update a post without photo credit or tags
-            $browser->visitRoute('posts.update', ['postId' => $latestPost->getId()])
+            $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->type('#title', 'New title for post')
                 ->click('@line-select')
                 ->waitFor('@circle-line-option')

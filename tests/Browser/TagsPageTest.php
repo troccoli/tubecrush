@@ -27,7 +27,7 @@ class TagsPageTest extends DuskTestCase
     public function testContentOfSinglePost(): void
     {
         /** @var Post $post */
-        $post = Post::query()->withTag($this->tag->getId())->latest()->first();
+        $post = Post::query()->withTag($this->tag->getKey())->latest()->first();
 
         $this->browse(function (Browser $browser) use ($post): void {
             $browser->visitRoute('posts-by-tags', ['slug' => $this->tag->getSlug()])

@@ -21,13 +21,13 @@ class EditPostTest extends TestCase
 
     public function testTheComponentIsRendered(): void
     {
-        $this->get(route('posts.update', ['postId' => $this->post->getId()]))
+        $this->get(route('posts.update', ['postId' => $this->post->getKey()]))
             ->assertSeeLivewire('posts.edit-post');
     }
 
     public function testTheTitleIsRequiredAndCannotBeLongerThan50Characters(): void
     {
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('title', '')
             ->call('submit')
             ->assertHasErrors(['title' => 'required'])
@@ -43,7 +43,7 @@ class EditPostTest extends TestCase
     {
         Post::factory()->create(['title' => 'First post']);
         AlternativePostSlug::factory()->for(Post::factory())->create(['slug' => 'existing-slug']);
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('title', 'First post')
             ->call('submit')
             ->assertHasErrors(['title' => UniquePostSlug::class])
@@ -68,7 +68,7 @@ class EditPostTest extends TestCase
 
     public function testTheContentIsRequiredAndMustBeAtLeast10CharactersLongAndNoMoreThan2000(): void
     {
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('content', '')
             ->call('submit')
             ->assertHasErrors(['content' => 'required'])
@@ -95,19 +95,19 @@ class EditPostTest extends TestCase
         $jpegFile = UploadedFile::fake()->image('photo2.jpeg');
         $pngFile = UploadedFile::fake()->image('photo3.png');
 
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('photo', $textFile)
             ->call('submit')
             ->assertHasErrors(['photo' => 'mimes']);
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('photo', $jpgFile)
             ->call('submit')
             ->assertHasNoErrors(['photo' => 'mimes']);
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('photo', $jpegFile)
             ->call('submit')
             ->assertHasNoErrors(['photo' => 'mimes']);
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('photo', $pngFile)
             ->call('submit')
             ->assertHasNoErrors(['photo' => 'mimes']);
@@ -115,7 +115,7 @@ class EditPostTest extends TestCase
 
     public function testThePhotoCreditIsOptionalButMustBeFewerThan20Characters(): void
     {
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('photoCredit', '')
             ->call('submit')
             ->assertHasNoErrors(['photoCredit'])
@@ -129,7 +129,7 @@ class EditPostTest extends TestCase
 
     public function testTheTagsAreOptional(): void
     {
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('tags', [])
             ->call('submit')
             ->assertHasNoErrors(['tags', 'tags.*']);
@@ -142,7 +142,7 @@ class EditPostTest extends TestCase
 
         $newTags = Tag::query()->inRandomOrder()->limit(5)->get();
 
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('title', "New post")
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
@@ -171,7 +171,7 @@ class EditPostTest extends TestCase
         $this->assertDatabaseMissing('posts', ['title' => 'New post']);
         $this->assertDatabaseHas('posts', ['title' => 'Old post']);
 
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('title', "New post")
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
@@ -187,7 +187,7 @@ class EditPostTest extends TestCase
         $this->assertDatabaseMissing('posts', ['title' => 'New post']);
         $this->assertDatabaseHas('posts', ['title' => 'Old post']);
 
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('title', "New post")
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
@@ -203,7 +203,7 @@ class EditPostTest extends TestCase
         $this->assertDatabaseMissing('posts', ['title' => 'New post']);
         $this->assertDatabaseHas('posts', ['title' => 'Old post']);
 
-        Livewire::test('posts.edit-post', ['postId' => $this->post->getId()])
+        Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
             ->set('title', "New Post")
             ->set('content', 'Amazing content for this new post')
             ->call('cancelEdit');
