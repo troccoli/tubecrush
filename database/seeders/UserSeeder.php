@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRoles;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -11,9 +12,9 @@ class UserSeeder extends Seeder
     {
         User::factory()->create([
             'email' => 'super-admin@example.com',
-        ])->assignRole('Super Admin');
+        ])->assignRole(UserRoles::SuperAdmin->value);
         User::factory()->create([
             'email' => 'editor@example.com',
-        ])->assignRole('Editor');
+        ])->assignRole(UserRoles::Editor->value);
     }
 }

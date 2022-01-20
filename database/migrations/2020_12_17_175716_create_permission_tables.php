@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRoles;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -131,8 +132,8 @@ class CreatePermissionTables extends Migration
         Permission::create(['name' => 'delete posts']);
         Permission::create(['name' => 'publish posts']);
 
-        Role::create(['name' => 'Super Admin']);
-        Role::create(['name' => 'Editor'])->givePermissionTo([
+        Role::create(['name' => UserRoles::SuperAdmin->value]);
+        Role::create(['name' => UserRoles::Editor->value])->givePermissionTo([
                 'create posts',
                 'view posts',
                 'update posts',

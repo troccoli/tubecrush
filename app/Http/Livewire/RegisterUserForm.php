@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\UserRoles;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\View;
@@ -26,7 +27,7 @@ class RegisterUserForm extends Component
         $data['password'] = Hash::make(Str::random());
 
         $user = User::create($data);
-        $user->assignRole('Editor');
+        $user->assignRole(UserRoles::Editor->value);
 
         $this->emit('userRegistered');
         $this->reset();
