@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\NewTubeCrushSubmitted;
 use App\Events\SomeoneHasContactedUs;
+use App\Listeners\NotifyEditorsNewTubeCrushSubmitted;
 use App\Listeners\SendChangePasswordEmail;
 use App\Listeners\SendContactUsMessage;
 use Illuminate\Auth\Events\Registered;
@@ -21,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         SomeoneHasContactedUs::class => [
             SendContactUsMessage::class,
+        ],
+        NewTubeCrushSubmitted::class => [
+            NotifyEditorsNewTubeCrushSubmitted::class,
         ],
     ];
 
