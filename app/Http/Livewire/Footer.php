@@ -16,8 +16,8 @@ class Footer extends Component
     {
         $this->phpVersion = phpversion();
         $this->laravelVersion = app()->version();
-        $this->livewireVersion = '2.8.2';
-        $this->tailwindcssVersion = '3.0.8';
+        $this->livewireVersion = '2.10.2';
+        $this->tailwindcssVersion = '3.0.22';
     }
 
     public function render(): View
