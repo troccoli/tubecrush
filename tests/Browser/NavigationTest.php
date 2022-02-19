@@ -55,6 +55,21 @@ class NavigationTest extends DuskTestCase
         });
     }
 
+    private function assertLinesDropdownNavigation(Browser $browser): void
+    {
+        foreach (Line::all() as $line) {
+            $browser
+                ->within('@main-nav', function (Browser $nav) use ($line): void {
+                    $nav->assertDontSeeLink($line->getName())
+                        ->clickLink('Lines', 'button')
+                        ->waitFor("@{$line->getSlug()}-link")
+                        ->assertSeeLink($line->getName())
+                        ->clickLink($line->getName())
+                        ->assertRouteIs('posts-by-lines', ['slug' => $line->getSlug()]);
+                });
+        }
+    }
+
     public function testDropdownNavigation(): void
     {
         $this->browse(function (Browser $browser): void {
@@ -132,18 +147,14 @@ class NavigationTest extends DuskTestCase
         });
     }
 
-    private function assertLinesDropdownNavigation(Browser $browser): void
+    public function testStickyNavigationBar(): void
     {
-        foreach (Line::all() as $line) {
-            $browser
-                ->within('@main-nav', function (Browser $nav) use ($line): void {
-                    $nav->assertDontSeeLink($line->getName())
-                        ->clickLink('Lines', 'button')
-                        ->waitFor("@{$line->getSlug()}-link")
-                        ->assertSeeLink($line->getName())
-                        ->clickLink($line->getName())
-                        ->assertRouteIs('posts-by-lines', ['slug' => $line->getSlug()]);
-                });
-        }
+        $this->markTestSkipped('This test always passes as assertVisible does not take the viewport into account.');
+        $this->browse(function (Browser $browser): void {
+            $browser->resize(1920, 500)
+                ->visitRoute('home')
+                ->scrollTo('@main-footer')
+                ->assertVisible('@main-nav');
+        });
     }
 }
