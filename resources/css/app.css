@@ -1,6 +1,6 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 .tooltip .tooltip-text {
     @apply invisible ;
@@ -11,97 +11,97 @@
 }
 
 .bakerloo-line {
-    color            : white;
-    background-color : #b26300;
+    color: white;
+    background-color: #b26300;
 }
 
 .central-line {
-    color            : white;
-    background-color : #dc241f;
+    color: white;
+    background-color: #dc241f;
 }
 
 .circle-line {
-    color            : #0019a8;
-    background-color : #ffd329;
+    color: #0019a8;
+    background-color: #ffd329;
 }
 
 .commuter-train {
-    color            : black;
-    background-color : #ffffff;
+    color: black;
+    background-color: #ffffff;
     border: 1px solid black;
 }
 
 .district-line {
-    color            : white;
-    background-color : #007d32;
+    color: white;
+    background-color: #007d32;
 }
 
 .dlr {
-    color            : white;
-    background-color : #00afad;
+    color: white;
+    background-color: #00afad;
 }
 
 .elizabeth-line {
-    color            : white;
-    background-color : #9364cc;
+    color: white;
+    background-color: #9364cc;
 }
 
 .emirates-air-line {
-    color            : white;
-    background-color : #dc241f;
+    color: white;
+    background-color: #dc241f;
 }
 
 .hammersmith-city-line {
-    color            : #0019a8;
-    background-color : #f4a9be;
+    color: #0019a8;
+    background-color: #f4a9be;
 }
 
 .jubilee-line {
-    color            : white;
-    background-color : #a2a5a7;
+    color: white;
+    background-color: #a2a5a7;
 }
 
 .london-buses {
-    color            : white;
-    background-color : #dc241f;
+    color: white;
+    background-color: #dc241f;
 }
 
 .london-overground {
-    color            : white;
-    background-color : #ef7b10;
+    color: white;
+    background-color: #ef7b10;
 }
 
 .london-trams {
-    color            : white;
-    background-color : #00bd19;
+    color: white;
+    background-color: #00bd19;
 }
 
 .metropolitan-line {
-    color            : white;
-    background-color : #9b0058;
+    color: white;
+    background-color: #9b0058;
 }
 
 .northern-line {
-    color            : white;
-    background-color : #000000;
+    color: white;
+    background-color: #000000;
 }
 
 .piccadilly-line {
-    color            : white;
-    background-color : #0019a8;
+    color: white;
+    background-color: #0019a8;
 }
 
 .tfl-rail {
-    color            : white;
-    background-color : #0019a8;
+    color: white;
+    background-color: #0019a8;
 }
 
 .victoria-line {
-    color            : white;
-    background-color : #0098d8;
+    color: white;
+    background-color: #0098d8;
 }
 
 .waterloo-city-line {
-    color            : #0019a8;
-    background-color : #93ceba;
+    color: #0019a8;
+    background-color: #93ceba;
 }

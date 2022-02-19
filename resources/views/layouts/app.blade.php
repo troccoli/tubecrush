@@ -14,28 +14,30 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     @livewireStyles
-    @stack('styles')
+@stack('styles')
 
-    <!-- Scripts -->
+<!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
 <body class="font-sans antialiased">
 <div class="min-h-screen bg-gray-100">
     <x-navigation-dropdown/>
 
-    <!-- Page Heading -->
-    <header class="bg-white">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            {{ $header }}
-        </div>
-    </header>
+    <div>
+        <!-- Page Heading -->
+        <header class="bg-white">
+            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                {{ $header }}
+            </div>
+        </header>
 
-    <!-- Page Content -->
-    <main class="bg-white pb-6">
-        {{ $slot }}
-    </main>
+        <!-- Page Content -->
+        <main class="bg-white pb-6">
+            {{ $slot }}
+        </main>
 
-    @livewire('footer')
+        @livewire('footer')
+    </div>
 </div>
 
 @livewire('cookie-consent')
