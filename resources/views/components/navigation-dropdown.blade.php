@@ -1,5 +1,5 @@
 <nav x-data="{ openMenu: false, openProfileMenu: false, openLinesMenu: false }"
-     class="bg-white border-b border-gray-100" dusk="main-nav">
+     class="bg-white border-b border-gray-100 sticky top-0" dusk="main-nav">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
