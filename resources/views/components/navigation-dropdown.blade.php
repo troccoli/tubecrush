@@ -1,6 +1,6 @@
 <nav dusk="main-nav"
      x-data="{ openMenu: false, openProfileMenu: false, openLinesMenu: false }"
-     class="bg-white sticky top-0">
+     class="bg-white sticky top-0 z-50">
     <!-- Primary Navigation Menu -->
     <div class="grid grid-cols-3 justify-between mx-2 py-3 max-w-7xl md:mx-6 lg:mx-10 xl:mx-auto">
         <div class="justify-self-start self-center">
