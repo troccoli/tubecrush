@@ -33,10 +33,15 @@
 
         <!-- Buttons -->
         <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 justify-end">
-            <x-jet-secondary-button dusk="cancel-button" wire:click="cancelSubmission"
-                                    class="w-full justify-center md:w-auto">{{ __('Cancel') }}</x-jet-secondary-button>
+            <x-jet-secondary-button dusk="cancel-button"
+                                    wire:click="cancelSubmission"
+                                    class="w-full justify-center md:w-auto">
+                {{ __('Cancel') }}
+            </x-jet-secondary-button>
             <x-jet-button dusk="submit-button" class="w-full justify-center md:w-auto">
-                <x-heroicons-s-refresh wire:loading wire:target="submit" dusk="submit-loading-icon"
+                <x-heroicons-s-refresh dusk="submit-loading-icon"
+                                       wire:loading
+                                       wire:target="submit"
                                        class="animate-reverse-spin w-4 h-4 mr-1"/>
                 {{ __('Send') }}
             </x-jet-button>

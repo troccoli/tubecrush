@@ -2,7 +2,7 @@
      x-data="{ openMenu: false, openProfileMenu: false, openLinesMenu: false }"
      class="bg-white sticky top-0">
     <!-- Primary Navigation Menu -->
-    <div class="grid grid-cols-2 justify-between mx-2 py-3 max-w-7xl md:mx-6 lg:mx-10 xl:mx-auto">
+    <div class="grid grid-cols-3 justify-between mx-2 py-3 max-w-7xl md:mx-6 lg:mx-10 xl:mx-auto">
         <div class="justify-self-start self-center">
             <div class="grid grid-flow-col space-x-8">
                 <x-jet-application-mark class="block h-9 w-auto"/>
@@ -21,6 +21,13 @@
                     @endforeach
                 </x-jet-nav-dropdown>
             </div>
+        </div>
+        <div class="justify-self-center self-center">
+            <button dusk="send-crush-button"
+                    class="w-32 px-6 py-1 rounded-lg bg-blue-300 hover:bg-blue-500 transition"
+                    @click.self="">
+                <x-heroicons-s-camera class="h-6 w-6 mx-auto my-1"/>
+            </button>
         </div>
         <div class="justify-self-end self-center">
             @if (auth()->check())

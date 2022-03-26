@@ -2,8 +2,8 @@
 
 @php
     $classes = ($active ?? false)
-        ? 'hidden sm:items-center sm:ml-10 text-gray-500 sm:flex border-b-2 border-indigo-400 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition'
-        : 'hidden sm:items-center sm:ml-10 text-gray-500 sm:flex border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition';
+        ? 'hidden md:items-center md:ml-10 text-gray-500 md:flex border-b-2 border-indigo-400 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition'
+        : 'hidden md:items-center md:ml-10 text-gray-500 md:flex border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition';
 @endphp
 
 <div {{ $attributes->merge(['class' => $classes, 'dusk' => '']) }} >
