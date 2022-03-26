@@ -1,6 +1,6 @@
 <div class="relative mt-2" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false"
      dusk="line-select">
-    <div @click="open = ! open">
+    <div @click.stop="open = ! open">
         <button type="button" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label"
                 class="relative w-full bg-white border border-gray-500 rounded-md shadow-sm pl-3 pr-10 py-3 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             <div class="flex items-center text-base">
@@ -30,7 +30,7 @@
          x-transition:leave-end="opacity-0 scale-95"
          class="absolute z-50 mt-2 w-full mr-6 rounded-md shadow-lg origin-top-left left-0"
          style="display: none;"
-         @click="open = false">
+         @click.stop="open = false">
         <div class="rounded-md ring-1 ring-black ring-opacity-5 w-full py-1 bg-white">
             <ul tabindex="-1" role="listbox" aria-labelledby="listbox-label"
                 aria-activedescendant="listbox-item-3"
@@ -38,7 +38,7 @@
                 @foreach(\App\Models\Line::all() as $line)
                     <li id="line-{{ $line->getKey() }}" role="option" dusk="{{ $line->getSlug() }}-option"
                         class="text-base text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 hover:bg-gray-100"
-                        @click="$wire.set('line', {{ $line->getKey() }})">
+                        @click.stop="$wire.set('line', {{ $line->getKey() }})">
                         <div class="flex items-center">
                             <div class="absolute w-1.5 h-full {{ $line->getSlug()}}"></div>
                             <span class="ml-3 block truncate">{{ $line->getName() }}</span>

@@ -69,7 +69,7 @@
         @endif
         <!-- Hamburger -->
             <div class="flex items-center md:hidden">
-                <button @click="openMenu = ! openMenu"
+                <button @click.stop="openMenu = ! openMenu"
                         class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition duration-300">
                     <span :class="{'hidden': openMenu, 'inline-flex': ! openMenu }"><x-heroicon-o-menu class="h-6 w-6"/></span>
                     <span :class="{'hidden': ! openMenu, 'inline-flex': openMenu }" class="hidden"><x-heroicons-o-x
@@ -84,7 +84,7 @@
                 <x-jet-responsive-nav-link href="{{ route('home') }}"
                                            :active="request()->routeIs('home')">{{ __('Home') }}</x-jet-responsive-nav-link>
                 <div>
-                    <button @click="openLinesMenu = ! openLinesMenu"
+                    <button @click.stop="openLinesMenu = ! openLinesMenu"
                             class="flex justify-between w-full py-2 text-base font-medium text-gray-600">
                         <div class="ml-4 text-left">{{ __('Lines') }}</div>
                         <div class="mr-5 flex flex-wrap content-center">
@@ -104,7 +104,7 @@
                     @endforeach</div>
                 @if (auth()->check())
                     <div class="border-t border-gray-100">
-                        <button @click="openProfileMenu = ! openProfileMenu"
+                        <button @click.stop="openProfileMenu = ! openProfileMenu"
                                 class="flex justify-between w-full py-2 text-base font-medium text-gray-600">
                             <div class="ml-4 text-left">{{ auth()->user()->getName() }}</div>
                             <div class="mr-5 flex flex-wrap content-center">
