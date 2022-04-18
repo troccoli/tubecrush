@@ -38,7 +38,7 @@
                 @foreach(\App\Models\Line::all() as $line)
                     <li id="line-{{ $line->getKey() }}" role="option" dusk="{{ $line->getSlug() }}-option"
                         class="text-base text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 hover:bg-gray-100"
-                        @click.stop="$wire.set('line', {{ $line->getKey() }})">
+                        @click.stop="$wire.set('line', {{ $line->getKey() }}); open = false">
                         <div class="flex items-center">
                             <div class="absolute w-1.5 h-full {{ $line->getSlug()}}"></div>
                             <span class="ml-3 block truncate">{{ $line->getName() }}</span>

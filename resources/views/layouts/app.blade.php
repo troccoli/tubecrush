@@ -14,9 +14,9 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     @livewireStyles
-@stack('styles')
+    @stack('styles')
 
-<!-- Scripts -->
+    <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
 <body class="font-sans antialiased">

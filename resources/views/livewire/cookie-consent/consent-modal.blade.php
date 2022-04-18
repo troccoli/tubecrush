@@ -1,6 +1,6 @@
 <div x-data="{ open: @entangle('openConsentModal') }" x-show="open" dusk="cookie-consent-modal"
      class="fixed z-10 w-full h-full top-0 left-0 flex items-center justify-center">
-    <div class="absolute w-full h-full bg-gray-900 opacity-50 sm:bg-yellow-500"></div>
+    <div class="absolute w-full h-full bg-gray-900 opacity-50"></div>
 
     <div class="bg-white w-auto mx-3 sm:mx-0 rounded shadow-lg z-50 overflow-y-auto">
         <div class="py-4 text-left px-6">
@@ -14,7 +14,8 @@
                 <p>{{  __('Your experience on this site will be improved by allowing cookies.') }}</p>
                 <div>
                     {{ __('Learn mode about our cookies') }}
-                    <button wire:click="toggleCookieModal" class="hover:text-blue-500" dusk="cookie-consent-cookie-policy-button">
+                    <button wire:click="toggleCookieModal" class="hover:text-blue-500"
+                            dusk="cookie-consent-cookie-policy-button">
                         <x-heroicons-o-information-circle class="h-5 w-5 inline-block"/>
                     </button>
                 </div>
