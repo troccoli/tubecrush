@@ -13,49 +13,39 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', \App\Http\Controllers\HomeController::class)
-    ->name('home');
-Route::get('/about-us', [\App\Http\Controllers\StaticPagesController::class, 'aboutUs'])
-    ->name('about-us');
-Route::get('/guidelines', [\App\Http\Controllers\StaticPagesController::class, 'guidelines'])
-    ->name('guidelines');
-Route::get('/legal-information', [\App\Http\Controllers\StaticPagesController::class, 'legalInformation'])
-    ->name('legal');
-Route::get('/photo-removal', [\App\Http\Controllers\StaticPagesController::class, 'photoRemoval'])
-    ->name('photo-removal');
-Route::get('/press-enquiries', [\App\Http\Controllers\StaticPagesController::class, 'pressEnquiries'])
-    ->name('press-enquiries');
-Route::get('/contact-us', \App\Http\Controllers\ContactUsController::class)
-    ->name('contact-us');
+Route::view('/', 'home')->name('home');
+Route::view('/about-us', 'static.about-us')->name('about-us');
+Route::view('/guidelines', 'static.guidelines')->name('guidelines');
+Route::view('/legal-information', 'static.legal-information')->name('legal');
+Route::view('/photo-removal', 'static.photo-removal')->name('photo-removal');
+Route::view('/press-enquiries', 'static.press-enquiries')->name('press-enquiries');
+Route::view('/contact-us', 'static.contact-us')->name('contact-us');
 Route::get('/lines/{slug}', \App\Http\Controllers\PostsByLinesController::class)
     ->name('posts-by-lines');
 Route::get('/tag/{slug}', \App\Http\Controllers\PostsByTagsController::class)
     ->name('posts-by-tags');
 Route::get('/post/{post:slug}', \App\Http\Controllers\SinglePostController::class)
     ->name('single-post');
-Route::get('/send-crush', \App\Http\Controllers\SendCrushController::class)
-    ->name('send-crush');
-Route::get('/send-crush/thank-you', [\App\Http\Controllers\StaticPagesController::class, 'sendCrushSuccess'])
-    ->name('send-crush-success');
+Route::view('/send-crush', 'static.send-crush')->name('send-crush');
+Route::view('/send-crush/thank-you', 'static.send-crush-success')->name('send-crush-success');
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {
-        Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)
-            ->name('dashboard');
+        Route::view('/dashboard', 'dashboard.index')->name('dashboard');
 
-        Route::get('/register', \App\Http\Controllers\RegisterUserController::class)
+        Route::view('/register', 'dashboard.register-user')
             ->middleware('can:register users')
             ->name('register');
 
-        Route::get('/posts', [\App\Http\Controllers\PostsController::class, 'list'])
+        Route::view('/posts', 'dashboard.posts.list')
             ->middleware('can:view posts')
             ->name('posts.list');
 
-        Route::get('/posts/create', [\App\Http\Controllers\PostsController::class, 'create'])
+        Route::view('/posts/create', 'dashboard.posts.create')
             ->middleware('can:create posts')
             ->name('posts.create');
 
-        Route::get('/posts/update/{postId}', [\App\Http\Controllers\PostsController::class, 'update'])
+        Route::view('/posts/update/{postId}', 'dashboard.posts.update')
             ->middleware('can:update posts')
             ->name('posts.update');
     });

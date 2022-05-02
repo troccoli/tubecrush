@@ -18,20 +18,21 @@ class DuskServiceProvider extends ServiceProvider
             Route::get('/cookietest', function () {
                 return 'TEST';
             })->name('dusk.cookies-consent');
+
+
+            Browser::macro('scrollToElement', function ($selector): Browser {
+                /** @var Browser $this */
+                $selector = addslashes($this->resolver->format($selector));
+                $this->driver->executeScript(
+                    "document.querySelector(\"$selector\").scrollIntoView({block: \"center\", inline: \"center\"});"
+                );
+                return $this;
+            });
+
+            Browser::macro('scrollAndClick', function ($selector): Browser {
+                /** @var Browser $this */
+                return $this->scrollToElement($selector)->click($selector);
+            });
         }
-
-        Browser::macro('scrollToElement', function ($selector): Browser {
-            /** @var Browser $this */
-            $selector = addslashes($this->resolver->format($selector));
-            $this->driver->executeScript(
-                "document.querySelector(\"$selector\").scrollIntoView({block: \"center\", inline: \"center\"});"
-            );
-            return $this;
-        });
-
-        Browser::macro('scrollAndClick', function ($selector): Browser {
-            /** @var Browser $this */
-            return $this->scrollToElement($selector)->click($selector);
-        });
     }
 }
