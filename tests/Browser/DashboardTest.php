@@ -34,7 +34,7 @@ class DashboardTest extends DuskTestCase
             $browser->loginAs($this->superAdmin)
                 ->visitRoute('posts.list')
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
-                    $row->click('@delete-post-button');
+                    $row->scrollAndClick('@delete-post-button');
                 })
                 ->waitFor('#confirm-delete-post-dialog')
                 ->within('#confirm-delete-post-dialog', function (Browser $dialog) use ($latestPost): void {
@@ -186,7 +186,7 @@ class DashboardTest extends DuskTestCase
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
                     $row->assertVisible('@publish-post-button')
                         ->assertMissing('@unpublish-post-button')
-                        ->click('@publish-post-button');
+                        ->scrollAndClick('@publish-post-button');
                 })
                 ->waitFor('#confirm-publish-post-dialog')
                 ->within('#confirm-publish-post-dialog', function (Browser $dialog) use ($draftPost): void {
@@ -230,7 +230,7 @@ class DashboardTest extends DuskTestCase
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
                     $row->assertVisible('@publish-post-button')
                         ->assertMissing('@unpublish-post-button')
-                        ->click('@publish-post-button');
+                        ->scrollAndClick('@publish-post-button');
                 })
                 ->waitFor('#confirm-publish-post-dialog')
                 ->within('#confirm-publish-post-dialog', function (Browser $dialog) use ($draftPost): void {
@@ -247,7 +247,7 @@ class DashboardTest extends DuskTestCase
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
                     $row->assertVisible('@publish-post-button')
                         ->assertMissing('@unpublish-post-button')
-                        ->click('@publish-post-button');
+                        ->scrollAndClick('@publish-post-button');
                 })
                 ->waitFor('#confirm-publish-post-dialog')
                 ->press('YEP, LET\'S GO')
@@ -312,7 +312,7 @@ class DashboardTest extends DuskTestCase
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
                     $row->assertMissing('@publish-post-button')
                         ->assertVisible('@unpublish-post-button')
-                        ->click('@unpublish-post-button');
+                        ->scrollAndClick('@unpublish-post-button');
                 })
                 ->waitFor('#confirm-unpublish-post-dialog')
                 ->within('#confirm-unpublish-post-dialog', function (Browser $dialog) use ($post): void {
@@ -329,7 +329,7 @@ class DashboardTest extends DuskTestCase
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
                     $row->assertMissing('@publish-post-button')
                         ->assertVisible('@unpublish-post-button')
-                        ->click('@unpublish-post-button');
+                        ->scrollAndClick('@unpublish-post-button');
                 })
                 ->waitFor('#confirm-unpublish-post-dialog')
                 ->press('OH YEAH')
@@ -355,7 +355,7 @@ class DashboardTest extends DuskTestCase
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
                     $row->assertMissing('@publish-post-button')
                         ->assertVisible('@unpublish-post-button')
-                        ->click('@unpublish-post-button');
+                        ->scrollAndClick('@unpublish-post-button');
                 })
                 ->waitFor('#confirm-unpublish-post-dialog')
                 ->within('#confirm-unpublish-post-dialog', function (Browser $dialog) use ($post): void {

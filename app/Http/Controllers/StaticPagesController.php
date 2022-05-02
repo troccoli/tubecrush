@@ -30,4 +30,9 @@ class StaticPagesController extends Controller
     {
         return view('static.press-enquiries');
     }
+
+    public function sendCrushSuccess(): View
+    {
+        return view('static.send-crush-success');
+    }
 }

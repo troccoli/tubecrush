@@ -23,9 +23,11 @@ class SendCrushForm extends Component
         return view('livewire.send-crush-form');
     }
 
-    public function cancelSubmission()
+    public function clearForm()
     {
-        return;
+        $this->line = 0;
+        $this->photo = null;
+        $this->photoCredit = null;
     }
 
     public function submit()
@@ -45,6 +47,8 @@ class SendCrushForm extends Component
         ]);
 
         NewTubeCrushSubmitted::dispatch($post);
+
+        $this->redirectRoute('send-crush-success');
     }
 
     public function updatedPhoto()

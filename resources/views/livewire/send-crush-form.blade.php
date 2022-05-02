@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="{{ mix('css/select2.css') }}">
 @endpush
 <div>
-    <form wire:submit.prevent="submit">
+    <form wire:submit.prevent="submit" dusk="send-crush-form">
         <!-- Line -->
         <div class="mb-6 md:w-full md:mr-6">
             <x-jet-label for="line" value="{{ __('Line') }}"/>
@@ -33,10 +33,10 @@
 
         <!-- Buttons -->
         <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 justify-end">
-            <x-jet-secondary-button dusk="cancel-button"
-                                    wire:click="cancelSubmission"
+            <x-jet-secondary-button dusk="clear-button"
+                                    wire:click="clearForm"
                                     class="w-full justify-center md:w-auto">
-                {{ __('Cancel') }}
+                {{ __('Clear') }}
             </x-jet-secondary-button>
             <x-jet-button dusk="submit-button" class="w-full justify-center md:w-auto">
                 <x-heroicons-s-refresh dusk="submit-loading-icon"

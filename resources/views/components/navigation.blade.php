@@ -3,14 +3,20 @@
      class="bg-white sticky top-0 z-50">
     <!-- Primary Navigation Menu -->
     <div class="grid grid-cols-3 justify-between mx-2 py-3 max-w-7xl md:mx-6 lg:mx-10 xl:mx-auto">
+        {{-- MENU --}}
         <div class="justify-self-start self-center">
             <div class="grid grid-flow-col space-x-8">
+                {{-- Logo --}}
                 <x-jet-application-mark class="block h-9 w-auto"/>
+
+                {{-- Home --}}
                 <div class="hidden md:flex">
                     <x-jet-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-jet-nav-link>
                 </div>
+
+                {{-- Line --}}
                 <x-jet-nav-dropdown dusk="lines-dropdown-menu" :active="request()->routeIs('posts-by-lines')">
                     <x-slot name="name">{{ __('Lines') }}</x-slot>
                     @foreach(\App\Models\Line::query()->orderBy('name')->get() as $line)
@@ -22,20 +28,22 @@
                 </x-jet-nav-dropdown>
             </div>
         </div>
+        {{-- SEND CRUSH --}}
         <div class="justify-self-center self-center">
-            <button dusk="send-crush-button"
+            <button type="button" dusk="send-crush-button"
                     class="w-32 px-6 py-1 rounded-lg bg-blue-300 hover:bg-blue-500 transition"
-                    @click.self="">
+                    @click.stop='window.location.href="{{ route('send-crush') }}"'>
                 <x-heroicons-s-camera class="h-6 w-6 mx-auto my-1"/>
             </button>
         </div>
+        {{-- PROFILE --}}
         <div class="justify-self-end self-center">
             @if (auth()->check())
-                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                <div class="hidden md:flex md:items-center md:ml-6">
                     <x-jet-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
-                                class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
+                                    class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
                                 <div>{{ auth()->user()->getName() }}</div>
                                 <div class="ml-1">
                                     <x-heroicons-s-chevron-down class="fill-current h-4 w-4"/>
@@ -47,13 +55,13 @@
                             <div dusk="dropdown-menu">
                                 @can('create posts')
                                     <x-jet-dropdown-link
-                                        href="{{ route('posts.create') }}">{{ __('Create post') }}</x-jet-dropdown-link>
+                                            href="{{ route('posts.create') }}">{{ __('Create post') }}</x-jet-dropdown-link>
                                     <div class="border-t border-gray-100"></div>
                                 @endcan
                                 <x-jet-dropdown-link
-                                    href="{{ route('dashboard') }}">{{ __('Dashboard') }}</x-jet-dropdown-link>
+                                        href="{{ route('dashboard') }}">{{ __('Dashboard') }}</x-jet-dropdown-link>
                                 <x-jet-dropdown-link
-                                    href="{{ route('profile.show') }}">{{ __('Profile') }}</x-jet-dropdown-link>
+                                        href="{{ route('profile.show') }}">{{ __('Profile') }}</x-jet-dropdown-link>
                                 <div class="border-t border-gray-100"></div>
 
                                 <!-- Authentication -->
@@ -66,14 +74,14 @@
                         </x-slot>
                     </x-jet-dropdown>
                 </div>
-        @endif
-        <!-- Hamburger -->
+            @endif
+            <!-- Hamburger -->
             <div class="flex items-center md:hidden">
                 <button @click.stop="openMenu = ! openMenu"
                         class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition duration-300">
                     <span :class="{'hidden': openMenu, 'inline-flex': ! openMenu }"><x-heroicon-o-menu class="h-6 w-6"/></span>
                     <span :class="{'hidden': ! openMenu, 'inline-flex': openMenu }" class="hidden"><x-heroicons-o-x
-                            class="h-6 w-6"/></span>
+                                class="h-6 w-6"/></span>
                 </button>
             </div>
         </div>
@@ -81,8 +89,10 @@
     <div :class="{'block': openMenu, 'hidden': ! openMenu}" class="hidden">
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="mt-3 space-y-1">
+                {{-- Home --}}
                 <x-jet-responsive-nav-link href="{{ route('home') }}"
                                            :active="request()->routeIs('home')">{{ __('Home') }}</x-jet-responsive-nav-link>
+                {{-- Line --}}
                 <div>
                     <button @click.stop="openLinesMenu = ! openLinesMenu"
                             class="flex justify-between w-full py-2 text-base font-medium text-gray-600">
@@ -100,8 +110,9 @@
                 <div :class="{'block': openLinesMenu, 'hidden': ! openLinesMenu}" class="hidden sm:hidden">
                     @foreach(\App\Models\Line::query()->orderBy('name')->get() as $line)
                         <x-jet-responsive-nav-link
-                            href="{{ route('posts-by-lines', ['slug' => $line->getSlug()]) }}">{{ $line->getName() }}</x-jet-responsive-nav-link>
+                                href="{{ route('posts-by-lines', ['slug' => $line->getSlug()]) }}">{{ $line->getName() }}</x-jet-responsive-nav-link>
                     @endforeach</div>
+                {{-- PROFILE --}}
                 @if (auth()->check())
                     <div class="border-t border-gray-100">
                         <button @click.stop="openProfileMenu = ! openProfileMenu"
@@ -112,8 +123,7 @@
                                     <x-heroicons-s-chevron-down class="fill-current h-4 w-4"/>
                                 </div>
                                 <div :class="{'block': openProfileMenu, 'hidden': ! openProfileMenu}">
-                                    <x-heroicons-s-chevron-up class="fill-current h-4 w-4"
-                                    /
+                                    <x-heroicons-s-chevron-up class="fill-current h-4 w-4"/>
                                 </div>
                             </div>
                         </button>
