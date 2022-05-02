@@ -128,10 +128,10 @@ class PostTest extends DuskTestCase
                 ->press('CREATE')
                 ->waitUntilMissing('@submit-loading-icon')
                 ->assertMissing('@photo-credit-error')
-                ->type('#photo-credit', 'qwertyuiopqwertyuiopq')
+                ->type('#photo-credit', Str::random(21))
                 ->press('CREATE')
                 ->waitForTextIn('@photo-credit-error', 'The photo credit may not be greater than 20 characters.')
-                ->type('#photo-credit', 'qwertyuiopqwertyuiop')
+                ->type('#photo-credit', Str::random(20))
                 ->press('CREATE')
                 ->waitUntilMissing('@submit-loading-icon')
                 ->assertMissing('@photo-credit-error');

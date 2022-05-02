@@ -8,7 +8,9 @@ use Illuminate\Queue\SerializesModels;
 
 class SomeoneHasContactedUs
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     private string $name;
     private string $email;

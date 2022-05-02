@@ -6,8 +6,8 @@ use Livewire\Component;
 
 class CookieConsent extends Component
 {
-    public const EVENT_COOKIES_ACCEPTED = __CLASS__ . "::cookieConsentGiven";
-    public const EVENT_COOKIES_DENIED = __CLASS__ . "::cookieConsentRefused";
+    public const EVENT_COOKIES_ACCEPTED = __CLASS__ . '::cookieConsentGiven';
+    public const EVENT_COOKIES_DENIED = __CLASS__ . '::cookieConsentRefused';
 
     public bool $askForConsent;
 

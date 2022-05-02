@@ -20,7 +20,10 @@ use Illuminate\Support\Carbon;
  */
 class Post extends Model
 {
-    use HasFactory, Sluggable, SoftDeletes, SluggableScopeHelpers;
+    use HasFactory;
+    use Sluggable;
+    use SluggableScopeHelpers;
+    use SoftDeletes;
 
     protected $casts = [
         'status' => PostStatus::class,

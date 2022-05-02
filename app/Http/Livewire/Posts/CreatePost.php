@@ -34,7 +34,7 @@ class CreatePost extends Component
     public function mount()
     {
         $this->availableTags = Tag::query()->orderBy('slug')->get()
-            ->map(fn(Tag $tag) => ['id' => $tag->getKey(), 'text' => $tag->getName()])
+            ->map(fn (Tag $tag) => ['id' => $tag->getKey(), 'text' => $tag->getName()])
             ->toArray();
     }
 

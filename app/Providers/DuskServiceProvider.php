@@ -19,13 +19,13 @@ class DuskServiceProvider extends ServiceProvider
                 return 'TEST';
             })->name('dusk.cookies-consent');
 
-
             Browser::macro('scrollToElement', function ($selector): Browser {
                 /** @var Browser $this */
                 $selector = addslashes($this->resolver->format($selector));
                 $this->driver->executeScript(
                     "document.querySelector(\"$selector\").scrollIntoView({block: \"center\", inline: \"center\"});"
                 );
+
                 return $this;
             });
 

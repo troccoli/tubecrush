@@ -91,6 +91,7 @@ class ContactUsFormTest extends TestCase
                 return $notification->getName() === 'John Doe'
                     && $notification->getEmail() === 'john.doe@example.com'
                     && $notification->getMessage() === 'Awesome site!';
-            });
+            }
+        );
     }
 }

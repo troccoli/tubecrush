@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use Closure;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Assert as PHPUnit;
 
@@ -23,16 +24,16 @@ class Browser extends \Laravel\Dusk\Browser
         return $this;
     }
 
-    public function withEach(string $selector, \Closure $callback): self
+    public function withEach(string $selector, Closure $callback): self
     {
         if (Str::startsWith($selector, '@')) {
-            $selector = Str::replaceFirst('@', '[dusk="', $selector).'"]';
+            $selector = Str::replaceFirst('@', '[dusk="', $selector) . '"]';
         }
 
         $elementsCount = count($this->elements($selector));
 
         for ($i = 1; $i <= $elementsCount; $i++) {
-            $this->within($selector.":nth-child({$i})", function ($browser) use ($callback, $i) {
+            $this->within($selector . ":nth-child({$i})", function ($browser) use ($callback, $i) {
                 $callback($browser, $i);
             });
         }
@@ -46,7 +47,9 @@ class Browser extends \Laravel\Dusk\Browser
         PHPUnit::assertCount(
             $expectedCount,
             $elements,
-            $message ?? "Failed asserting that actual size ".count($elements)." matches expected size $expectedCount for elements [{$selector}]."
+            $message ?? 'Failed asserting that actual size ' . count(
+                $elements
+            ) . " matches expected size $expectedCount for elements [{$selector}]."
         );
 
         return $this;

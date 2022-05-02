@@ -12,6 +12,7 @@ class PostsByTagsController extends Controller
     {
         /** @var Tag $tag */
         $tag = Tag::whereSlug($slug)->first();
+
         return view('tags', ['id' => $tag->getKey(), 'name' => $tag->getName()]);
     }
 }

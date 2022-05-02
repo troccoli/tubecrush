@@ -36,7 +36,7 @@ class EditPostTest extends TestCase
             ->assertHasErrors(['title' => 'max'])
             ->set('title', Str::random(50))
             ->call('submit')
-            ->assertHasNoErrors(['title']);;
+            ->assertHasNoErrors(['title']);
     }
 
     public function testTheSlugMustBeUnique()
@@ -143,7 +143,7 @@ class EditPostTest extends TestCase
         $newTags = Tag::query()->inRandomOrder()->limit(5)->get();
 
         Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
-            ->set('title', "New post")
+            ->set('title', 'New post')
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
             ->set('photoCredit', 'John')
@@ -172,7 +172,7 @@ class EditPostTest extends TestCase
         $this->assertDatabaseHas('posts', ['title' => 'Old post']);
 
         Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
-            ->set('title', "New post")
+            ->set('title', 'New post')
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
             ->set('photoCredit', null)
@@ -188,7 +188,7 @@ class EditPostTest extends TestCase
         $this->assertDatabaseHas('posts', ['title' => 'Old post']);
 
         Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
-            ->set('title', "New post")
+            ->set('title', 'New post')
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
             ->set('photoCredit', 'John')
@@ -204,7 +204,7 @@ class EditPostTest extends TestCase
         $this->assertDatabaseHas('posts', ['title' => 'Old post']);
 
         Livewire::test('posts.edit-post', ['postId' => $this->post->getKey()])
-            ->set('title', "New Post")
+            ->set('title', 'New Post')
             ->set('content', 'Amazing content for this new post')
             ->call('cancelEdit');
 

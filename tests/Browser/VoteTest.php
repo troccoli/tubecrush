@@ -43,17 +43,17 @@ class VoteTest extends DuskTestCase
             /** @var Post $singlePost */
             $singlePost = Post::query()->first();
             $browser->visitRoute('single-post', ['post' => $singlePost->getSlug()])
-                    ->with('[dusk="post"]', function (Browser $post): void {
-                        $post->assertEnabled('@likes-button')
-                             ->assertVisible('@likes-icon-not-voted')
-                             ->assertMissing('@likes-icon-voted')
-                             ->click('@likes-button')
-                             ->waitFor('@likes-icon-voted')
-                             ->assertMissing('@likes-icon-not-voted')
-                             ->click('@likes-button')
-                             ->waitFor('@likes-icon-not-voted')
-                             ->assertMissing('@likes-icon-voted');
-                    });
+                ->with('[dusk="post"]', function (Browser $post): void {
+                    $post->assertEnabled('@likes-button')
+                        ->assertVisible('@likes-icon-not-voted')
+                        ->assertMissing('@likes-icon-voted')
+                        ->click('@likes-button')
+                        ->waitFor('@likes-icon-voted')
+                        ->assertMissing('@likes-icon-not-voted')
+                        ->click('@likes-button')
+                        ->waitFor('@likes-icon-not-voted')
+                        ->assertMissing('@likes-icon-voted');
+                });
         });
     }
 }

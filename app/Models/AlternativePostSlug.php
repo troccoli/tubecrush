@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AlternativePostSlug extends Model
 {
-    use HasFactory, SluggableScopeHelpers;
+    use HasFactory;
+    use SluggableScopeHelpers;
 
     protected $fillable = [
         'slug',

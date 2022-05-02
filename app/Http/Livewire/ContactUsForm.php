@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Events\SomeoneHasContactedUs;
 use Illuminate\Contracts\View\View;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
 class ContactUsForm extends Component
@@ -19,7 +20,7 @@ class ContactUsForm extends Component
     ];
 
     /**
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function updated($propertyName): void
     {

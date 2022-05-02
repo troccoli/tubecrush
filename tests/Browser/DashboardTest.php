@@ -430,6 +430,4 @@ class DashboardTest extends DuskTestCase
 
         return $row;
     }
-
-
 }

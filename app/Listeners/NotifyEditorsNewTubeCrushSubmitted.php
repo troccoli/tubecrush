@@ -19,6 +19,6 @@ class NotifyEditorsNewTubeCrushSubmitted implements ShouldQueue
         $notification = new NewTubeCrush($event->post);
 
         Role::query()->whereName(UserRoles::Editor->value)->with(['users'])->first()->users
-            ->each(fn(User $user) => $user->notify($notification));
+            ->each(fn (User $user) => $user->notify($notification));
     }
 }
