@@ -1,6 +1,9 @@
 name: Linting
 
-on: [ push, pull_request ]
+on:
+  push:
+    branches-ignore:
+      - deploy
 
 jobs:
   php-cs-fixer:
