@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Livewire\Posts;
 
+use App\Enums\PostStatus;
 use App\Models\AlternativePostSlug;
 use App\Models\Line;
 use App\Models\Post;
@@ -151,6 +152,8 @@ class CreatePostTest extends TestCase
         /** @var Post $post */
         $post = $this->superAdmin()->posts->first();
         $this->assertSame('new-post', $post->getSlug());
+        $this->assertEquals(PostStatus::Draft, $post->getStatus());
+        $this->assertNull($post->getPublishedDate());
 
         /** @var Collection $postTags */
         $postTags = $post->tags;

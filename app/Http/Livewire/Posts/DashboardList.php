@@ -11,19 +11,25 @@ class DashboardList extends Component
 {
     use WithPagination;
 
-    public ?int $confirmingId = null;
+    public ?int $confirmingDeletingId = null;
+    public ?int $confirmingPublishingId = null;
+    public ?int $confirmingUnpublishingId = null;
     public string $confirmingTitle = '';
 
     public function render()
     {
         return view('livewire.posts.dashboard-list', [
-            'posts' => Post::query()->orderByDesc('created_at')->paginate(5),
+            'posts' => Post::query()->latest()->paginate(5),
         ]);
     }
 
-    public function confirmDelete(Post $post)
+    public function confirmAction(Post $post, string $action)
     {
-        $this->confirmingId = $post->getKey();
+        match ($action) {
+            'delete' => $this->confirmingDeletingId = $post->getKey(),
+            'publish' => $this->confirmingPublishingId = $post->getKey(),
+            'unpublish' => $this->confirmingUnpublishingId = $post->getKey(),
+        };
         $this->confirmingTitle = $post->getTitle();
     }
 
@@ -31,12 +37,30 @@ class DashboardList extends Component
     {
         abort_unless(auth()->user()->can('delete posts'), Response::HTTP_UNAUTHORIZED);
 
-        Post::destroy($this->confirmingId);
-        $this->confirmingId = null;
+        Post::destroy($this->confirmingDeletingId);
+        $this->confirmingDeletingId = null;
+    }
+
+    public function publishPost()
+    {
+        abort_unless(auth()->user()->can('publish posts'), Response::HTTP_UNAUTHORIZED);
+
+        Post::findOrFail($this->confirmingPublishingId)->publish();
+        $this->confirmingPublishingId = null;
+    }
+
+    public function unpublishPost()
+    {
+        abort_unless(auth()->user()->can('publish posts'), Response::HTTP_UNAUTHORIZED);
+
+        Post::findOrFail($this->confirmingUnpublishingId)->unpublish();
+        $this->confirmingUnpublishingId = null;
     }
 
     public function keepPost()
     {
-        $this->confirmingId = null;
+        $this->confirmingDeletingId = null;
+        $this->confirmingPublishingId = null;
+        $this->confirmingUnpublishingId = null;
     }
 }

@@ -1,6 +1,6 @@
-<div class="relative mt-2" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false"
+<div class="static mt-2" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false"
      dusk="line-select">
-    <div @click="open = ! open">
+    <div @click.stop="open = ! open">
         <button type="button" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label"
                 class="relative w-full bg-white border border-gray-500 rounded-md shadow-sm pl-3 pr-10 py-3 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             <div class="flex items-center text-base">
@@ -28,17 +28,17 @@
          x-transition:leave="transition ease-in duration-75"
          x-transition:leave-start="opacity-100 scale-100"
          x-transition:leave-end="opacity-0 scale-95"
-         class="absolute z-50 mt-2 w-full mr-6 rounded-md shadow-lg origin-top-left left-0"
+         class="z-40 w-full mt-1 rounded-md shadow-lg"
          style="display: none;"
-         @click="open = false">
-        <div class="rounded-md ring-1 ring-black ring-opacity-5 w-full py-1 bg-white">
+         @click.stop="open = false">
+        <div class="w-full bg-white">
             <ul tabindex="-1" role="listbox" aria-labelledby="listbox-label"
                 aria-activedescendant="listbox-item-3"
-                class="max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+                class="max-h-56 rounded-md text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
                 @foreach(\App\Models\Line::all() as $line)
                     <li id="line-{{ $line->getKey() }}" role="option" dusk="{{ $line->getSlug() }}-option"
                         class="text-base text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 hover:bg-gray-100"
-                        @click="$wire.set('line', {{ $line->getKey() }})">
+                        @click.stop="$wire.set('line', {{ $line->getKey() }}); open = false">
                         <div class="flex items-center">
                             <div class="absolute w-1.5 h-full {{ $line->getSlug()}}"></div>
                             <span class="ml-3 block truncate">{{ $line->getName() }}</span>

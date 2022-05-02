@@ -24,6 +24,18 @@ class LinesPageTest extends DuskTestCase
         });
     }
 
+    public function testDraftPostsAreNotShown(): void
+    {
+        /** @var Post $draftPost */
+        $draftPost = Post::factory()->draft()->now()->for($this->line, 'line')->create();
+        $this->browse(function (Browser $browser) use ($draftPost): void {
+            $browser->visitRoute('posts-by-lines', ['slug' => $this->line->getSlug()])
+                ->with('[dusk="post"]:first-child', function (Browser $row) use ($draftPost): void {
+                    $row->assertDontSeeIn('@title', $draftPost->getTitle());
+                });
+        });
+    }
+
     public function testContentOfSinglePost(): void
     {
         /** @var Post $post */
@@ -58,6 +70,6 @@ class LinesPageTest extends DuskTestCase
 
         $this->line = Line::query()->inRandomOrder()->first();
 
-        Post::factory()->bySuperAdmin()->for($this->line, 'line')->count(10)->create();
+        Post::factory()->for($this->line, 'line')->count(10)->create();
     }
 }

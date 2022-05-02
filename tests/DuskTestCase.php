@@ -20,6 +20,9 @@ abstract class DuskTestCase extends BaseTestCase
     use CreatesApplication;
     use DatabaseMigrations;
 
+    protected $seeder = DatabaseSeeder::class;
+    protected $seed = true;
+
     protected User $superAdmin;
     protected User $editor;
 
@@ -43,8 +46,6 @@ abstract class DuskTestCase extends BaseTestCase
         $this->hotfixSqlite();
         parent::setUp();
 
-        $this->seed(DatabaseSeeder::class);
-
         $this->superAdmin = User::whereEmail('super-admin@example.com')->first();
         $this->editor = User::whereEmail('editor@example.com')->first();
     }
@@ -56,19 +57,22 @@ abstract class DuskTestCase extends BaseTestCase
 
     protected function driver(): RemoteWebDriver
     {
-        $options = (new ChromeOptions)->addArguments(collect([
-            '--window-size=1920,1080',
-        ])->unless($this->hasHeadlessDisabled(), function ($items) {
-            return $items->merge([
-                '--disable-gpu',
-                '--headless',
-            ]);
-        })->all());
+        $options = (new ChromeOptions)->addArguments(
+            collect([
+                '--window-size=1920,1080',
+            ])->unless($this->hasHeadlessDisabled(), function ($items) {
+                return $items->merge([
+                    '--disable-gpu',
+                    '--headless',
+                ]);
+            })->all()
+        );
 
         return RemoteWebDriver::create(
             $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
             DesiredCapabilities::chrome()->setCapability(
-                ChromeOptions::CAPABILITY, $options
+                ChromeOptions::CAPABILITY,
+                $options
             )
         );
     }

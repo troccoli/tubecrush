@@ -10,8 +10,8 @@ class ShareTest extends DuskTestCase
 {
     public function testShare(): void
     {
+        Post::factory()->withTitle('To be shared')->now()->publishedNow()->create();
         $this->browse(function (Browser $browser) {
-            Post::factory()->bySuperAdmin()->withTitle('To be shared')->now()->create();
             $textParam = urlencode("To be shared {$this->baseUrl()}/post/to-be-shared");
             $uParam = urlencode("{$this->baseUrl()}/post/to-be-shared");
 

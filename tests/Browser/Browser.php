@@ -32,8 +32,8 @@ class Browser extends \Laravel\Dusk\Browser
         $elementsCount = count($this->elements($selector));
 
         for ($i = 1; $i <= $elementsCount; $i++) {
-            $this->within($selector.":nth-child({$i})", function ($browser) use ($callback) {
-                $callback($browser);
+            $this->within($selector.":nth-child({$i})", function ($browser) use ($callback, $i) {
+                $callback($browser, $i);
             });
         }
 

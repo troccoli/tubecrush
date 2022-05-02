@@ -38,11 +38,25 @@ module.exports = {
             blue: colors.blue,
             pink: colors.pink,
             indigo: colors.indigo,
+            cyan: colors.cyan,
+            emerald: colors.emerald,
             twitter: '#55acee',
             facebook: '#3b5998',
-        }
+        },
     },
-
+    // The following lines are necessary so that IN DEVELOPMENT I can quickly change
+    // classes in the browser without the need to recompile to css.
+    // Variants need to be added manually when needed, but since this code is only
+    // useful to change classes directly in the browser, there is no need to commit
+    // the changes.
+    ...(process.env.NODE_ENV == 'development') && {
+        safelist: [{
+            pattern: /.*/,
+            variants: [
+                "hover"
+            ]
+        }],
+    },
     plugins: [
         require('@tailwindcss/forms'),
         require('@tailwindcss/typography'),

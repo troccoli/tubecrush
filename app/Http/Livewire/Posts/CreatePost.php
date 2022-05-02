@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Posts;
 
+use App\Enums\PostStatus;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Rules\UniquePostSlug;
@@ -25,15 +26,16 @@ class CreatePost extends Component
         return $this->redirectBack();
     }
 
+    private function redirectBack()
+    {
+        return redirect()->route('posts.list');
+    }
+
     public function mount()
     {
         $this->availableTags = Tag::query()->orderBy('slug')->get()
-            ->map(function (Tag $tag): array {
-                return [
-                    'id' => $tag->getKey(),
-                    'text' => $tag->getName(),
-                ];
-            })->toArray();
+            ->map(fn(Tag $tag) => ['id' => $tag->getKey(), 'text' => $tag->getName()])
+            ->toArray();
     }
 
     public function render()
@@ -53,6 +55,8 @@ class CreatePost extends Component
             'photo' => $this->photo->store('photos', 'public'),
             'photo_credit' => $this->photoCredit,
             'author_id' => auth()->user()->getAuthIdentifier(),
+            'status' => PostStatus::Draft,
+            'published_at' => null,
         ]);
 
         $post->tags()->sync($this->tags);
@@ -78,10 +82,5 @@ class CreatePost extends Component
             'tags' => 'sometimes|array',
             'tags.*' => 'exists:\App\Models\Tag,id',
         ];
-    }
-
-    private function redirectBack()
-    {
-        return redirect()->route('posts.list');
     }
 }

@@ -21,6 +21,18 @@ class HomepageTest extends DuskTestCase
         });
     }
 
+    public function testDraftPostsAreNotShown(): void
+    {
+        /** @var Post $draftPost */
+        $draftPost = Post::factory()->draft()->now()->create();
+        $this->browse(function (Browser $browser) use ($draftPost): void {
+            $browser->visitRoute('home')
+                ->with('[dusk="post"]:first-child', function (Browser $row) use ($draftPost): void {
+                    $row->assertDontSeeIn('@title', $draftPost->getTitle());
+                });
+        });
+    }
+
     public function testContentOfSinglePost(): void
     {
         /** @var Post $post */
@@ -45,21 +57,24 @@ class HomepageTest extends DuskTestCase
                                 ->assertVisible('@facebook-share')
                                 ->assertVisible('@copy-link-share');
                         });
+                });
 
-                    $row->click('@line')
+            $browser->visitRoute('home')
+                ->with('[dusk="post"]:first-child', function (Browser $row) use ($post): void {
+                    $row->scrollAndClick('@line')
                         ->assertRouteIs('posts-by-lines', ['slug' => $post->line->getSlug()]);
                 });
 
             $browser->visitRoute('home')
-                    ->with('[dusk="post"]:first-child', function (Browser $row) use ($post): void {
-                        $row->click('@title')
-                            ->assertRouteIs('single-post', ['post' => $post]);
-                    });
+                ->with('[dusk="post"]:first-child', function (Browser $row) use ($post): void {
+                    $row->scrollAndClick('@title')
+                        ->assertRouteIs('single-post', ['post' => $post]);
+                });
 
             $browser->visitRoute('home')
                 ->with('[dusk="post"]:first-child', function (Browser $row) use ($post): void {
                     $tag = $post->tags->first();
-                    $row->click('@tag-' . $tag->getSlug())
+                    $row->scrollAndClick('@tag-' . $tag->getSlug())
                         ->assertRouteIs('posts-by-tags', ['slug' => $tag->getSlug()]);
                 });
         });
@@ -67,7 +82,7 @@ class HomepageTest extends DuskTestCase
 
     public function testDontShowPhotoCreditIfThereIsntOne(): void
     {
-        Post::factory()->bySuperAdmin()->withoutPhotoCredit()->now()->create();
+        Post::factory()->withoutPhotoCredit()->now()->publishedNow()->create();
 
         $this->browse(function (Browser $browser): void {
             $browser->visitRoute('home')
@@ -81,10 +96,10 @@ class HomepageTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visitRoute('home')
-                    ->with('[dusk="post"]:first-child', function (Browser $post): void {
-                        $post->assertVisible('@comments-count')
-                             ->assertSeeIn('@comments-count', '0 Comments');
-                    });
+                ->with('[dusk="post"]:first-child', function (Browser $post): void {
+                    $post->assertVisible('@comments-count')
+                        ->assertSeeIn('@comments-count', '0 Comments');
+                });
         });
     }
 }

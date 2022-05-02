@@ -33,6 +33,10 @@ Route::get('/tag/{slug}', \App\Http\Controllers\PostsByTagsController::class)
     ->name('posts-by-tags');
 Route::get('/post/{post:slug}', \App\Http\Controllers\SinglePostController::class)
     ->name('single-post');
+Route::get('/send-crush', \App\Http\Controllers\SendCrushController::class)
+    ->name('send-crush');
+Route::get('/send-crush/thank-you', [\App\Http\Controllers\StaticPagesController::class, 'sendCrushSuccess'])
+    ->name('send-crush-success');
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->group(function () {

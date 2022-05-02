@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Livewire;
 
+use App\Enums\UserRoles;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
@@ -27,7 +28,7 @@ class RegisterUserFormTest extends TestCase
         $user = User::whereEmail('paul@example.com')->first();
 
         $this->assertNotNull($user);
-        $this->assertTrue($user->hasRole('Editor'));
+        $this->assertTrue($user->hasRole(UserRoles::Editor->value));
     }
 
     public function testTheNameIsMandatoryAndCannotBeLongerThan255Characters(): void

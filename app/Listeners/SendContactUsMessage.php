@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Enums\UserRoles;
 use App\Events\SomeoneHasContactedUs;
 use App\Notifications\ContactUsMessage;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +15,7 @@ class SendContactUsMessage implements ShouldQueue
 
     public function handle(SomeoneHasContactedUs $event): void
     {
-        $SuperAdmin = Role::query()->whereName('Super Admin')->with(['users'])->first()->users;
+        $SuperAdmin = Role::query()->whereName(UserRoles::SuperAdmin->value)->with(['users'])->first()->users;
 
         foreach ($SuperAdmin as $superAdmin) {
             $superAdmin->notify(new ContactUsMessage($event->getName(), $event->getEmail(), $event->getMessage()));
