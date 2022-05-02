@@ -26,7 +26,7 @@ Route::get('/tag/{slug}', \App\Http\Controllers\PostsByTagsController::class)
     ->name('posts-by-tags');
 Route::get('/post/{post:slug}', \App\Http\Controllers\SinglePostController::class)
     ->name('single-post');
-Route::view('/send-crush', 'send-crush')->name('send-crush');
+Route::view('/send-crush', 'static.send-crush')->name('send-crush');
 Route::view('/send-crush/thank-you', 'static.send-crush-success')->name('send-crush-success');
 
 Route::middleware(['auth:sanctum', 'verified'])
