@@ -11,7 +11,7 @@ git fetch origin deploy
 git reset --hard origin/deploy
 
 # Install dependencies based on lock file
-composer install --no-interaction --no-dev --no-suggest --prefer-dist --optimize-autoloader --no-progress
+composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader --no-progress
 
 # Migrate database
 php artisan migrate --force --no-interaction
