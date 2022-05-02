@@ -29,8 +29,8 @@ class ContactUsMessage extends Notification implements ShouldQueue
 
     public function toMail(): MailMessage
     {
-        return (new MailMessage)
-            ->subject('New message from the '.config('app.name').' site.')
+        return (new MailMessage())
+            ->subject('New message from the ' . config('app.name') . ' site.')
             ->markdown('emails.contact-us-message', [
                 'name' => $this->name,
                 'email' => $this->email,

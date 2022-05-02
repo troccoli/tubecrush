@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 /**
  * @method TagFactory factory
  */
-
 class Tag extends Model
 {
     use HasFactory;
@@ -31,5 +30,4 @@ class Tag extends Model
     {
         return $this->slug;
     }
-
 }

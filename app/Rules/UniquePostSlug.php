@@ -31,7 +31,7 @@ class UniquePostSlug implements Rule
         }
 
         $post = Post::query()
-            ->when($this->excludingPost, fn($query) => $query->whereKeyNot($this->excludingPost))
+            ->when($this->excludingPost, fn ($query) => $query->whereKeyNot($this->excludingPost))
             ->whereSlug($slug)->first();
         if ($post) {
             return false;

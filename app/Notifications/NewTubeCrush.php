@@ -25,7 +25,7 @@ class NewTubeCrush extends Notification implements ShouldQueue
     {
         return (new MailMessage())
             ->subject('A new TubeCrush has been submitted')
-            ->line("Hello,")
+            ->line('Hello,')
             ->line('Someone has sent us a TubeCrush and a draft post has been created.')
             ->line('Click on the button below to edit the post and publish it.')
             ->action('Edit Post', url(route('posts.update', [$this->post])))

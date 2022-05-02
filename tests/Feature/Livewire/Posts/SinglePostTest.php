@@ -69,6 +69,7 @@ class SinglePostTest extends TestCase
                 ->onlyMethods(['hasVoted'])
                 ->getMock();
             $votingCookie->method('hasVoted')->willReturn($userHasVoted);
+
             return $votingCookie;
         });
 
@@ -134,6 +135,7 @@ class SinglePostTest extends TestCase
                 ->onlyMethods(['hasVoted'])
                 ->getMock();
             $votingCookie->method('hasVoted')->willReturnOnConsecutiveCalls(true, false);
+
             return $votingCookie;
         });
 

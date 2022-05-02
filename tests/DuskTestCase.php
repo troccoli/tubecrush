@@ -3,10 +3,12 @@
 namespace Tests;
 
 use App\Models\User;
+use Closure;
 use Database\Seeders\DatabaseSeeder;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\SQLiteBuilder;
 use Illuminate\Database\SQLiteConnection;
@@ -57,7 +59,7 @@ abstract class DuskTestCase extends BaseTestCase
 
     protected function driver(): RemoteWebDriver
     {
-        $options = (new ChromeOptions)->addArguments(
+        $options = (new ChromeOptions())->addArguments(
             collect([
                 '--window-size=1920,1080',
             ])->unless($this->hasHeadlessDisabled(), function ($items) {
@@ -88,15 +90,16 @@ abstract class DuskTestCase extends BaseTestCase
      */
     private function hotfixSqlite()
     {
-        \Illuminate\Database\Connection::resolverFor('sqlite', function ($connection, $database, $prefix, $config) {
+        Connection::resolverFor('sqlite', function ($connection, $database, $prefix, $config) {
             return new class($connection, $database, $prefix, $config) extends SQLiteConnection {
                 public function getSchemaBuilder()
                 {
                     if ($this->schemaGrammar === null) {
                         $this->useDefaultSchemaGrammar();
                     }
+
                     return new class($this) extends SQLiteBuilder {
-                        protected function createBlueprint($table, \Closure $callback = null)
+                        protected function createBlueprint($table, Closure $callback = null)
                         {
                             return new class($table, $callback) extends Blueprint {
                                 public function dropForeign($index)

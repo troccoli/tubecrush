@@ -15,7 +15,6 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * @method UserFactory factory()
  */
-
 class User extends Authenticatable
 {
     use HasApiTokens;

@@ -36,7 +36,6 @@ class SendCrushTest extends DuskTestCase
                 ->assertSeeIn('@clear-button', 'CLEAR')
                 ->assertSeeIn('@submit-button', 'SEND');
 
-
             // The line is mandatory
             $browser->visitRoute('send-crush')
                 ->press('SEND')

@@ -18,6 +18,6 @@ class TwitterShare extends Component
 
     public function text(): string
     {
-        return urlencode($this->post->getTitle() . ' '. route('single-post', ['post' => $this->post]));
+        return urlencode($this->post->getTitle() . ' ' . route('single-post', ['post' => $this->post]));
     }
 }

@@ -13,5 +13,5 @@ return [
     'voting' => [
         'cookie_name' => 'tubecrush_cookie_voting',
         'cookie_lifetime' => 60 * 24 * 365,
-    ]
+    ],
 ];

@@ -137,7 +137,7 @@ class CreatePostTest extends TestCase
         $tags = Tag::query()->inRandomOrder()->limit(3)->get();
 
         Livewire::test('posts.create-post')
-            ->set('title', "New Post")
+            ->set('title', 'New Post')
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
             ->set('photo', $photo)
@@ -172,7 +172,7 @@ class CreatePostTest extends TestCase
         $photo = UploadedFile::fake()->image('photo.jpg');
 
         Livewire::test('posts.create-post')
-            ->set('title', "New Post")
+            ->set('title', 'New Post')
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
             ->set('photo', $photo)
@@ -192,7 +192,7 @@ class CreatePostTest extends TestCase
         $photo = UploadedFile::fake()->image('photo.jpg');
 
         Livewire::test('posts.create-post')
-            ->set('title', "New Post")
+            ->set('title', 'New Post')
             ->set('line', 1)
             ->set('content', 'Amazing content for this new post')
             ->set('photo', $photo)
@@ -210,7 +210,7 @@ class CreatePostTest extends TestCase
         $this->actingAs($this->superAdmin());
 
         Livewire::test('posts.create-post')
-            ->set('title', "New Post")
+            ->set('title', 'New Post')
             ->set('content', 'Amazing content for this new post')
             ->call('cancelCreate');
 

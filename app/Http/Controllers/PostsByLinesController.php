@@ -12,6 +12,7 @@ class PostsByLinesController extends Controller
     {
         /** @var Line $line */
         $line = Line::whereSlug($slug)->first();
+
         return view('lines', ['id' => $line->getKey(), 'name' => $line->getName()]);
     }
 }
