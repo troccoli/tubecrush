@@ -23,8 +23,6 @@ php artisan storage:link
 # ...
 
 # Clear caches
-php artisan optimize:clear --no-interaction
-php artisan permission:cache-reset
 rm ./bootstrap/cache/*.php
 
 # Rebuild cache
