@@ -11,11 +11,19 @@ env:
   build-artifacts: build-artifacts
 
 jobs:
+  build-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-matrix
+        run: echo "::set-output name=matrix::{\"php-versions\":['8.1.]}"
   unit-tests:
+    needs: build-matrix
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        php-versions: [ '8.1' ]
+      matrix: ${{fromJSON(needs.build-matrix.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v2
       - name: Install PHP
@@ -72,10 +80,10 @@ jobs:
         id: phpunit
         run: vendor/bin/phpunit --testsuite Unit
   feature-tests:
+    needs: build-matrix
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        php-versions: [ '8.1' ]
+      matrix: ${{fromJSON(needs.build-matrix.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v2
       - name: Install PHP
@@ -132,10 +140,10 @@ jobs:
         id: phpunit
         run: vendor/bin/phpunit --testsuite Feature
   e2e-tests:
+    needs: build-matrix
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        php-versions: [ '8.1' ]
+      matrix: ${{fromJSON(needs.build-matrix.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v2
       - name: Install PHP
