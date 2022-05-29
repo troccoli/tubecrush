@@ -1,5 +1,5 @@
 <div class="static mt-2" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false"
-     dusk="line-select">
+     dusk="line-select" cy="line-select">
     <div @click.stop="open = ! open">
         <button type="button" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label"
                 class="relative w-full bg-white border border-gray-500 rounded-md shadow-sm pl-3 pr-10 py-3 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -37,6 +37,7 @@
                 class="max-h-56 rounded-md text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
                 @foreach(\App\Models\Line::all() as $line)
                     <li id="line-{{ $line->getKey() }}" role="option" dusk="{{ $line->getSlug() }}-option"
+                        cy="{{ $line->getSlug() }}-option"
                         class="text-base text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 hover:bg-gray-100"
                         @click.stop="$wire.set('line', {{ $line->getKey() }}); open = false">
                         <div class="flex items-center">
