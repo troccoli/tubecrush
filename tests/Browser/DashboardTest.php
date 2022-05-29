@@ -372,7 +372,7 @@ class DashboardTest extends DuskTestCase
                 ->with('[dusk="post"]:first-child', function (Browser $row): void {
                     $row->assertMissing('@publish-post-button')
                         ->assertVisible('@unpublish-post-button')
-                        ->click('@unpublish-post-button');
+                        ->scrollAndClick('@unpublish-post-button');
                 })
                 ->waitFor('#confirm-unpublish-post-dialog')
                 ->press('OH YEAH')

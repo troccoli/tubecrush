@@ -133,7 +133,8 @@ class CreatePermissionTables extends Migration
         Permission::create(['name' => 'publish posts']);
 
         Role::create(['name' => UserRoles::SuperAdmin->value]);
-        Role::create(['name' => UserRoles::Editor->value])->givePermissionTo([
+        Role::create(['name' => UserRoles::Editor->value])->givePermissionTo(
+            [
                 'create posts',
                 'view posts',
                 'update posts',

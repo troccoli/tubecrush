@@ -11,11 +11,139 @@ env:
   build-artifacts: build-artifacts
 
 jobs:
-  tests:
+  build-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-matrix
+        run: echo "::set-output name=matrix::{\"php-versions\":['8.1']}"
+  unit-tests:
+    needs: build-matrix
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        php-versions: ['8.1']
+      matrix: ${{fromJSON(needs.build-matrix.outputs.matrix)}}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+      - name: Debug
+        run: |
+          php --version
+          composer --version
+          node --version
+          npm --version
+
+      - name: Setup Environment
+        run: |
+          cp .env.ci .env
+          touch ./storage/logs/laravel.log
+          touch ./database/database.sqlite
+
+      - name: Cache node modules
+        id: cache-node-modules
+        uses: actions/cache@v1
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
+      - name: Install node dependencies
+        run: npm install
+
+      - name: Cache composer packages
+        id: cache-composer-packages
+        uses: actions/cache@v1
+        with:
+          path: ./vendor
+          key: ${{ runner.os }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
+      - name: Install composer dependencies
+        run: composer install -n --ignore-platform-reqs --no-progress
+
+      - name: Build artifacts
+        run: npm run prod
+
+      - name: Migrate Database
+        run: php artisan migrate --force
+
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Dump Autoloader
+        run: composer dump-autoload
+
+      - name: Run Laravel Server
+        run: php artisan serve &
+
+      - name: Execute all tests via PHPUnit
+        id: phpunit
+        run: vendor/bin/phpunit --testsuite Unit
+  feature-tests:
+    needs: build-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJSON(needs.build-matrix.outputs.matrix)}}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+      - name: Debug
+        run: |
+          php --version
+          composer --version
+          node --version
+          npm --version
+
+      - name: Setup Environment
+        run: |
+          cp .env.ci .env
+          touch ./storage/logs/laravel.log
+          touch ./database/database.sqlite
+
+      - name: Cache node modules
+        id: cache-node-modules
+        uses: actions/cache@v1
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
+      - name: Install node dependencies
+        run: npm install
+
+      - name: Cache composer packages
+        id: cache-composer-packages
+        uses: actions/cache@v1
+        with:
+          path: ./vendor
+          key: ${{ runner.os }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
+      - name: Install composer dependencies
+        run: composer install -n --ignore-platform-reqs --no-progress
+
+      - name: Build artifacts
+        run: npm run prod
+
+      - name: Migrate Database
+        run: php artisan migrate --force
+
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Dump Autoloader
+        run: composer dump-autoload
+
+      - name: Run Laravel Server
+        run: php artisan serve &
+
+      - name: Execute all tests via PHPUnit
+        id: phpunit
+        run: vendor/bin/phpunit --testsuite Feature
+  e2e-tests:
+    needs: build-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJSON(needs.build-matrix.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v2
       - name: Install PHP
@@ -78,10 +206,6 @@ jobs:
       - name: Run Laravel Server
         run: php artisan serve &
 
-      - name: Execute all tests via PHPUnit
-        id: phpunit
-        run: vendor/bin/phpunit
-
       - name: Run Laravel Dusk Tests
         id: laravel-dusk
         continue-on-error: true
@@ -106,7 +230,7 @@ jobs:
         run: exit 2
   deploy:
     runs-on: ubuntu-latest
-    needs: [ tests ]
+    needs: [ unit-tests, feature-tests, e2e-tests ]
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Trigger deployment of main branch
