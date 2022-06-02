@@ -1,4 +1,4 @@
-<div x-data="{ open: @entangle('openCookieModal') }" x-show="open" dusk="cookie-policy-modal"
+<div x-data="{ open: @entangle('openCookieModal') }" x-show="open" dusk="cookie-policy-modal" cy="cookie-policy-modal"
      class="fixed z-10 w-full h-full top-0 left-0 flex items-center justify-center">
     <div class="absolute w-full h-full bg-gray-900 opacity-50 sm:bg-yellow-500"></div>
 
@@ -19,7 +19,7 @@
 
             <!--Footer-->
             <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-1 sm:gap-3 sm:grid-flow-row-dense">
-                <button wire:click="toggleCookieModal" dusk="cookie-policy-close-button"
+                <button wire:click="toggleCookieModal" dusk="cookie-policy-close-button" cy="cookie-policy-close-button"
                         class="mb-2 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-900 text-base font-medium text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
                     {{ __('Close') }}
                 </button>

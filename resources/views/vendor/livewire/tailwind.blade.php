@@ -8,7 +8,9 @@
                             {!! __('pagination.previous') !!}
                         </span>
                     @else
-                        <button wire:click="previousPage" wire:loading.attr="disabled" dusk="previousPage.before" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-indigo-800 bg-white border border-indigo-300 leading-5 rounded-md hover:bg-indigo-300 focus:outline-none focus:ring-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition">
+                        <button wire:click="previousPage" wire:loading.attr="disabled" dusk="previousPage.before"
+                                cy="previousPage.before"
+                                class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-indigo-800 bg-white border border-indigo-300 leading-5 rounded-md hover:bg-indigo-300 focus:outline-none focus:ring-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition">
                             {!! __('pagination.previous') !!}
                         </button>
                     @endif
@@ -16,7 +18,9 @@
 
                 <span>
                     @if ($paginator->hasMorePages())
-                        <button wire:click="nextPage" wire:loading.attr="disabled" dusk="nextPage.before" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-indigo-800 bg-white border border-indigo-300 leading-5 rounded-md hover:bg-indigo-300 focus:outline-none focus:ring-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition">
+                        <button wire:click="nextPage" wire:loading.attr="disabled" dusk="nextPage.before"
+                                cy="nextPage.before"
+                                class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-indigo-800 bg-white border border-indigo-300 leading-5 rounded-md hover:bg-indigo-300 focus:outline-none focus:ring-blue focus:border-blue-300 active:bg-gray-100 active:text-gray-700 transition">
                             {!! __('pagination.next') !!}
                         </button>
                     @else
@@ -46,13 +50,17 @@
                             {{-- Previous Page Link --}}
                             @if ($paginator->onFirstPage())
                                 <span aria-disabled="true" aria-label="{{ __('pagination.previous') }}">
-                                    <span class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-indigo-300 bg-white border border-indigo-300 cursor-default rounded-l-md leading-5" aria-hidden="true">
-                                        <x-heroicons-s-chevron-left class="h-5 w-5" />
+                                    <span class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-indigo-300 bg-white border border-indigo-300 cursor-default rounded-l-md leading-5"
+                                          aria-hidden="true">
+                                        <x-heroicons-s-chevron-left class="h-5 w-5"/>
                                     </span>
                                 </span>
                             @else
-                                <button wire:click="previousPage" dusk="previousPage.after" rel="prev" class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-indigo-800 bg-white border border-indigo-300 rounded-l-md leading-5 hover:bg-indigo-300 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring-blue active:bg-gray-100 active:text-gray-500 transition duration-300" aria-label="{{ __('pagination.previous') }}">
-                                    <x-heroicons-s-chevron-left class="h-5 w-5" />
+                                <button wire:click="previousPage" dusk="previousPage.after" cy="previousPage.after"
+                                        rel="prev"
+                                        class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-indigo-800 bg-white border border-indigo-300 rounded-l-md leading-5 hover:bg-indigo-300 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring-blue active:bg-gray-100 active:text-gray-500 transition duration-300"
+                                        aria-label="{{ __('pagination.previous') }}">
+                                    <x-heroicons-s-chevron-left class="h-5 w-5"/>
                                 </button>
                             @endif
                         </span>
@@ -75,7 +83,9 @@
                                                 <span class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-indigo-300 bg-white border border-indigo-300 cursor-default leading-5">{{ $page }}</span>
                                             </span>
                                         @else
-                                            <button wire:click="gotoPage({{ $page }})" class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-indigo-800 bg-white border border-indigo-300 leading-5 hover:bg-indigo-300 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring-blue active:bg-gray-100 active:text-gray-700 transition" aria-label="{{ __('Go to page :page', ['page' => $page]) }}">
+                                            <button wire:click="gotoPage({{ $page }})"
+                                                    class="relative inline-flex items-center px-4 py-2 -ml-px text-sm font-medium text-indigo-800 bg-white border border-indigo-300 leading-5 hover:bg-indigo-300 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring-blue active:bg-gray-100 active:text-gray-700 transition"
+                                                    aria-label="{{ __('Go to page :page', ['page' => $page]) }}">
                                                 {{ $page }}
                                             </button>
                                         @endif
@@ -87,13 +97,16 @@
                         <span>
                             {{-- Next Page Link --}}
                             @if ($paginator->hasMorePages())
-                                <button wire:click="nextPage" dusk="nextPage.after" rel="next" class="relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium text-indigo-800 bg-white border border-indigo-300 rounded-r-md leading-5 hover:bg-indigo-300 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring-blue active:bg-gray-100 active:text-gray-500 transition" aria-label="{{ __('pagination.next') }}">
-                                    <x-heroicons-s-chevron-right class="h-5 w-5" />
+                                <button wire:click="nextPage" dusk="nextPage.after" cy="nextPage.after" rel="next"
+                                        class="relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium text-indigo-800 bg-white border border-indigo-300 rounded-r-md leading-5 hover:bg-indigo-300 focus:z-10 focus:outline-none focus:border-blue-300 focus:ring-blue active:bg-gray-100 active:text-gray-500 transition"
+                                        aria-label="{{ __('pagination.next') }}">
+                                    <x-heroicons-s-chevron-right class="h-5 w-5"/>
                                 </button>
                             @else
                                 <span aria-disabled="true" aria-label="{{ __('pagination.next') }}">
-                                    <span class="relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium text-indigo-300 bg-white border border-indigo-300 cursor-default rounded-r-md leading-5" aria-hidden="true">
-                                        <x-heroicons-s-chevron-right class="h-5 w-5" />
+                                    <span class="relative inline-flex items-center px-2 py-2 -ml-px text-sm font-medium text-indigo-300 bg-white border border-indigo-300 cursor-default rounded-r-md leading-5"
+                                          aria-hidden="true">
+                                        <x-heroicons-s-chevron-right class="h-5 w-5"/>
                                     </span>
                                 </span>
                             @endif

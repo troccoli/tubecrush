@@ -1,4 +1,4 @@
-<div dusk="twitter-share">
+<div dusk="twitter-share" cy="twitter-share">
     <a href="https://twitter.com/intent/tweet?via=tubecrush&text={{ $text() }}"
        onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
        title="Share on Twitter">
