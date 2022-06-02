@@ -6,9 +6,9 @@ on:
       - deploy
 
 env:
-  node-modules-cache-name: cache-node-modules-3
-  composer-packages-cache-name: cache-composer-packages-3
-  build-artifacts-cache-name: cache-build-artifacts-3
+  node-modules-cache-name: cache-node-modules-5
+  composer-packages-cache-name: cache-composer-packages-5
+  build-artifacts-cache-name: cache-build-artifacts-5
 
 jobs:
   build-matrix:
@@ -43,13 +43,12 @@ jobs:
             ~/.cache/Cypress
             ./node_modules
           key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
-      - name: Install node dependencies
-        if: steps.cache-composer-packages.outputs.cache-hit != 'true'
+      - if: steps.cache-composer-packages.outputs.cache-hit != 'true'
         run: npm install
       - name: Install Cypress
         run: npm i cypress
       - name: Verify Cypress
-        uses: cypress-io/github-action@v3
+        uses: cypress-io/github-action@v4
         with:
           runTests: false
 
@@ -59,11 +58,10 @@ jobs:
         with:
           path: ./vendor
           key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
-      - name: Install composer dependencies
-        if: steps.cache-composer-packages.outputs.cache-hit != 'true'
-        run: composer install -n --ignore-platform-reqs --no-progress
+      - if: steps.cache-composer-packages.outputs.cache-hit != 'true'
+        run: composer install --no-interaction --ignore-platform-reqs --optimize-autoloader
 
-      - name: Build artifacts
+      - name: Cache build artifacts
         id: cache-build-artifacts
         uses: actions/cache@v3
         with:
@@ -71,15 +69,14 @@ jobs:
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }} }}
-      - name: Install composer dependencies
-        run: npm run prod
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }}
+      - run: npm run prod
 
   unit-tests:
     needs: [ build-matrix, install-dependencies ]
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJSON(needs.build-matrix.outputs.matrix)}}
+      matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -101,21 +98,21 @@ jobs:
           touch ./storage/logs/laravel.log
           touch ./database/database.sqlite
 
-      - name: Cache node modules
+      - name: Restore node modules
         id: cache-node-modules
         uses: actions/cache@v3
         with:
           path: ./node_modules
           key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Cache composer packages
+      - name: Restore composer packages
         id: cache-composer-packages
         uses: actions/cache@v3
         with:
           path: ./vendor
           key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
 
-      - name: Build artifacts
+      - name: Restore build artifacts
         id: cache-build-artifacts
         uses: actions/cache@v3
         with:
@@ -123,7 +120,7 @@ jobs:
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }} }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -145,7 +142,7 @@ jobs:
     needs: [ build-matrix, install-dependencies ]
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJSON(needs.build-matrix.outputs.matrix)}}
+      matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -167,21 +164,21 @@ jobs:
           touch ./storage/logs/laravel.log
           touch ./database/database.sqlite
 
-      - name: Cache node modules
+      - name: Restore node modules
         id: cache-node-modules
         uses: actions/cache@v3
         with:
           path: ./node_modules
           key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Cache composer packages
+      - name: Restore composer packages
         id: cache-composer-packages
         uses: actions/cache@v3
         with:
           path: ./vendor
           key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
 
-      - name: Build artifacts
+      - name: Restore build artifacts
         id: cache-build-artifacts
         uses: actions/cache@v3
         with:
@@ -189,7 +186,7 @@ jobs:
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }} }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -211,7 +208,7 @@ jobs:
     needs: [ build-matrix, install-dependencies ]
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJSON(needs.build-matrix.outputs.matrix)}}
+      matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -233,21 +230,21 @@ jobs:
           touch ./storage/logs/laravel.log
           touch ./database/database.sqlite
 
-      - name: Cache node modules
+      - name: Restore node modules
         id: cache-node-modules
         uses: actions/cache@v3
         with:
           path: ./node_modules
           key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Cache composer packages
+      - name: Restore composer packages
         id: cache-composer-packages
         uses: actions/cache@v3
         with:
           path: ./vendor
           key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
 
-      - name: Build artifacts
+      - name: Restore build artifacts
         id: cache-build-artifacts
         uses: actions/cache@v3
         with:
@@ -255,7 +252,7 @@ jobs:
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }} }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -286,7 +283,7 @@ jobs:
 
       - name: Upload logs
         uses: actions/upload-artifact@v3
-        if: ${{ steps.laravel-dusk.outcome == 'failure'}}
+        if: ${{ steps.laravel-dusk.outcome == 'failure' }}
         with:
           name: ${{ github.job }}-log
           path: ./storage/logs/*.log
@@ -299,14 +296,14 @@ jobs:
           path: ./tests/Browser/screenshots
 
       - name: Sanity check
-        if: ${{ steps.laravel-dusk.outcome == 'failure'}}
+        if: ${{ steps.laravel-dusk.outcome == 'failure' }}
         run: exit 2
 
   cypress-tests:
     needs: [ build-matrix, install-dependencies ]
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJSON(needs.build-matrix.outputs.matrix)}}
+      matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -328,7 +325,7 @@ jobs:
           touch ./storage/logs/laravel.log
           touch ./database/database.sqlite
 
-      - name: Cache node modules
+      - name: Restore node modules
         id: cache-node-modules
         uses: actions/cache@v3
         with:
@@ -337,14 +334,14 @@ jobs:
             ./node_modules
           key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Cache composer packages
+      - name: Restore composer packages
         id: cache-composer-packages
         uses: actions/cache@v3
         with:
           path: ./vendor
           key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
 
-      - name: Build artifacts
+      - name: Restore build artifacts
         id: cache-build-artifacts
         uses: actions/cache@v3
         with:
@@ -352,7 +349,7 @@ jobs:
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }} }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -368,13 +365,21 @@ jobs:
 
       - name: Run Cypress Tests
         id: cypress-tests
-        uses: cypress-io/github-action@v3
+        uses: cypress-io/github-action@v4
         with:
           install: false
           wait-on: 'http://127.0.0.1:8000'
           config: baseUrl=http://127.0.0.1:8000
-          quiet: true
+          config-file: ./cypress.config.js
+          record: true
           project: ./
+        env:
+          # pass the Dashboard record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # pass the project ID from the secrets through environment variable
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
 
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
