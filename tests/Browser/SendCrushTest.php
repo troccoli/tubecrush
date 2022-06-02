@@ -48,7 +48,7 @@ class SendCrushTest extends DuskTestCase
                 ->waitUntilMissing('@line-error');
 
             // The photo is mandatory, must be jpg, jpeg or png
-            $textFile = UploadedFile::fake()->create('file.txt', 1000, 'text/plain');
+            $textFile = UploadedFile::fake()->create('file.txt', 'Text files are not allowed');
             $jpgFile = UploadedFile::fake()->image('photo1.jpg');
             $jpegFile = UploadedFile::fake()->image('photo2.jpeg');
             $pngFile = UploadedFile::fake()->image('photo3.png');
