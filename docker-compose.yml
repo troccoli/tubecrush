@@ -57,7 +57,7 @@ services:
     networks:
       - sail
   cypress:
-    image: 'cypress/included:9.4.1'
+    image: 'cypress/included:10.0.1'
     profiles:
       - 'on-demand-only'
     volumes:
