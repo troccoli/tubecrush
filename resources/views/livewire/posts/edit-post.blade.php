@@ -11,34 +11,34 @@
                      autocomplete="title"/>
             <div id="slug" class="mt-1 font-medium text-sm text-black block w-full"><span
                     class="text-gray-700">Slug:</span> {{ $slug }}</div>
-            <x-input-error for="title" class="mt-2" dusk="title-error" cy="title-error"/>
+            <x-input-error for="title" class="mt-2" dusk="title-error" data-cy="title-error"/>
         </div>
 
         <!-- Line -->
         <div class="mb-6 md:w-full md:mr-6">
             <x-label for="line" value="{{ __('Line') }}"/>
             <x-line-select></x-line-select>
-            <x-input-error for="line" class="" dusk="line-error" cy="line-error"/>
+            <x-input-error for="line" class="" dusk="line-error" data-cy="line-error"/>
         </div>
 
         <!-- Content -->
         <div class="mb-6">
             <x-label for="content" value="{{ __('Content') }}"/>
             <x-textarea id="content" class="mt-2 block w-full" wire:model="content" rows="10"/>
-            <x-input-error for="content" class="mt-2" dusk="content-error" cy="content-error"/>
+            <x-input-error for="content" class="mt-2" dusk="content-error" data-cy="content-error"/>
         </div>
 
         <!-- Photo -->
         <div class="mb-6">
             <x-upload-photo-button></x-upload-photo-button>
-            <x-input-error for="photo" class="mt-2" dusk="photo-error" cy="photo-error"/>
+            <x-input-error for="photo" class="mt-2" dusk="photo-error" data-cy="photo-error"/>
             <div class="mt-4">
                 @if ($errors->has('photo') || !$photo)
-                    <img dusk="photo-image" cy="photo-image"
+                    <img dusk="photo-image" data-cy="photo-image"
                          src="{{ \Illuminate\Support\Facades\Storage::url($post->getPhoto()) }}"
                          alt="Cover photo">
                 @else
-                    <img dusk="photo-image" cy="photo-image" src="{{ $photo->temporaryUrl() }}" alt="temp">
+                    <img dusk="photo-image" data-cy="photo-image" src="{{ $photo->temporaryUrl() }}" alt="temp">
                 @endif
             </div>
         </div>
@@ -47,13 +47,13 @@
         <div class="mb-6 md:w-full md:mr-6">
             <x-label for="photo-credit" value="{{ __('Photo submitted by') }}"/>
             <x-input id="photo-credit" type="text" class="mt-2 block w-full" wire:model.defer="photoCredit"/>
-            <x-input-error for="photoCredit" class="mt-2" dusk="photo-credit-error" cy="photo-credit-error"/>
+            <x-input-error for="photoCredit" class="mt-2" dusk="photo-credit-error" data-cy="photo-credit-error"/>
         </div>
 
         <!-- Tags -->
         <div class="mb-6 md:w-full md:mr-6">
             <x-label for="tags" value="{{ __('Tags') }}"/>
-            <div wire:ignore class="mt-2" dusk="tags-select" cy="tags-select">
+            <div wire:ignore class="mt-2" dusk="tags-select" data-cy="tags-select">
                 <select id="tags" class="form-input block w-full " name="tags" multiple>
                     @foreach($availableTags as $tag)
                         <option value="{{ $tag['id'] }}"
@@ -61,16 +61,16 @@
                     @endforeach
                 </select>
             </div>
-            <x-input-error for="tags" class="mt-2" dusk="tags-error" cy="tags-error"/>
+            <x-input-error for="tags" class="mt-2" dusk="tags-error" data-cy="tags-error"/>
         </div>
 
         <!-- Buttons -->
         <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 justify-end">
-            <x-secondary-button dusk="cancel-button" cy="cancel-button" wire:click="cancelEdit"
+            <x-secondary-button dusk="cancel-button" data-cy="cancel-button" wire:click="cancelEdit"
                                 class="w-full justify-center md:w-auto">{{ __('Cancel') }}</x-secondary-button>
-            <x-button dusk="submit-button" cy="submit-button" class="w-full justify-center md:w-auto">
+            <x-button dusk="submit-button" data-cy="submit-button" class="w-full justify-center md:w-auto">
                 <x-heroicons-s-arrow-path wire:loading wire:target="submit" dusk="submit-loading-icon"
-                                          cy="submit-loading-icon" class="animate-spin w-4 h-4 mr-1"/>
+                                          data-cy="submit-loading-icon" class="animate-spin w-4 h-4 mr-1"/>
                 {{ __('Update') }}
             </x-button>
         </div>
