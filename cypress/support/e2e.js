@@ -28,6 +28,7 @@ before(() => {
 
     cy.refreshRoutes();
     cy.refreshDatabase();
+    cy.seed();
 
     cy.acceptCookies();
 });
