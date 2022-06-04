@@ -39,7 +39,7 @@
                 {{ __('Cancel') }}
             </x-jet-secondary-button>
 
-            <x-jet-button class="ml-2" dusk="confirm-password-button" cy="confirm-password-button"
+            <x-jet-button class="ml-2" dusk="confirm-password-button" data-cy="confirm-password-button"
                           wire:click="confirmPassword" wire:loading.attr="disabled">
                 {{ $button }}
             </x-jet-button>

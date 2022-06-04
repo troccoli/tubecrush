@@ -1,4 +1,4 @@
-<nav dusk="main-nav" cy="main-nav"
+<nav dusk="main-nav" data-cy="main-nav"
      x-data="{ openMenu: false, openProfileMenu: false, openLinesMenu: false }"
      class="bg-white sticky top-0 z-50">
     <!-- Primary Navigation Menu -->
@@ -17,11 +17,11 @@
                 </div>
 
                 {{-- Line --}}
-                <x-jet-nav-dropdown dusk="lines-dropdown-menu" cy="lines-dropdown-menu"
+                <x-jet-nav-dropdown dusk="lines-dropdown-menu" data-cy="lines-dropdown-menu"
                                     :active="request()->routeIs('posts-by-lines')">
                     <x-slot name="name">{{ __('Lines') }}</x-slot>
                     @foreach(\App\Models\Line::query()->orderBy('name')->get() as $line)
-                        <x-jet-dropdown-link dusk="{{ $line->getSlug() }}-link" cy="{{ $line->getSlug() }}-link"
+                        <x-jet-dropdown-link dusk="{{ $line->getSlug() }}-link" data-cy="{{ $line->getSlug() }}-link"
                                              href="{{ route('posts-by-lines', ['slug' => $line->getSlug()]) }}">
                             {{ $line->getName() }}
                         </x-jet-dropdown-link>
@@ -31,7 +31,7 @@
         </div>
         {{-- SEND CRUSH --}}
         <div class="justify-self-center self-center">
-            <button type="button" dusk="send-crush-button" cy="send-crush-button"
+            <button type="button" dusk="send-crush-button" data-cy="send-crush-button"
                     class="w-32 px-6 py-1 rounded-lg bg-blue-300 hover:bg-blue-500 transition"
                     @click.stop='window.location.href="{{ route('send-crush') }}"'>
                 <x-heroicons-s-camera class="h-6 w-6 mx-auto my-1"/>
@@ -53,7 +53,7 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <div dusk="dropdown-menu" cy="dropdown-menu">
+                            <div dusk="dropdown-menu" data-cy="dropdown-menu">
                                 @can('create posts')
                                     <x-jet-dropdown-link
                                         href="{{ route('posts.create') }}">{{ __('Create post') }}</x-jet-dropdown-link>

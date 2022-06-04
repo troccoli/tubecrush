@@ -1,4 +1,4 @@
-<div class="flex items-end w-full bg-white" dusk="main-footer" cy="main-footer">
+<div class="flex items-end w-full bg-white" dusk="main-footer" data-cy="main-footer">
 
     <footer class="w-full text-gray-700 bg-gray-100 body-font">
         <div
