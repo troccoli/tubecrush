@@ -28,7 +28,7 @@ before(() => {
 
     cy.refreshRoutes();
     cy.refreshDatabase();
-    cy.seed();
+    cy.seed('DatabaseSeeder');
 
     cy.acceptCookies();
 });

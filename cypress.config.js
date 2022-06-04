@@ -6,10 +6,6 @@ module.exports = defineConfig({
         baseUrl: 'http://localhost',
         chromeWebSecurity: false,
         defaultCommandTimeout: 5000,
-        retries: {
-            runMode: 2,
-            openMode: 2
-        },
         setupNodeEvents(on, config) {
             on('task', {
                 activateCypressEnvFile() {
