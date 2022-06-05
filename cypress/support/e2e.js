@@ -24,13 +24,17 @@ import './assertions';
 
 before(() => {
     cy.task('activateCypressEnvFile', {}, {log: false});
-    cy.artisan('config:clear', {}, {log: false});
+    cy.artisan('config:cache', {}, {log: false});
 
     cy.refreshRoutes();
     cy.refreshDatabase();
+
+    cy.acceptCookies();
 });
 
 after(() => {
     cy.task('activateLocalEnvFile', {}, {log: false});
     cy.artisan('config:clear', {}, {log: false});
+
+    cy.clearCookies();
 });
