@@ -1,5 +1,6 @@
 const {defineConfig} = require("cypress");
 const fs = require("fs");
+const dayjs = require("dayjs")
 
 module.exports = defineConfig({
     e2e: {
@@ -7,6 +8,7 @@ module.exports = defineConfig({
         chromeWebSecurity: false,
         defaultCommandTimeout: 5000,
         setupNodeEvents(on, config) {
+            require('cypress-terminal-report/src/installLogsPrinter')(on, {printLogsToConsole: 'always'});
             on('task', {
                 activateCypressEnvFile() {
                     if (fs.existsSync('.env.cypress')) {
@@ -24,11 +26,6 @@ module.exports = defineConfig({
                     }
 
                     return null;
-                },
-
-                log(message) {
-                    console.log(message)
-                    return null
                 },
             })
         },

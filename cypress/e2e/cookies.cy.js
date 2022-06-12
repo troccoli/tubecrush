@@ -3,7 +3,7 @@ describe('Cookies consent', function () {
         cy.clearCookies();
     })
 
-    it('should show a pop-up to consent or reject cookies', function () {
+    it('show a pop-up to consent or reject cookies', function () {
         cy.getCookie('tubecrush_cookie_consent').should('be.null');
         cy.visit({route: 'home'});
 
@@ -35,7 +35,7 @@ describe('Cookies consent', function () {
             .should('not.be.visible');
     });
 
-    it('should accept cookies', function () {
+    it('allow the user to accept cookies', function () {
         cy.getCookie('tubecrush_cookie_consent').should('be.null');
         cy.visit({route: 'home'});
 
@@ -51,7 +51,7 @@ describe('Cookies consent', function () {
         cy.getCy('cookie-consent-modal').should('not.exist');
     });
 
-    it('should refuse cookies', function () {
+    it('allow the user to refuse cookies', function () {
         cy.getCookie('tubecrush_cookie_consent').should('be.null');
         cy.visit({route: 'home'});
 

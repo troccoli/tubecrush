@@ -297,7 +297,5 @@ Cypress.Commands.add('php', (command) => {
 });
 
 Cypress.Commands.add('acceptCookies', (command) => {
-    // cy.setCookie('tubecrush_cookie_consent', 'eyJpdiI6IlF0NzZ2REl0R2ZBdnZiQjVhRktnYVE9PSIsInZhbHVlIjoiVTdFYTROOEUzbm9yeUVpeU5KdmtEVzBXRXhSUFdtOU10Wmc4WmNFUE5GeTBjYUhxcWtMbWt4LzZ0K1pSTTI4OSIsIm1hYyI6IjA0N2M0MGJjMjg1ZjczZWQ3MjU5YTkxMGYyNjJiNmMxNWEwNjljNDhmZmM0YjA2YWY3MjE5ZjRiZmY2ZWYxNGYiLCJ0YWciOiIifQ%3D%3D');
-    // return cy;
     return cy.visit('/__cypress__/accept-cookies', {log: false});
 })

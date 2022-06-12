@@ -18,24 +18,36 @@ import './commands'
 import './laravel-commands';
 import './laravel-routes';
 import './assertions';
-
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+require('cypress-terminal-report/src/installLogsCollector')();
 
 before(() => {
     cy.task('activateCypressEnvFile', {}, {log: false});
     cy.artisan('config:cache', {}, {log: false});
 
     cy.refreshRoutes();
-    cy.refreshDatabase();
-    cy.seed('DatabaseSeeder');
+    cy.refreshDatabase({'--seed': true});
+    // cy.seed();
 
-    cy.acceptCookies();
+    cy.intercept('/livewire/**/*').as('forLivewire');
+
+    Cypress.on('uncaught:exception', (err, runnable) => {
+        // returning false here prevents Cypress from
+        // failing the test
+        return false
+    });
 });
 
-after(() => {
-    cy.task('activateLocalEnvFile', {}, {log: false});
-    cy.artisan('config:clear', {}, {log: false});
+beforeEach(() => {
+    cy.acceptCookies();
+})
 
+afterEach(() => {
     cy.clearCookies();
+})
+
+after(() => {
+    cy.artisan('config:clear', {}, {log: false});
+    cy.task('activateLocalEnvFile', {}, {log: false});
 });
