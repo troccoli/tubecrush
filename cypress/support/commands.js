@@ -23,3 +23,15 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("getCy", (selector, ...args) => {
+    return cy.get(`[data-cy=${selector}]`, ...args);
+});
+
+Cypress.Commands.add("loginAsSuperAdmin", () => {
+    return cy.login({email: 'super-admin@example.com'});
+});
+
+Cypress.Commands.add("loginAsEditor", () => {
+    return cy.login({email: 'editor@example.com'});
+});
