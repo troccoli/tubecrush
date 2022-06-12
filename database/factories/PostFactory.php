@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Enums\PostStatus;
 use App\Models\Line;
+use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -66,5 +68,12 @@ class PostFactory extends Factory
     public function withoutPhotoCredit(): self
     {
         return $this->state(fn (array $attributes) => ['photo_credit' => null]);
+    }
+
+    public function withTags(): self
+    {
+        return $this->afterCreating(
+            fn (Post $post) => $post->tags()->sync(Tag::query()->inRandomOrder()->limit(mt_rand(1, 5))->get())
+        );
     }
 }
