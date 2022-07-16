@@ -6,9 +6,9 @@ on:
       - deploy
 
 env:
-  node-modules-cache-name: cache-node-modules-5
+  node-dependencies-cache-name: cache-node-dependencies-1
   composer-packages-cache-name: cache-composer-packages-5
-  build-artifacts-cache-name: cache-build-artifacts-5
+  artifacts-cache-name: cache-artifacts-5
 
 jobs:
   build-matrix:
@@ -35,42 +35,47 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
 
-      - name: Cache node modules
+      - name: Check for cached Node dependencies
         id: cache-node-modules
         uses: actions/cache@v3
         with:
           path: |
             ~/.cache/Cypress
             ./node_modules
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
-      - if: steps.cache-composer-packages.outputs.cache-hit != 'true'
-        run: npm install
-      - name: Install Cypress
-        run: npm i cypress
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
+      - name: Install Node dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: |
+          npm install
+          npm install cypress
       - name: Verify Cypress
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         uses: cypress-io/github-action@v4
         with:
           runTests: false
 
-      - name: Cache composer packages
+      - name: Check for cached Composer packages
         id: cache-composer-packages
         uses: actions/cache@v3
         with:
           path: ./vendor
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
-      - if: steps.cache-composer-packages.outputs.cache-hit != 'true'
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
+      - name: Install Composer dependencies
+        if: steps.cache-composer-packages.outputs.cache-hit != 'true'
         run: composer install --no-interaction --ignore-platform-reqs --optimize-autoloader
 
-      - name: Cache build artifacts
-        id: cache-build-artifacts
+      - name: Check for cached artifacts
+        id: cache-artifacts
         uses: actions/cache@v3
         with:
           path: |
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }}
-      - run: npm run prod
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
+      - name: Build artifacts
+        if: steps.cache-artifacts.outputs.cache-hit != 'true'
+        run: npm run prod
 
   unit-tests:
     needs: [ build-matrix, install-dependencies ]
@@ -98,29 +103,26 @@ jobs:
           touch ./storage/logs/laravel.log
           touch ./database/database.sqlite
 
-      - name: Restore node modules
-        id: cache-node-modules
+      - name: Restore Node dependencies
         uses: actions/cache@v3
         with:
           path: ./node_modules
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Restore composer packages
-        id: cache-composer-packages
+      - name: Restore Composer packages
         uses: actions/cache@v3
         with:
           path: ./vendor
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
 
-      - name: Restore build artifacts
-        id: cache-build-artifacts
+      - name: Restore artifacts
         uses: actions/cache@v3
         with:
           path: |
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -164,29 +166,26 @@ jobs:
           touch ./storage/logs/laravel.log
           touch ./database/database.sqlite
 
-      - name: Restore node modules
-        id: cache-node-modules
+      - name: Restore Node dependencies
         uses: actions/cache@v3
         with:
           path: ./node_modules
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Restore composer packages
-        id: cache-composer-packages
+      - name: Restore Composer packages
         uses: actions/cache@v3
         with:
           path: ./vendor
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
 
-      - name: Restore build artifacts
-        id: cache-build-artifacts
+      - name: Restore artifacts
         uses: actions/cache@v3
         with:
           path: |
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -230,29 +229,26 @@ jobs:
           touch ./storage/logs/laravel.log
           touch ./database/database.sqlite
 
-      - name: Restore node modules
-        id: cache-node-modules
+      - name: Restore Node dependencies
         uses: actions/cache@v3
         with:
           path: ./node_modules
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Restore composer packages
-        id: cache-composer-packages
+      - name: Restore Composer packages
         uses: actions/cache@v3
         with:
           path: ./vendor
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
 
-      - name: Restore build artifacts
-        id: cache-build-artifacts
+      - name: Restore artifacts
         uses: actions/cache@v3
         with:
           path: |
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -325,31 +321,28 @@ jobs:
           touch ./storage/logs/laravel.log
           touch ./database/database.sqlite
 
-      - name: Restore node modules
-        id: cache-node-modules
+      - name: Restore Node dependencies
         uses: actions/cache@v3
         with:
           path: |
             ~/.cache/Cypress
             ./node_modules
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-modules-cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Restore composer packages
-        id: cache-composer-packages
+      - name: Restore Composer packages
         uses: actions/cache@v3
         with:
           path: ./vendor
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
 
-      - name: Restore build artifacts
-        id: cache-build-artifacts
+      - name: Restore artifacts
         uses: actions/cache@v3
         with:
           path: |
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.build-artifacts-cache-name }}
+          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -360,19 +353,18 @@ jobs:
       - name: Dump Autoloader
         run: composer dump-autoload
 
-      - name: Run Laravel Server
-        run: php artisan serve &
-
       - name: Run Cypress Tests
         id: cypress-tests
         uses: cypress-io/github-action@v4
         with:
           install: false
+          start: php artisan serve --quiet
           wait-on: 'http://127.0.0.1:8000'
           config: baseUrl=http://127.0.0.1:8000
           config-file: ./cypress.config.js
           record: true
           project: ./
+          browser: electron
         env:
           # pass the Dashboard record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
