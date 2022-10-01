@@ -5,6 +5,9 @@ on:
     branches-ignore:
       - deploy
 
+permissions:
+  contents: read
+
 jobs:
   php-cs-fixer:
     name: PHP-CS-Fixer
