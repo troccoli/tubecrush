@@ -5,6 +5,9 @@ on:
     branches-ignore:
       - deploy
 
+permissions:
+  contents: read
+
 env:
   node-dependencies-cache-name: cache-node-dependencies-1
   composer-packages-cache-name: cache-composer-packages-5

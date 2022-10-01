@@ -4,6 +4,9 @@ on:
   repository_dispatch:
     types: [ Deploy ]
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
