@@ -44,7 +44,7 @@
                     <x-jet-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
-                                    class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
+                                class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
                                 <div>{{ auth()->user()->getName() }}</div>
                                 <div class="ml-1">
                                     <x-heroicons-s-chevron-down class="fill-current h-4 w-4"/>
@@ -56,13 +56,13 @@
                             <div dusk="dropdown-menu" cy="dropdown-menu">
                                 @can('create posts')
                                     <x-jet-dropdown-link
-                                            href="{{ route('posts.create') }}">{{ __('Create post') }}</x-jet-dropdown-link>
+                                        href="{{ route('posts.create') }}">{{ __('Create post') }}</x-jet-dropdown-link>
                                     <div class="border-t border-gray-100"></div>
                                 @endcan
                                 <x-jet-dropdown-link
-                                        href="{{ route('dashboard') }}">{{ __('Dashboard') }}</x-jet-dropdown-link>
+                                    href="{{ route('dashboard') }}">{{ __('Dashboard') }}</x-jet-dropdown-link>
                                 <x-jet-dropdown-link
-                                        href="{{ route('profile.show') }}">{{ __('Profile') }}</x-jet-dropdown-link>
+                                    href="{{ route('profile.show') }}">{{ __('Profile') }}</x-jet-dropdown-link>
                                 <div class="border-t border-gray-100"></div>
 
                                 <!-- Authentication -->
@@ -80,9 +80,10 @@
             <div class="flex items-center md:hidden">
                 <button @click.stop="openMenu = ! openMenu"
                         class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition duration-300">
-                    <span :class="{'hidden': openMenu, 'inline-flex': ! openMenu }"><x-heroicon-o-menu class="h-6 w-6"/></span>
-                    <span :class="{'hidden': ! openMenu, 'inline-flex': openMenu }" class="hidden"><x-heroicons-o-x
-                                class="h-6 w-6"/></span>
+                    <span :class="{'hidden': openMenu, 'inline-flex': ! openMenu }"><x-heroicons-o-bars-3
+                            class="h-6 w-6"/></span>
+                    <span :class="{'hidden': ! openMenu, 'inline-flex': openMenu }" class="hidden"><x-heroicons-o-x-mark
+                            class="h-6 w-6"/></span>
                 </button>
             </div>
         </div>
@@ -111,7 +112,7 @@
                 <div :class="{'block': openLinesMenu, 'hidden': ! openLinesMenu}" class="hidden sm:hidden">
                     @foreach(\App\Models\Line::query()->orderBy('name')->get() as $line)
                         <x-jet-responsive-nav-link
-                                href="{{ route('posts-by-lines', ['slug' => $line->getSlug()]) }}">{{ $line->getName() }}</x-jet-responsive-nav-link>
+                            href="{{ route('posts-by-lines', ['slug' => $line->getSlug()]) }}">{{ $line->getName() }}</x-jet-responsive-nav-link>
                     @endforeach</div>
                 {{-- PROFILE --}}
                 @if (auth()->check())

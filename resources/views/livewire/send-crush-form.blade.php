@@ -39,10 +39,10 @@
                 {{ __('Clear') }}
             </x-jet-secondary-button>
             <x-jet-button dusk="submit-button" cy="submit-button" class="w-full justify-center md:w-auto">
-                <x-heroicons-s-refresh dusk="submit-loading-icon" cy="submit-loading-icon"
-                                       wire:loading
-                                       wire:target="submit"
-                                       class="animate-reverse-spin w-4 h-4 mr-1"/>
+                <x-heroicons-s-arrow-path dusk="submit-loading-icon" cy="submit-loading-icon"
+                                          wire:loading
+                                          wire:target="submit"
+                                          class="animate-spin w-4 h-4 mr-1"/>
                 {{ __('Send') }}
             </x-jet-button>
         </div>

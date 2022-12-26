@@ -7,7 +7,7 @@
         <div class="py-4 text-left px-6">
             <!--Title-->
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-gray-900">
-                <x-heroicons-o-speakerphone class="h-8 w-8 text-white"/>
+                <x-heroicons-o-megaphone class="h-8 w-8 text-white"/>
             </div>
 
             <!--Body-->
