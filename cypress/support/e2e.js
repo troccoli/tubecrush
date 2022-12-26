@@ -25,7 +25,7 @@ require('cypress-terminal-report/src/installLogsCollector')();
 
 before(() => {
     cy.task('activateCypressEnvFile', {}, {log: false});
-    cy.artisan('config:clear', {}, {log: false});
+    cy.artisan('config:cache', {}, {log: false});
 
     cy.refreshRoutes();
     cy.refreshDatabase({'--seed': true});
