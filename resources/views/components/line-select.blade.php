@@ -16,7 +16,7 @@
                 @endif
             </div>
             <span class="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                <x-heroicons-s-selector class="h-5 w-5 text-gray-400"/>
+                <x-heroicons-s-chevron-up-down class="h-5 w-5 text-gray-400"/>
             </span>
         </button>
     </div>

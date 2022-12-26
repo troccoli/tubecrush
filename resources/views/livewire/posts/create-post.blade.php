@@ -64,8 +64,8 @@
             <x-jet-secondary-button dusk="cancel-button" cy="cancel-button" wire:click="cancelCreate"
                                     class="w-full justify-center md:w-auto">{{ __('Cancel') }}</x-jet-secondary-button>
             <x-jet-button dusk="submit-button" cy="submit-button" class="w-full justify-center md:w-auto">
-                <x-heroicons-s-refresh wire:loading wire:target="submit" dusk="submit-loading-icon"
-                                       cy="submit-loading-icon" class="animate-reverse-spin w-4 h-4 mr-1"/>
+                <x-heroicons-s-arrow-path wire:loading wire:target="submit" dusk="submit-loading-icon"
+                                          cy="submit-loading-icon" class="animate-spin w-4 h-4 mr-1"/>
                 {{ __('Create') }}
             </x-jet-button>
         </div>
@@ -82,7 +82,7 @@
                 })
                 .on('change', function (e) {
                     var data = $('#tags').select2("val");
-                    @this.set('tags', data);
+                @this.set('tags', data);
                 });
         });
     </script>

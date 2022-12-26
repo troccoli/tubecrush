@@ -10,7 +10,7 @@
             <x-jet-input id="title" type="text" class="mt-2 block w-full" wire:model="title"
                          autocomplete="title"/>
             <div id="slug" class="mt-1 font-medium text-sm text-black block w-full"><span
-                        class="text-gray-700">Slug:</span> {{ $slug }}</div>
+                    class="text-gray-700">Slug:</span> {{ $slug }}</div>
             <x-jet-input-error for="title" class="mt-2" dusk="title-error" cy="title-error"/>
         </div>
 
@@ -69,8 +69,8 @@
             <x-jet-secondary-button dusk="cancel-button" cy="cancel-button" wire:click="cancelEdit"
                                     class="w-full justify-center md:w-auto">{{ __('Cancel') }}</x-jet-secondary-button>
             <x-jet-button dusk="submit-button" cy="submit-button" class="w-full justify-center md:w-auto">
-                <x-heroicons-s-refresh wire:loading wire:target="submit" dusk="submit-loading-icon"
-                                       cy="submit-loading-icon" class="animate-reverse-spin w-4 h-4 mr-1"/>
+                <x-heroicons-s-arrow-path wire:loading wire:target="submit" dusk="submit-loading-icon"
+                                          cy="submit-loading-icon" class="animate-spin w-4 h-4 mr-1"/>
                 {{ __('Update') }}
             </x-jet-button>
         </div>

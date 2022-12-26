@@ -7,7 +7,7 @@
                 <a href="{{ route('posts.create') }}" title="Create post" dusk="create-post-button"
                    cy="create-post-button"
                    class="w-1/5 md:w-auto p-1 flex justify-around rounded-md text-indigo-100 bg-indigo-600 hover:text-indigo-300 hover:bg-indigo-700">
-                    <x-heroicons-o-document-add class="h-10 w-10"/>
+                    <x-heroicons-o-document-plus class="h-10 w-10"/>
                 </a>
             @endcan
         </div>
@@ -101,7 +101,7 @@
                                            title="Unpublish post"
                                            class="flex justify-around w-1/2 md:w-auto md:px-1 py-1 ml-1 border border-transparent rounded-md bg-cyan-400 hover:bg-cyan-500 transition duration-300"
                                            dusk="unpublish-post-button" cy="unpublish-post-button">
-                                            <x-heroicons-o-eye-off class="h-8 w-8"/>
+                                            <x-heroicons-o-eye-slash class="h-8 w-8"/>
                                         </a>
                                     @endif
                                 @endcan
