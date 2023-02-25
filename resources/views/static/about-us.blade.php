@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <x-banner/>
+        <x-tubecrush-banner/>
     </x-slot>
     <div class="max-w-5xl mx-auto px-4 sm:px-6 text-gray-700 leading-relaxed">
         <h2 class="mb-6 text-2xl sm:text-3xl">About Tube Crush</h2>
@@ -11,7 +11,8 @@
             the joy they bring to their fellow passenger admirers.
         </p>
         <p class=" mb-4">
-            The premise is simple: <span class="italic text-black">See, Snap, Share</span>. See a crush, discretely snap him with
+            The premise is simple: <span class="italic text-black">See, Snap, Share</span>. See a crush, discretely snap
+            him with
             your phone or if you're brave enough ask him to pose for you! Send your pic to us with your name (or alias),
             name of the tube line you were travelling on to share the guy candy with our many online followers.
         </p>

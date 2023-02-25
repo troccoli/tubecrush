@@ -16,7 +16,7 @@ class CreateApiTokenTest extends TestCase
     public function test_api_tokens_can_be_created(): void
     {
         if (!Features::hasApiFeatures()) {
-            return $this->markTestSkipped('API support is not enabled.');
+            $this->markTestSkipped('API support is not enabled.');
         }
 
         if (Features::hasTeamFeatures()) {
@@ -26,16 +26,16 @@ class CreateApiTokenTest extends TestCase
         }
 
         Livewire::test(ApiTokenManager::class)
-            ->set([
-                'createApiTokenForm' => [
-                    'name' => 'Test Token',
-                    'permissions' => [
-                        'read',
-                        'update',
+                ->set([
+                    'createApiTokenForm' => [
+                        'name' => 'Test Token',
+                        'permissions' => [
+                            'read',
+                            'update',
+                        ],
                     ],
-                ],
-            ])
-            ->call('createApiToken');
+                ])
+                ->call('createApiToken');
 
         $this->assertCount(1, $user->fresh()->tokens);
         $this->assertEquals('Test Token', $user->fresh()->tokens->first()->name);

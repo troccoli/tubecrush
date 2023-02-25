@@ -38,7 +38,11 @@ class PostTest extends DuskTestCase
                 ->assertSee('Tags')
                 ->within('@tags-select', function (Browser $select): void {
                     $select->waitFor('.select2-search__field')
-                        ->assertAttribute('.select2-search__field', 'placeholder', 'Start typing to search for tags');
+                        ->assertAttribute(
+                            '.select2-search__field',
+                            'placeholder',
+                            'Start typing to search for tags'
+                        );
                 })
                 ->assertSeeIn('@cancel-button', 'CANCEL')
                 ->assertSeeIn('@submit-button', 'CREATE');
@@ -56,7 +60,7 @@ class PostTest extends DuskTestCase
                 ->waitForTextIn('@title-error', 'The title field is required.')
                 ->type('#title', Str::random(51))
                 ->press('CREATE')
-                ->waitForTextIn('@title-error', 'The title may not be greater than 50 characters.')
+                ->waitForTextIn('@title-error', 'The title field must not be greater than 50 characters.')
                 ->type('#title', Str::random(50))
                 ->press('CREATE')
                 ->waitUntilMissing('@title-error');
@@ -87,10 +91,10 @@ class PostTest extends DuskTestCase
                 ->waitForTextIn('@content-error', 'The content field is required.')
                 ->type('#content', Str::random(9))
                 ->press('CREATE')
-                ->waitForTextIn('@content-error', 'The content must be at least 10 characters.')
+                ->waitForTextIn('@content-error', 'The content field must be at least 10 characters.')
                 ->type('#content', Str::random(2001))
                 ->press('CREATE')
-                ->waitForTextIn('@content-error', 'The content may not be greater than 2000 characters.')
+                ->waitForTextIn('@content-error', 'The content field must not be greater than 2000 characters.')
                 ->type('#content', Str::random(10))
                 ->press('CREATE')
                 ->waitUntilMissing('@content-error')
@@ -108,7 +112,7 @@ class PostTest extends DuskTestCase
                 ->waitForTextIn('@photo-error', 'The photo field is required.')
                 ->assertMissing('@photo-image')
                 ->attach('#photo', $textFile)
-                ->waitForTextIn('@photo-error', 'The photo must be a file of type: jpg, jpeg, png.')
+                ->waitForTextIn('@photo-error', 'The photo field must be a file of type: jpg, jpeg, png.')
                 ->assertMissing('@photo-image')
                 ->attach('#photo', $jpgFile)
                 ->waitUntilMissing('@photo-loading-icon')
@@ -130,7 +134,7 @@ class PostTest extends DuskTestCase
                 ->assertMissing('@photo-credit-error')
                 ->type('#photo-credit', Str::random(21))
                 ->press('CREATE')
-                ->waitForTextIn('@photo-credit-error', 'The photo credit may not be greater than 20 characters.')
+                ->waitForTextIn('@photo-credit-error', 'The photo credit field must not be greater than 20 characters.')
                 ->type('#photo-credit', Str::random(20))
                 ->press('CREATE')
                 ->waitUntilMissing('@submit-loading-icon')
@@ -219,7 +223,7 @@ class PostTest extends DuskTestCase
                 ->assertSee('Content')
                 ->assertInputValue('#content', $latestPost->getContent())
                 ->assertSeeIn('@upload-photo-button', 'Upload a photo')
-                ->assertAttribute('@photo-image', 'src', '/storage/' . $latestPost->getPhoto())
+                ->assertAttribute('@photo-image', 'src', '/storage/'.$latestPost->getPhoto())
                 ->assertSee('Photo submitted by')
                 ->assertInputValue('#photo-credit', $latestPost->getPhotoCredit())
                 ->assertSee('Tags')
@@ -248,7 +252,7 @@ class PostTest extends DuskTestCase
                 ->waitForTextIn('@title-error', 'The title field is required.')
                 ->type('#title', Str::random(51))
                 ->press('UPDATE')
-                ->waitForTextIn('@title-error', 'The title may not be greater than 50 characters.');
+                ->waitForTextIn('@title-error', 'The title field must not be greater than 50 characters.');
 
             // The generated slug must be unique
             $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
@@ -266,10 +270,10 @@ class PostTest extends DuskTestCase
                 ->waitForTextIn('@content-error', 'The content field is required.')
                 ->type('#content', Str::random(9))
                 ->press('UPDATE')
-                ->waitForTextIn('@content-error', 'The content must be at least 10 characters.')
+                ->waitForTextIn('@content-error', 'The content field must be at least 10 characters.')
                 ->type('#content', Str::random(2001))
                 ->press('UPDATE')
-                ->waitForTextIn('@content-error', 'The content may not be greater than 2000 characters.');
+                ->waitForTextIn('@content-error', 'The content field must not be greater than 2000 characters.');
 
             // The photo must be jpg, jpeg or png
             $textFile = UploadedFile::fake()->create('file.txt', 'Text files are not allowed');
@@ -278,8 +282,8 @@ class PostTest extends DuskTestCase
             $pngFile = UploadedFile::fake()->image('photo3.png');
             $browser->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->attach('#photo', $textFile)
-                ->waitForTextIn('@photo-error', 'The photo must be a file of type: jpg, jpeg, png.')
-                ->assertAttribute('@photo-image', 'src', '/storage/' . $latestPost->getPhoto())
+                ->waitForTextIn('@photo-error', 'The photo field must be a file of type: jpg, jpeg, png.')
+                ->assertAttribute('@photo-image', 'src', '/storage/'.$latestPost->getPhoto())
                 ->attach('#photo', $jpgFile)
                 ->waitUntilMissing('@photo-loading-icon')
                 ->assertMissing('@photo-error')
@@ -299,7 +303,7 @@ class PostTest extends DuskTestCase
                 ->visitRoute('posts.update', ['postId' => $latestPost->getKey()])
                 ->type('#photo-credit', Str::random(21))
                 ->press('UPDATE')
-                ->waitForTextIn('@photo-credit-error', 'The photo credit may not be greater than 20 characters.')
+                ->waitForTextIn('@photo-credit-error', 'The photo credit field must not be greater than 20 characters.')
                 ->type('#photo-credit', Str::random(20))
                 ->press('UPDATE')
                 ->waitForReload()
@@ -455,7 +459,7 @@ class PostTest extends DuskTestCase
                 ->type('#content', Str::random(2001))
                 ->press('CREATE')
                 ->waitUntilMissing('@submit-loading-icon')
-                ->assertSeeIn('@content-error', 'The content may not be greater than 2000 characters.')
+                ->assertSeeIn('@content-error', 'The content field must not be greater than 2000 characters.')
                 ->logout();
 
             $latestPost = Post::query()->latest()->first();
@@ -464,7 +468,7 @@ class PostTest extends DuskTestCase
                 ->type('#content', Str::random(2001))
                 ->press('UPDATE')
                 ->waitUntilMissing('@submit-loading-icon')
-                ->assertSeeIn('@content-error', 'The content may not be greater than 2000 characters.')
+                ->assertSeeIn('@content-error', 'The content field must not be greater than 2000 characters.')
                 ->logout();
         });
     }

@@ -1,13 +1,12 @@
-# For more information: https://laravel.com/docs/sail
 version: '3'
 services:
   laravel.test:
     build:
-      context: ./vendor/laravel/sail/runtimes/8.1
+      context: ./vendor/laravel/sail/runtimes/8.2
       dockerfile: Dockerfile
       args:
         WWWGROUP: '${WWWGROUP}'
-    image: sail-8.1/tubecrush/app
+    image: sail-8.2/tubecrush/app
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     ports:
@@ -35,7 +34,7 @@ services:
       MYSQL_PASSWORD: '${DB_PASSWORD}'
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
     volumes:
-      - 'sailmariadb:/var/lib/mysql'
+      - 'sail-mariadb:/var/lib/mysql'
     networks:
       - sail
     healthcheck:
@@ -50,7 +49,7 @@ services:
     networks:
       - sail
   selenium:
-    image: 'selenium/standalone-chrome'
+    image: selenium/standalone-chrome
     shm_size: 2gb
     volumes:
       - '/dev/shm:/dev/shm'
@@ -59,15 +58,15 @@ services:
   cypress:
     image: 'cypress/included:10.0.1'
     profiles:
-      - 'on-demand-only'
+      - on-demand-only
     volumes:
       - '.:/e2e'
       - '/tmp/.X11-unix:/tmp/.X11-unix'
-    working_dir: '/e2e'
+    working_dir: /e2e
     environment:
-      - CYPRESS_baseUrl=http://laravel.test
+      - 'CYPRESS_baseUrl=http://laravel.test'
       - CYPRESS_VIDEO=false
-      - DISPLAY=host.docker.internal:0
+      - 'DISPLAY=host.docker.internal:0'
     networks:
       - sail
     depends_on:
@@ -77,5 +76,5 @@ networks:
   sail:
     driver: bridge
 volumes:
-  sailmariadb:
+  sail-mariadb:
     driver: local

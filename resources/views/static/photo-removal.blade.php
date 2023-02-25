@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <x-banner/>
+        <x-tubecrush-banner/>
     </x-slot>
     <div class="max-w-5xl mx-auto px-4 sm:px-6 text-gray-700 leading-relaxed">
         <h2 class="mb-6 text-2xl sm:text-3xl">Photo Removal Request</h2>
@@ -11,7 +11,8 @@
         <p class="mb-4">
             If your image is on our site and you don’t want it to be just drop us an email and include a recent photo of
             yourself and a link to the page that features your image and we will verify it is you and remove it –
-            <a href="mailto:{{ config('mail.from.address') }}" class="underline hover:text-red-600">{{ config('mail.from.address') }}</a>
+            <a href="mailto:{{ config('mail.from.address') }}"
+               class="underline hover:text-red-600">{{ config('mail.from.address') }}</a>
         </p>
         <p>
             Once we have received the request we will email a reply within 24 hours to request either a link to, or an

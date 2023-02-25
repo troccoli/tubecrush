@@ -7,26 +7,26 @@
         <div class="justify-self-start self-center">
             <div class="grid grid-flow-col space-x-8">
                 {{-- Logo --}}
-                <x-jet-application-mark class="block h-9 w-auto"/>
+                <x-application-mark class="block h-9 w-auto"/>
 
                 {{-- Home --}}
                 <div class="hidden md:flex">
-                    <x-jet-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
                         {{ __('Home') }}
-                    </x-jet-nav-link>
+                    </x-nav-link>
                 </div>
 
                 {{-- Line --}}
-                <x-jet-nav-dropdown dusk="lines-dropdown-menu" cy="lines-dropdown-menu"
-                                    :active="request()->routeIs('posts-by-lines')">
+                <x-nav-dropdown dusk="lines-dropdown-menu" cy="lines-dropdown-menu"
+                                :active="request()->routeIs('posts-by-lines')">
                     <x-slot name="name">{{ __('Lines') }}</x-slot>
                     @foreach(\App\Models\Line::query()->orderBy('name')->get() as $line)
-                        <x-jet-dropdown-link dusk="{{ $line->getSlug() }}-link" cy="{{ $line->getSlug() }}-link"
-                                             href="{{ route('posts-by-lines', ['slug' => $line->getSlug()]) }}">
+                        <x-dropdown-link dusk="{{ $line->getSlug() }}-link" cy="{{ $line->getSlug() }}-link"
+                                         href="{{ route('posts-by-lines', ['slug' => $line->getSlug()]) }}">
                             {{ $line->getName() }}
-                        </x-jet-dropdown-link>
+                        </x-dropdown-link>
                     @endforeach
-                </x-jet-nav-dropdown>
+                </x-nav-dropdown>
             </div>
         </div>
         {{-- SEND CRUSH --}}
@@ -41,7 +41,7 @@
         <div class="justify-self-end self-center">
             @if (auth()->check())
                 <div class="hidden md:flex md:items-center md:ml-6">
-                    <x-jet-dropdown align="right" width="48">
+                    <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
                                 class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition">
@@ -55,25 +55,25 @@
                         <x-slot name="content">
                             <div dusk="dropdown-menu" cy="dropdown-menu">
                                 @can('create posts')
-                                    <x-jet-dropdown-link
-                                        href="{{ route('posts.create') }}">{{ __('Create post') }}</x-jet-dropdown-link>
+                                    <x-dropdown-link
+                                        href="{{ route('posts.create') }}">{{ __('Create post') }}</x-dropdown-link>
                                     <div class="border-t border-gray-100"></div>
                                 @endcan
-                                <x-jet-dropdown-link
-                                    href="{{ route('dashboard') }}">{{ __('Dashboard') }}</x-jet-dropdown-link>
-                                <x-jet-dropdown-link
-                                    href="{{ route('profile.show') }}">{{ __('Profile') }}</x-jet-dropdown-link>
+                                <x-dropdown-link
+                                    href="{{ route('dashboard') }}">{{ __('Dashboard') }}</x-dropdown-link>
+                                <x-dropdown-link
+                                    href="{{ route('profile.show') }}">{{ __('Profile') }}</x-dropdown-link>
                                 <div class="border-t border-gray-100"></div>
 
                                 <!-- Authentication -->
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <x-jet-dropdown-link href="{{ route('logout') }}"
-                                                         onclick="event.preventDefault(); this.closest('form').submit();">{{ __('Log out') }}</x-jet-dropdown-link>
+                                    <x-dropdown-link href="{{ route('logout') }}"
+                                                     onclick="event.preventDefault(); this.closest('form').submit();">{{ __('Log out') }}</x-dropdown-link>
                                 </form>
                             </div>
                         </x-slot>
-                    </x-jet-dropdown>
+                    </x-dropdown>
                 </div>
             @endif
             <!-- Hamburger -->
@@ -92,8 +92,8 @@
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="mt-3 space-y-1">
                 {{-- Home --}}
-                <x-jet-responsive-nav-link href="{{ route('home') }}"
-                                           :active="request()->routeIs('home')">{{ __('Home') }}</x-jet-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('home') }}"
+                                       :active="request()->routeIs('home')">{{ __('Home') }}</x-responsive-nav-link>
                 {{-- Line --}}
                 <div>
                     <button @click.stop="openLinesMenu = ! openLinesMenu"
@@ -111,8 +111,8 @@
                 </div>
                 <div :class="{'block': openLinesMenu, 'hidden': ! openLinesMenu}" class="hidden sm:hidden">
                     @foreach(\App\Models\Line::query()->orderBy('name')->get() as $line)
-                        <x-jet-responsive-nav-link
-                            href="{{ route('posts-by-lines', ['slug' => $line->getSlug()]) }}">{{ $line->getName() }}</x-jet-responsive-nav-link>
+                        <x-responsive-nav-link
+                            href="{{ route('posts-by-lines', ['slug' => $line->getSlug()]) }}">{{ $line->getName() }}</x-responsive-nav-link>
                     @endforeach</div>
                 {{-- PROFILE --}}
                 @if (auth()->check())
@@ -133,21 +133,21 @@
                     <div :class="{'block': openProfileMenu, 'hidden': ! openProfileMenu}" class="hidden sm:hidden">
                         @can('create posts')
                             <div class="border-t border-gray-100">
-                                <x-jet-responsive-nav-link href="{{ route('posts.create') }}"
-                                                           :active="request()->routeIs('posts.create')">{{ __('Create post') }}</x-jet-responsive-nav-link>
+                                <x-responsive-nav-link href="{{ route('posts.create') }}"
+                                                       :active="request()->routeIs('posts.create')">{{ __('Create post') }}</x-responsive-nav-link>
                             </div>
                         @endcan
                         <div class="border-t border-gray-100">
-                            <x-jet-responsive-nav-link href="{{ route('dashboard') }}"
-                                                       :active="request()->routeIs('dashboard')">{{ __('Dashboard') }}</x-jet-responsive-nav-link>
-                            <x-jet-responsive-nav-link href="{{ route('profile.show') }}"
-                                                       :active="request()->routeIs('profile.show')">{{ __('Profile') }}</x-jet-responsive-nav-link>
+                            <x-responsive-nav-link href="{{ route('dashboard') }}"
+                                                   :active="request()->routeIs('dashboard')">{{ __('Dashboard') }}</x-responsive-nav-link>
+                            <x-responsive-nav-link href="{{ route('profile.show') }}"
+                                                   :active="request()->routeIs('profile.show')">{{ __('Profile') }}</x-responsive-nav-link>
                         </div>
                         <div class="border-t border-gray-100">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <x-jet-responsive-nav-link href="{{ route('logout') }}"
-                                                           onclick="event.preventDefault(); this.closest('form').submit();">{{ __('Log out') }}</x-jet-responsive-nav-link>
+                                <x-responsive-nav-link href="{{ route('logout') }}"
+                                                       onclick="event.preventDefault(); this.closest('form').submit();">{{ __('Log out') }}</x-responsive-nav-link>
                             </form>
                         </div>
                     </div>

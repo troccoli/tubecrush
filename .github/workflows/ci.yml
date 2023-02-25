@@ -20,9 +20,8 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v3
-
       - id: set-matrix
-        run: echo "::set-output name=matrix::{\"php-versions\":[ '8.1' ]}"
+        run: echo "::set-output name=matrix::{\"php-version\":[ '8.2' ]}"
 
   install-dependencies:
     needs: build-matrix
@@ -36,7 +35,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-version }}
 
       - name: Check for cached Node dependencies
         id: cache-node-modules
@@ -45,7 +44,7 @@ jobs:
           path: |
             ~/.cache/Cypress
             ./node_modules
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
       - name: Install Node dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: |
@@ -62,7 +61,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./vendor
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
       - name: Install Composer dependencies
         if: steps.cache-composer-packages.outputs.cache-hit != 'true'
         run: composer install --no-interaction --ignore-platform-reqs --optimize-autoloader
@@ -75,7 +74,7 @@ jobs:
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
       - name: Build artifacts
         if: steps.cache-artifacts.outputs.cache-hit != 'true'
         run: npm run prod
@@ -92,7 +91,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-version }}
       - name: Debug
         run: |
           php --version
@@ -110,13 +109,13 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./node_modules
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
 
       - name: Restore Composer packages
         uses: actions/cache@v3
         with:
           path: ./vendor
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
 
       - name: Restore artifacts
         uses: actions/cache@v3
@@ -125,7 +124,7 @@ jobs:
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -155,7 +154,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-version }}
       - name: Debug
         run: |
           php --version
@@ -173,13 +172,13 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./node_modules
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
 
       - name: Restore Composer packages
         uses: actions/cache@v3
         with:
           path: ./vendor
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
 
       - name: Restore artifacts
         uses: actions/cache@v3
@@ -188,7 +187,7 @@ jobs:
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -218,7 +217,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-version }}
       - name: Debug
         run: |
           php --version
@@ -236,13 +235,13 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./node_modules
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
 
       - name: Restore Composer packages
         uses: actions/cache@v3
         with:
           path: ./vendor
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
 
       - name: Restore artifacts
         uses: actions/cache@v3
@@ -251,7 +250,7 @@ jobs:
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -310,7 +309,7 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-version }}
       - name: Debug
         run: |
           php --version
@@ -330,13 +329,13 @@ jobs:
           path: |
             ~/.cache/Cypress
             ./node_modules
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.node-dependencies-cache-name }}-${{ hashFiles('package-lock.json') }}
 
       - name: Restore Composer packages
         uses: actions/cache@v3
         with:
           path: ./vendor
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.composer-packages-cache-name }}-${{ hashFiles('composer.lock') }}
 
       - name: Restore artifacts
         uses: actions/cache@v3
@@ -345,7 +344,7 @@ jobs:
             ./public/css
             ./public/js
             ./public/mix-manifest.json
-          key: ${{ runner.os }}-php-${{ matrix.php-versions }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-build-${{ env.artifacts-cache-name }}-${{ hashFiles('resources/css/**/*.css', 'resources/js/**/*.js', 'resources/scss/**/*.scss') }}
 
       - name: Migrate Database
         run: php artisan migrate --force
@@ -391,8 +390,8 @@ jobs:
           path: cypress/videos
 
   deploy:
+    needs: [ build-matrix, unit-tests, feature-tests, dusk-tests, cypress-tests ]
     runs-on: ubuntu-latest
-    needs: [ unit-tests, feature-tests, dusk-tests, cypress-tests ]
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Trigger deployment of main branch
