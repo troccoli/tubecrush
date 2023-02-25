@@ -22,7 +22,7 @@ class NewTubeCrushSubmittedTest extends TestCase
 
         NewTubeCrushSubmitted::dispatch($post);
 
-        Notification::assertTimesSent($editors->count(), NewTubeCrush::class);
+        Notification::assertSentTimes(NewTubeCrush::class, $editors->count());
         $editors->each(fn (User $editor) => Notification::assertSentTo($editor, NewTubeCrush::class));
     }
 }
