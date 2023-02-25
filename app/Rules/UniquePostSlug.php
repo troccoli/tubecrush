@@ -19,7 +19,6 @@ class UniquePostSlug implements Rule
     }
 
     /**
-     * @param string $attribute
      * @param mixed $value
      */
     public function passes(string $attribute, $value): bool
