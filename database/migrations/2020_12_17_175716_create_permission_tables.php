@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class CreatePermissionTables extends Migration
+return new class extends Migration
 {
     public function down(): void
     {
@@ -142,4 +142,4 @@ class CreatePermissionTables extends Migration
             ]
         );
     }
-}
+};

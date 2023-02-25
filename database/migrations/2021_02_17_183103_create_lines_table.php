@@ -6,7 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-class CreateLinesTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -58,4 +58,4 @@ class CreateLinesTable extends Migration
             ]);
         }
     }
-}
+};
