@@ -7,7 +7,7 @@ use Tests\DuskTestCase;
 
 class VoteTest extends DuskTestCase
 {
-    public function testUserCannotVoteIfConsentWasRefused()
+    public function testUserCannotVoteIfConsentWasRefused(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->refuseCookies()
@@ -24,7 +24,7 @@ class VoteTest extends DuskTestCase
         });
     }
 
-    public function testUserCanVoteIfConsentWasGiven()
+    public function testUserCanVoteIfConsentWasGiven(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->acceptCookies()

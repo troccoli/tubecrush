@@ -39,7 +39,7 @@ class EditPostTest extends TestCase
             ->assertHasNoErrors(['title']);
     }
 
-    public function testTheSlugMustBeUnique()
+    public function testTheSlugMustBeUnique(): void
     {
         Post::factory()->create(['title' => 'First post']);
         AlternativePostSlug::factory()->for(Post::factory())->create(['slug' => 'existing-slug']);

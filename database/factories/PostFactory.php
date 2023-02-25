@@ -16,7 +16,7 @@ class PostFactory extends Factory
         return $this->state(fn (array $attributes) => ['author_id' => 1]);
     }
 
-    public function definition()
+    public function definition(): array
     {
         $date = $this->faker->dateTime();
 
