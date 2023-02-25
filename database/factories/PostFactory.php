@@ -11,8 +11,6 @@ use Illuminate\Support\Carbon;
 
 class PostFactory extends Factory
 {
-    protected $model = Post::class;
-
     public function bySuperAdmin()
     {
         return $this->state(fn (array $attributes) => ['author_id' => 1]);
