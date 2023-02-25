@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     public function down(): void
     {
         $tableNames = config('permission.table_names');
