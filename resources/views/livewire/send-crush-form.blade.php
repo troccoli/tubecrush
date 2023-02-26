@@ -1,6 +1,6 @@
 @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="{{ mix('css/select2.css') }}">
+    @vite('resources/css/select2.css')
 @endpush
 <div>
     <form wire:submit.prevent="submit" dusk="send-crush-form" cy="send-crush-form">
