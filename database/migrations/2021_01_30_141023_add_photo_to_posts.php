@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPhotoToPosts extends Migration
-{
+return new class () extends Migration {
     public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
@@ -21,4 +20,4 @@ class AddPhotoToPosts extends Migration
             $table->dropColumn('photo');
         });
     }
-}
+};

@@ -7,7 +7,7 @@
 @endphp
 
 <div {{ $attributes->merge(['class' => $classes, 'dusk' => '']) }} >
-    <x-jet-dropdown align="left">
+    <x-dropdown align="left">
         <x-slot name="trigger">
             <button
                 class="flex items-center text-sm font-medium pt-1">
@@ -27,5 +27,5 @@
         <x-slot name="content">
             {{ $slot }}
         </x-slot>
-    </x-jet-dropdown>
+    </x-dropdown>
 </div>

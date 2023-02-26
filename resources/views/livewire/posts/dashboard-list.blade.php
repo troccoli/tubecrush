@@ -122,7 +122,7 @@
         {{--        </div>--}}
         {{ $posts->links() }}
     </div>
-    <x-jet-confirmation-modal wire:model="confirmingDeletingId" id="confirm-delete-post-dialog">
+    <x-confirmation-modal wire:model="confirmingDeletingId" id="confirm-delete-post-dialog">
         <x-slot name="title">
             <p class="text-2xl font-bold tracking-wide">Delete a post</p>
         </x-slot>
@@ -133,18 +133,18 @@
             </div>
         </x-slot>
         <x-slot name="footer">
-            <x-jet-secondary-button wire:click="keepPost" wire:loading.attr="disabled" dusk="cancel-delete-post-button"
-                                    cy="cancel-delete-post-button">
+            <x-secondary-button wire:click="keepPost" wire:loading.attr="disabled" dusk="cancel-delete-post-button"
+                                cy="cancel-delete-post-button">
                 {{ __("Never mind") }}
-            </x-jet-secondary-button>
+            </x-secondary-button>
 
-            <x-jet-danger-button class="ml-2" wire:click="deletePost" wire:loading.attr="disabled"
-                                 dusk="confirm-delete-post-button" cy="confirm-delete-post-button">
+            <x-danger-button class="ml-2" wire:click="deletePost" wire:loading.attr="disabled"
+                             dusk="confirm-delete-post-button" cy="confirm-delete-post-button">
                 {{ __('Yes please') }}
-            </x-jet-danger-button>
+            </x-danger-button>
         </x-slot>
-    </x-jet-confirmation-modal>
-    <x-jet-confirmation-modal wire:model="confirmingPublishingId" id="confirm-publish-post-dialog">
+    </x-confirmation-modal>
+    <x-confirmation-modal wire:model="confirmingPublishingId" id="confirm-publish-post-dialog">
         <x-slot name="title">
             <p class="text-2xl font-bold tracking-wide">Publish a post</p>
         </x-slot>
@@ -155,18 +155,18 @@
             </div>
         </x-slot>
         <x-slot name="footer">
-            <x-jet-secondary-button wire:click="keepPost" wire:loading.attr="disabled"
-                                    dusk="cancel-publish-post-button" cy="cancel-publish-post-button">
+            <x-secondary-button wire:click="keepPost" wire:loading.attr="disabled"
+                                dusk="cancel-publish-post-button" cy="cancel-publish-post-button">
                 {{ __("Whoops, no thanks") }}
-            </x-jet-secondary-button>
+            </x-secondary-button>
 
-            <x-jet-danger-button class="ml-2" wire:click="publishPost" wire:loading.attr="disabled"
-                                 dusk="confirm-publish-post-button" cy="confirm-publish-post-button">
+            <x-danger-button class="ml-2" wire:click="publishPost" wire:loading.attr="disabled"
+                             dusk="confirm-publish-post-button" cy="confirm-publish-post-button">
                 {{ __('Yep, let\'s go') }}
-            </x-jet-danger-button>
+            </x-danger-button>
         </x-slot>
-    </x-jet-confirmation-modal>
-    <x-jet-confirmation-modal wire:model="confirmingUnpublishingId" id="confirm-unpublish-post-dialog">
+    </x-confirmation-modal>
+    <x-confirmation-modal wire:model="confirmingUnpublishingId" id="confirm-unpublish-post-dialog">
         <x-slot name="title">
             <p class="text-2xl font-bold tracking-wide">Unpublish a post</p>
         </x-slot>
@@ -177,15 +177,15 @@
             </div>
         </x-slot>
         <x-slot name="footer">
-            <x-jet-secondary-button wire:click="keepPost" wire:loading.attr="disabled"
-                                    dusk="cancel-unpublish-post-button" cy="cancel-unpublish-post-button">
+            <x-secondary-button wire:click="keepPost" wire:loading.attr="disabled"
+                                dusk="cancel-unpublish-post-button" cy="cancel-unpublish-post-button">
                 {{ __("Naah, leave it") }}
-            </x-jet-secondary-button>
+            </x-secondary-button>
 
-            <x-jet-danger-button class="ml-2" wire:click="unpublishPost" wire:loading.attr="disabled"
-                                 dusk="confirm-unpublish-post-button" cy="confirm-unpublish-post-button">
+            <x-danger-button class="ml-2" wire:click="unpublishPost" wire:loading.attr="disabled"
+                             dusk="confirm-unpublish-post-button" cy="confirm-unpublish-post-button">
                 {{ __('Oh yeah') }}
-            </x-jet-danger-button>
+            </x-danger-button>
         </x-slot>
-    </x-jet-confirmation-modal>
+    </x-confirmation-modal>
 </div>

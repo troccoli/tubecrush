@@ -9,8 +9,6 @@ use Illuminate\Support\Str;
 
 class AlternativePostSlugFactory extends Factory
 {
-    protected $model = AlternativePostSlug::class;
-
     public function definition(): array
     {
         return [

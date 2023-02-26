@@ -6,9 +6,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-class CreateLinesTable extends Migration
-{
-    public function up()
+return new class () extends Migration {
+    public function up(): void
     {
         Schema::create('lines', function (Blueprint $table) {
             $table->id();
@@ -22,7 +21,7 @@ class CreateLinesTable extends Migration
         $this->addData();
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('lines');
     }
@@ -58,4 +57,4 @@ class CreateLinesTable extends Migration
             ]);
         }
     }
-}
+};

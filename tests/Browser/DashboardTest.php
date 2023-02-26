@@ -281,7 +281,7 @@ class DashboardTest extends DuskTestCase
                 // Name must not be longer than 255 characters
                 ->type('#name', Str::random(256))
                 ->pressAndWaitFor('REGISTER')
-                ->assertSee('The name may not be greater than 255 characters.')
+                ->assertSee('The name field must not be greater than 255 characters.')
                 ->assertDontSee('The user has been registered.')
 
                 // The email must not have been used before

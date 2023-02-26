@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <x-banner/>
+        <x-tubecrush-banner/>
     </x-slot>
 
     <livewire:posts.list-posts/>
