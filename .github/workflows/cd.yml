@@ -24,7 +24,7 @@ jobs:
       - name: Install Node packages
         run: npm install
       - name: Build assets for production
-        run: npm run production
+        run: npm run build
       - name: Commit built assets
         run: |
           git config --local user.email "action@github.com"
