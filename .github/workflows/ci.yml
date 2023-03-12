@@ -14,20 +14,12 @@ env:
   artifacts-cache-name: cache-artifacts-5
 
 jobs:
-  build-matrix:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - uses: actions/checkout@v3
-      - id: set-matrix
-        run: echo "::set-output name=matrix::{\"php-version\":[ '8.2' ]}"
 
   install-dependencies:
-    needs: build-matrix
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJSON(needs.build-matrix.outputs.matrix)}}
+      matrix:
+        php-version: [ '8.2' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -80,10 +72,11 @@ jobs:
         run: npm run prod
 
   unit-tests:
-    needs: [ build-matrix, install-dependencies ]
+    needs: [ install-dependencies ]
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
+      matrix:
+        php-version: [ '8.2' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -143,10 +136,11 @@ jobs:
         run: vendor/bin/phpunit --testsuite Unit
 
   feature-tests:
-    needs: [ build-matrix, install-dependencies ]
+    needs: [ install-dependencies ]
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
+      matrix:
+        php-version: [ '8.2' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -206,10 +200,11 @@ jobs:
         run: vendor/bin/phpunit --testsuite Feature
 
   dusk-tests:
-    needs: [ build-matrix, install-dependencies ]
+    needs: [ install-dependencies ]
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
+      matrix:
+        php-version: [ '8.2' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -298,10 +293,11 @@ jobs:
         run: exit 2
 
   cypress-tests:
-    needs: [ build-matrix, install-dependencies ]
+    needs: [ install-dependencies ]
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.build-matrix.outputs.matrix) }}
+      matrix:
+        php-version: [ '8.2' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -390,7 +386,7 @@ jobs:
           path: cypress/videos
 
   deploy:
-    needs: [ build-matrix, unit-tests, feature-tests, dusk-tests, cypress-tests ]
+    needs: [ unit-tests, feature-tests, dusk-tests, cypress-tests ]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
