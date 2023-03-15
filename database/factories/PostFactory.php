@@ -14,7 +14,7 @@ class PostFactory extends Factory
 {
     public function definition(): array
     {
-        $date = $this->faker->dateTime();
+        $date = $this->faker->dateTimeBetween(endDate: now()->subDay());
 
         return [
             'title' => $this->faker->unique()->sentence(4),
