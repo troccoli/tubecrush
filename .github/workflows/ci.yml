@@ -298,6 +298,7 @@ jobs:
     strategy:
       matrix:
         php-version: [ '8.2' ]
+        browser: [ 'electron', 'firefox', 'chrome', 'edge' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -362,7 +363,7 @@ jobs:
           config-file: ./cypress.config.js
           record: true
           project: ./
-          browser: electron
+          browser: ${{ matrix.browser }}
         env:
           # pass the Dashboard record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
