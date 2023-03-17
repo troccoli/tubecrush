@@ -9,7 +9,7 @@
  */
 Cypress.Commands.add('login', (attributes = {}) => {
     // Are we using the new object system.
-    let requestBody = attributes.attributes || attributes.state || attributes.load ? attributes : { attributes };
+    let requestBody = attributes.attributes || attributes.state || attributes.load ? attributes : {attributes};
 
     return cy
         .csrfToken()
@@ -17,20 +17,20 @@ Cypress.Commands.add('login', (attributes = {}) => {
             return cy.request({
                 method: 'POST',
                 url: '/__cypress__/login',
-                body: { ...requestBody, _token: token },
+                body: {...requestBody, _token: token},
                 log: false,
             });
         })
-        .then(({ body }) => {
+        .then(({body}) => {
             Cypress.Laravel.currentUser = body;
 
             Cypress.log({
                 name: 'login',
                 message: JSON.stringify(body),
-                consoleProps: () => ({ user: body }),
+                consoleProps: () => ({user: body}),
             });
         })
-        .its('body', { log: false });
+        .its('body', {log: false});
 });
 
 /**
@@ -44,7 +44,7 @@ Cypress.Commands.add('currentUser', () => {
             .request({
                 method: 'POST',
                 url: '/__cypress__/current-user',
-                body: { _token: token },
+                body: {_token: token},
                 log: false,
             })
             .then((response) => {
@@ -72,12 +72,12 @@ Cypress.Commands.add('logout', () => {
             return cy.request({
                 method: 'POST',
                 url: '/__cypress__/logout',
-                body: { _token: token },
+                body: {_token: token},
                 log: false,
             });
         })
         .then(() => {
-            Cypress.log({ name: 'logout', message: '' });
+            Cypress.log({name: 'logout', message: ''});
         });
 });
 
@@ -93,7 +93,7 @@ Cypress.Commands.add('csrfToken', () => {
             url: '/__cypress__/csrf_token',
             log: false,
         })
-        .its('body', { log: false });
+        .its('body', {log: false});
 });
 
 /**
@@ -107,10 +107,10 @@ Cypress.Commands.add('refreshRoutes', () => {
             .request({
                 method: 'POST',
                 url: '/__cypress__/routes',
-                body: { _token: token },
+                body: {_token: token},
                 log: false,
             })
-            .its('body', { log: false })
+            .its('body', {log: false})
             .then((routes) => {
                 cy.writeFile(Cypress.config().supportFolder + '/routes.json', routes, {
                     log: false,
@@ -178,7 +178,7 @@ Cypress.Commands.add('create', (model, count = 1, attributes = {}, load = [], st
             count = 1;
         }
 
-        requestBody = { model, state, attributes, load, count };
+        requestBody = {model, state, attributes, load, count};
     } else {
         requestBody = model;
     }
@@ -189,7 +189,7 @@ Cypress.Commands.add('create', (model, count = 1, attributes = {}, load = [], st
             return cy.request({
                 method: 'POST',
                 url: '/__cypress__/factory',
-                body: { ...requestBody, _token: token },
+                body: {...requestBody, _token: token},
                 log: false,
             });
         })
@@ -197,10 +197,10 @@ Cypress.Commands.add('create', (model, count = 1, attributes = {}, load = [], st
             Cypress.log({
                 name: 'create',
                 message: requestBody.model + (requestBody.count > 1 ? ` (${requestBody.count} times)` : ''),
-                consoleProps: () => ({ [model]: response.body }),
+                consoleProps: () => ({[model]: response.body}),
             });
         })
-        .its('body', { log: false });
+        .its('body', {log: false});
 });
 
 /**
@@ -239,7 +239,7 @@ Cypress.Commands.add('seed', (seederClass) => {
  * @example cy.artisan('cache:clear');
  */
 Cypress.Commands.add('artisan', (command, parameters = {}, options = {}) => {
-    options = Object.assign({}, { log: true }, options);
+    options = Object.assign({}, {log: true}, options);
 
     if (options.log) {
         Cypress.log({
@@ -253,7 +253,7 @@ Cypress.Commands.add('artisan', (command, parameters = {}, options = {}) => {
 
                 return message;
             })(),
-            consoleProps: () => ({ command, parameters }),
+            consoleProps: () => ({command, parameters}),
         });
     }
 
@@ -261,7 +261,7 @@ Cypress.Commands.add('artisan', (command, parameters = {}, options = {}) => {
         return cy.request({
             method: 'POST',
             url: '/__cypress__/artisan',
-            body: { command: command, parameters: parameters, _token: token },
+            body: {command: command, parameters: parameters, _token: token},
             log: false,
         });
     });
@@ -282,7 +282,7 @@ Cypress.Commands.add('php', (command) => {
             return cy.request({
                 method: 'POST',
                 url: '/__cypress__/run-php',
-                body: { command: command, _token: token },
+                body: {command: command, _token: token},
                 log: false,
             });
         })
@@ -290,8 +290,12 @@ Cypress.Commands.add('php', (command) => {
             Cypress.log({
                 name: 'php',
                 message: command,
-                consoleProps: () => ({ result: response.body.result }),
+                consoleProps: () => ({result: response.body.result}),
             });
         })
-        .its('body.result', { log: false });
+        .its('body.result', {log: false});
 });
+
+Cypress.Commands.add('acceptCookies', (command) => {
+    return cy.visit('/__cypress__/accept-cookies', {log: false});
+})

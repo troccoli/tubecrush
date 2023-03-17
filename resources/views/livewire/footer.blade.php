@@ -1,4 +1,4 @@
-<div class="flex items-end w-full bg-white" dusk="main-footer" cy="main-footer">
+<div class="flex items-end w-full bg-white" dusk="main-footer" data-cy="main-footer">
 
     <footer class="w-full text-gray-700 bg-gray-100 body-font">
         <div
@@ -43,15 +43,15 @@
                     <nav class="mb-10 list-none">
                         <ul>
                             <li class="mt-3">
-                                <a class="text-gray-500 cursor-pointer hover:text-gray-900"
+                                <a class="text-gray-500 cursor-pointer hover:text-gray-900" data-cy="about-us-link"
                                    href="{{ route('about-us') }}">{{__('About us')}}</a>
                             </li>
                             <li class="mt-3">
-                                <a class="text-gray-500 cursor-pointer hover:text-gray-900"
+                                <a class="text-gray-500 cursor-pointer hover:text-gray-900" data-cy="guidelines-link"
                                    href="{{ route('guidelines') }}">{{__('Photo guidelines')}}</a>
                             </li>
                             <li class="mt-3">
-                                <a class="text-gray-500 cursor-pointer hover:text-gray-900"
+                                <a class="text-gray-500 cursor-pointer hover:text-gray-900" data-cy="legal-link"
                                    href="{{ route('legal') }}">{{__('Legal')}}</a>
                             </li>
                         </ul>
@@ -62,15 +62,16 @@
                     <nav class="mb-10 list-none">
                         <ul>
                             <li class="mt-3">
-                                <a class="text-gray-500 cursor-pointer hover:text-gray-900"
+                                <a class="text-gray-500 cursor-pointer hover:text-gray-900" data-cy="contact-us-link"
                                    href="{{ route('contact-us') }}">{{__('Contact us')}}</a>
                             </li>
                             <li class="mt-3">
-                                <a class="text-gray-500 cursor-pointer hover:text-gray-900"
+                                <a class="text-gray-500 cursor-pointer hover:text-gray-900" data-cy="photo-removal-link"
                                    href="{{ route('photo-removal') }}">{{__('Photo removal')}}</a>
                             </li>
                             <li class="mt-3">
                                 <a class="text-gray-500 cursor-pointer hover:text-gray-900"
+                                   data-cy="press-enquiries-link"
                                    href="{{ route('press-enquiries') }}">{{__('Press enquiries')}}</a>
                             </li>
                         </ul>
