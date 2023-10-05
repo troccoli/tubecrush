@@ -7774,21 +7774,22 @@
         },
         {
             "name": "laravel/dusk",
-            "version": "v7.7.0",
+            "version": "v7.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/dusk.git",
-                "reference": "c1d17269c317bc99fef3c2e885465d0bb6398434"
+                "reference": "076865d1057a4951f796342aa6a8f97a317e7638"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/dusk/zipball/c1d17269c317bc99fef3c2e885465d0bb6398434",
-                "reference": "c1d17269c317bc99fef3c2e885465d0bb6398434",
+                "url": "https://api.github.com/repos/laravel/dusk/zipball/076865d1057a4951f796342aa6a8f97a317e7638",
+                "reference": "076865d1057a4951f796342aa6a8f97a317e7638",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-zip": "*",
+                "guzzlehttp/guzzle": "^7.2",
                 "illuminate/console": "^9.0|^10.0",
                 "illuminate/support": "^9.0|^10.0",
                 "nesbot/carbon": "^2.0",
@@ -7802,7 +7803,9 @@
             "require-dev": {
                 "mockery/mockery": "^1.4.2",
                 "orchestra/testbench": "^7.0|^8.0",
-                "phpunit/phpunit": "^9.5.10|^10.0.1"
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^9.5.10|^10.0.1",
+                "psy/psysh": "^0.11.12"
             },
             "suggest": {
                 "ext-pcntl": "Used to gracefully terminate Dusk when tests are running."
@@ -7841,9 +7844,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/dusk/issues",
-                "source": "https://github.com/laravel/dusk/tree/v7.7.0"
+                "source": "https://github.com/laravel/dusk/tree/v7.11.1"
             },
-            "time": "2023-02-21T11:38:10+00:00"
+            "time": "2023-09-26T13:23:43+00:00"
         },
         {
             "name": "laravel/sail",
