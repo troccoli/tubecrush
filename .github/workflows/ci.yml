@@ -389,15 +389,15 @@ jobs:
           name: ${{ github.job }}-videos
           path: cypress/videos
 
-  deploy:
-    needs: [ build-matrix, unit-tests, feature-tests, dusk-tests, cypress-tests ]
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Trigger deployment of main branch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.PUSH_TOKEN }}
-          repository: ${{ github.repository }}
-          event-type: Deploy
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+#  deploy:
+#    needs: [ build-matrix, unit-tests, feature-tests, dusk-tests, cypress-tests ]
+#    runs-on: ubuntu-latest
+#    if: github.ref == 'refs/heads/main'
+#    steps:
+#      - name: Trigger deployment of main branch
+#        uses: peter-evans/repository-dispatch@v1
+#        with:
+#          token: ${{ secrets.PUSH_TOKEN }}
+#          repository: ${{ github.repository }}
+#          event-type: Deploy
+#          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
