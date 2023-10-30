@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Posts;
 
+use App\Builders\PostBuilder;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
@@ -40,10 +41,10 @@ class ListPosts extends Component
     {
         $query = Post::query()
             ->with(['author', 'line', 'tags'])
-            ->when($this->lineId, function (Builder $query): Builder {
+            ->when($this->lineId, function (PostBuilder $query): PostBuilder {
                 return $query->onLine($this->lineId);
             })
-            ->when($this->tagId, function (Builder $query): Builder {
+            ->when($this->tagId, function (PostBuilder $query): PostBuilder {
                 return $query->withTag($this->tagId);
             })
             ->published()

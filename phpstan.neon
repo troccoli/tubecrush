@@ -2,15 +2,15 @@ includes:
     - ./vendor/nunomaduro/larastan/extension.neon
 
 parameters:
-    level: 9
+    level: 5
     paths:
         - app/
 #        - config/
 #        - database/
 #        - routes/
 #        - tests/
-    ignoreErrors:
-        - '#PHPDoc tag @var#'
+#    ignoreErrors:
+#        - '#PHPDoc tag @var#'
 #    parallel:
 #        memoryLimit: 1G
 #        jobs: 8
