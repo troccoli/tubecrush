@@ -21,7 +21,7 @@ class CopyLinkShare extends Component
         return route('single-post', ['post' => $this->post]);
     }
 
-    public function uniqueId(): int
+    public function uniqueId(): mixed
     {
         return $this->post->getKey();
     }

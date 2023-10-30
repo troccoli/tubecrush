@@ -12,13 +12,11 @@ class VotingCookie implements VotingService
     private string $cookieName;
     private int $cookieLifetime;
     private array $votes;
-    private CookieConsent $service;
 
-    public function __construct(CookieConsent $service)
+    public function __construct(private CookieConsent $service)
     {
         $this->cookieName = config('cookies.voting.cookie_name');
         $this->cookieLifetime = config('cookies.voting.cookie_lifetime');
-        $this->service = $service;
         if ($this->service->consentHasBeenGiven()) {
             $this->votes = json_decode(Request::cookie($this->cookieName), true) ?? [];
             $this->refreshCookie();

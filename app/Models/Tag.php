@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @method TagFactory factory
+ * @method static TagFactory factory()
  */
 class Tag extends Model
 {

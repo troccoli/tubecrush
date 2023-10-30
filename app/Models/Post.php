@@ -2,21 +2,22 @@
 
 namespace App\Models;
 
+use App\Builders\PostBuilder;
 use App\Enums\PostStatus;
+use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Database\Factories\PostFactory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Carbon;
 
 /**
- * @method PostFactory factory()
+ * @method static PostFactory factory()
+ * @method static PostBuilder query()
  */
 class Post extends Model
 {
@@ -50,6 +51,15 @@ class Post extends Model
                 ]);
             }
         });
+    }
+
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return PostBuilder
+     */
+    public function newEloquentBuilder($query): PostBuilder
+    {
+        return new PostBuilder($query);
     }
 
     public function alternativeSlugs(): HasMany
@@ -131,18 +141,6 @@ class Post extends Model
         return $this->belongsTo(Line::class);
     }
 
-    public function scopeOnLine(Builder $query, int $lineId): Builder
-    {
-        return $query->where('line_id', $lineId);
-    }
-
-    public function scopeWithTag(Builder $query, int $tagId): Builder
-    {
-        return $query->whereHas('tags', function (Builder $query) use ($tagId): Builder {
-            return $query->where('id', $tagId);
-        });
-    }
-
     public function sluggable(): array
     {
         return [
@@ -165,11 +163,6 @@ class Post extends Model
     public function isDraft(): bool
     {
         return $this->status === PostStatus::Draft;
-    }
-
-    public function scopePublished(Builder $query): Builder
-    {
-        return $query->where('status', PostStatus::Published);
     }
 
     public function publish(): self
